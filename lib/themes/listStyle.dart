@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 class Lista extends StatelessWidget {
   final String name;
-  const Lista({Key key, this.name}) : super(key: key);
+  final String asset;
+  final Color color1;
+  final Color color2;
+  const Lista({Key key, this.name, this.asset, this.color1, this.color2})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    //var colors = [Colors.red, Colors.blue, Colors.white, Colors.green];
-    //final random = new Random();
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Container(
@@ -40,7 +42,7 @@ class Lista extends StatelessWidget {
             Container(
               height: 70,
               child: Image(
-                image: AssetImage('assets/images/006-chemistry.png'),
+                image: AssetImage(asset),
                 fit: BoxFit.fill,
               ),
             )
@@ -49,10 +51,7 @@ class Lista extends StatelessWidget {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Colors.white,
-            gradient: LinearGradient(colors: [
-              Color.fromRGBO(255, 135, 135, 1),
-              Color.fromRGBO(73, 122, 246, 1),
-            ]),
+            gradient: LinearGradient(colors: [color1, color2]),
             boxShadow: [
               BoxShadow(
                   color: Colors.grey[200],

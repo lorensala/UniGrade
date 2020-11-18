@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mis_notas/animation/FadeAnimation.dart';
+import 'package:mis_notas/themes/textInput.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -50,31 +51,10 @@ class _LoginPageState extends State<LoginPage> {
                               ]),
                           child: Column(
                             children: <Widget>[
-                              Container(
-                                padding: EdgeInsets.all(8.0),
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom:
-                                          BorderSide(color: Colors.grey[100])),
-                                ),
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'Usuario',
-                                      hintStyle:
-                                          TextStyle(color: Colors.grey[400])),
-                                ),
+                              TextInputStyle(
+                                name: 'Usuario',
                               ),
-                              Container(
-                                padding: EdgeInsets.all(8.0),
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'Contraseña',
-                                      hintStyle:
-                                          TextStyle(color: Colors.grey[400])),
-                                ),
-                              )
+                              TextInputStyle(name: 'Contraseña',)
                             ],
                           ),
                         )),
@@ -85,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                         1,
                         InkWell(
                           onTap: () {
-                            print('Hola');
+                            Navigator.pushNamed(context, '/nav');
                           },
                           child: Container(
                               height: 50,

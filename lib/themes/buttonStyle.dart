@@ -8,7 +8,8 @@ class ButtonProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 50.0,
+      height: 150.0,
+      width: 170,
       child: Container(
         decoration: BoxDecoration(
             color: Colors.white,
@@ -29,7 +30,10 @@ class ButtonProfile extends StatelessWidget {
                 Expanded(
                     child: Center(
                   child: Text(name,
-                      style: TextStyle(fontSize: 18, color: Colors.grey[600])),
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey[600],
+                          fontWeight: FontWeight.bold)),
                 )),
               ],
             ),

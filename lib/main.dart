@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:mis_notas/interface/homepage.dart';
-import 'package:mis_notas/interface/login.dart';
-import 'package:mis_notas/interface/navegation.dart';
-import 'package:mis_notas/interface/profile.dart';
-import 'package:mis_notas/interface/statspage.dart';
+import 'package:mis_notas/gui/home_page.dart';
+import 'package:mis_notas/gui/mis_materias.dart';
+import 'package:mis_notas/gui/mis_notas.dart';
+import 'package:mis_notas/gui/nueva_nota.dart';
 
-void main() => runApp(MaterialApp(        
+void main() => runApp(MaterialApp(
+    theme: ThemeData(fontFamily: 'Avenir LT Std'),
     initialRoute: '/',
     routes: {
-      '/': (context) => LoginPage(),
-      '/nav': (context) => Navegation(),
-      '/homepage': (context) => HomePage(),
-      '/statspage': (context) => ChartApp(),
-      '/profilepage': (context) => ProfilePage()
+      '/': (context) => HomePage(),
+      '/mismaterias': (context) => MisMaterias(),
+      '/misnotas': (context) => MisNotas(),
+      '/nuevanota': (context) => NuevaNota()
     },
     debugShowCheckedModeBanner: false));

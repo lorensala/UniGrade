@@ -69,6 +69,10 @@ flutter:
     - assets/images/3.0x/bluebar.png
     - assets/images/3.0x/divgrey.png
     - assets/images/002-ruler.png
+    - assets/images/home.png
+    - assets/images/user.png
+    - assets/images/info.png
+
 
 
 

@@ -133,7 +133,7 @@ class MisNotas extends StatelessWidget {
                   Expanded(
                     child: ListView.builder(
                       physics: BouncingScrollPhysics(),
-                      itemCount: 10,
+                      itemCount: 1,
                       itemBuilder: (context, index) {
                         return NotaCard();
                       },

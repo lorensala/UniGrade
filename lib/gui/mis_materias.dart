@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:mis_notas/style/materia_style.dart';
-import 'package:mis_notas/style/options_button.dart';
+import 'package:mis_notas/widgets/materia_style.dart';
+import 'package:mis_notas/widgets/options_button.dart';
+import 'package:mis_notas/widgets/search_bar.dart';
 
 class MisMaterias extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<String> names = [
-      'Sisitemas\nOperativos',
+      'Sistemas\nOperativos',
       'Análisis\nMatemático',
       'Sistemas de\nRepresentación'
     ];
@@ -63,15 +64,21 @@ class MisMaterias extends StatelessWidget {
                   textAlign: TextAlign.left,
                 ),
               ),
+
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+                child: SearchBar(null),
+              ),
+
               // Filtreos
               Padding(
                 padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    OptionButton('Cursando'),
-                    OptionButton('Aprobadas'),
-                    OptionButton('Restantes')
+                    OptionButton('Cursando', null),
+                    OptionButton('Aprobadas', null),
+                    OptionButton('Restantes', null)
                   ],
                 ),
               ),

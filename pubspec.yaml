@@ -23,14 +23,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  animated_bottom_navigation_bar: ^0.1.2+2
-  cupertino_icons: ^0.1.3
-  lottie: ^0.7.0+1
-  responsive_framework: ^0.0.11
-  responsive_scaffold: ^1.3.0+2
   simple_animations: ^2.2.3
   syncfusion_flutter_charts: ^18.3.50
-  adobe_xd: ^1.0.0+1 
+  flutter_svg: ^0.17.4
 
 dev_dependencies:
   flutter_test:
@@ -54,7 +49,6 @@ flutter:
     - assets/images/home.png
     - assets/images/011-director.png
     - assets/images/backgroundgreen.png
-    - assets/lottie/34490-book-animation.json
     - assets/images/008-paper.png
     - assets/images/014-math.png
     - assets/images/menu_icon.png
@@ -72,6 +66,9 @@ flutter:
     - assets/images/home.png
     - assets/images/user.png
     - assets/images/info.png
+    - assets/images/home_white.png
+    - assets/images/user_white.png
+    - assets/images/info_white.png
 
 
 
@@ -90,6 +87,6 @@ flutter:
   fonts:
     - family: Avenir LT Std
       fonts:
-        - asset: assets/fonts/AvenirLTStd-Black.otf
-        - asset: assets/fonts/AvenirLTStd-Book.otf
-        - asset: assets/fonts/AvenirLTStd-Roman.otf
+        - asset: assets/fonts/AvenirLTStd-Black.ttf
+        - asset: assets/fonts/AvenirLTStd-Book.ttf
+        - asset: assets/fonts/AvenirLTStd-Roman.ttf

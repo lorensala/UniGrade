@@ -5,7 +5,6 @@ import 'package:mis_notas/gui/mis_materias.dart';
 import 'package:mis_notas/gui/mis_notas.dart';
 
 void main() => runApp(MaterialApp(
-    theme: ThemeData(fontFamily: 'Avenir LT Std'),
     initialRoute: '/',
     routes: {
       '/': (context) => HomePage(),

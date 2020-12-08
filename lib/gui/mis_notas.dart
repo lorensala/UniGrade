@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mis_notas/style/notas_style.dart';
-import 'package:mis_notas/style/options_button.dart';
+import 'package:mis_notas/widgets/notas_style.dart';
+import 'package:mis_notas/widgets/options_button.dart';
+import 'package:mis_notas/widgets/search_bar.dart';
+
+//TODO: Agregar la barra de busqueda.
 
 class MisNotas extends StatelessWidget {
   @override
@@ -45,6 +48,10 @@ class MisNotas extends StatelessWidget {
                       textAlign: TextAlign.left,
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+                    child: SearchBar(null),
+                  ),
                   // Filtros
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
@@ -56,84 +63,23 @@ class MisNotas extends StatelessWidget {
                           crossAxisAlignment: WrapCrossAlignment.end,
                           //alignment: WrapAlignment.spaceAround,
                           children: <Widget>[
-                            OptionButton('Cursando'),
-                            OptionButton('Aprobadas'),
-                            OptionButton('Libre'),
-                            OptionButton('Promoción'),
-                            OptionButton('Ap. Directa'),
+                            OptionButton('Cursando', null),
+                            OptionButton('Aprobadas', null),
+                            OptionButton('Libre', null),
+                            OptionButton('Promoción', null),
+                            OptionButton('Ap. Directa', null),
                           ],
                         ),
                         SizedBox(
                           height: 10,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            Text(
-                              'Materia',
-                              style: TextStyle(
-                                fontFamily: 'Avenir LT Std',
-                                fontSize: 14,
-                                color: const Color(0xff000000),
-                                fontWeight: FontWeight.w900,
-                                height: 1.8571428571428572,
-                              ),
-                              textAlign: TextAlign.left,
-                            ),
-                            Text(
-                              'PRÁCTICO',
-                              style: TextStyle(
-                                fontFamily: 'Avenir LT Std',
-                                fontSize: 14,
-                                color: const Color(0xff000000),
-                                fontWeight: FontWeight.w900,
-                                height: 1.8571428571428572,
-                              ),
-                              textAlign: TextAlign.left,
-                            ),
-                            Text(
-                              'TEÓRICO',
-                              style: TextStyle(
-                                fontFamily: 'Avenir LT Std',
-                                fontSize: 14,
-                                color: const Color(0xff000000),
-                                fontWeight: FontWeight.w900,
-                                height: 1.8571428571428572,
-                              ),
-                              textAlign: TextAlign.left,
-                            ),
-                            Text(
-                              'TP',
-                              style: TextStyle(
-                                fontFamily: 'Avenir LT Std',
-                                fontSize: 14,
-                                color: const Color(0xff000000),
-                                fontWeight: FontWeight.w900,
-                                height: 1.8571428571428572,
-                              ),
-                              textAlign: TextAlign.left,
-                            ),
-                            Text(
-                              'NF',
-                              style: TextStyle(
-                                fontFamily: 'Avenir LT Std',
-                                fontSize: 14,
-                                color: const Color(0xff000000),
-                                fontWeight: FontWeight.w900,
-                                height: 1.8571428571428572,
-                              ),
-                              textAlign: TextAlign.left,
-                            )
-                          ],
-                        ),
-                        Image.asset('assets/images/3.0x/bluebar.png'),
                       ],
                     ),
                   ),
                   Expanded(
                     child: ListView.builder(
                       physics: BouncingScrollPhysics(),
-                      itemCount: 1,
+                      itemCount: 10,
                       itemBuilder: (context, index) {
                         return NotaCard();
                       },

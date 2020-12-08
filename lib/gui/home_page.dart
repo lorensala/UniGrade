@@ -1,10 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:mis_notas/style/colors.dart';
-import 'package:mis_notas/style/dialog_nuevanota.dart';
-import 'package:mis_notas/style/main_button.dart';
+import 'package:mis_notas/widgets/colors.dart';
+import 'package:mis_notas/widgets/dialog_nuevamateria.dart';
+import 'package:mis_notas/widgets/dialog_nuevanota.dart';
+import 'package:mis_notas/widgets/main_button.dart';
+import 'package:mis_notas/widgets/quick_bar.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+//TODO: Acomodar la logica para los btones de la nav bar, o sacarla a a la mierda
+
+class _HomePageState extends State<HomePage> {
+  bool _isPressedInfo = false;
+  bool _isPressedHome = false;
+  bool _isPressedUser = false;
+
+  int indexInfo = 0;
+  int indexHome = 0;
+  int indexUser = 0;
+
+  var buttons = {
+    'info': ['assets/images/info.png', 'assets/images/info_white.png'],
+    'home': ['assets/images/home.png', 'assets/images/home_white.png'],
+    'user': ['assets/images/user.png', 'assets/images/user_white.png']
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,106 +134,11 @@ class HomePage extends StatelessWidget {
                     height: 20,
                   ),
                   Center(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(26.0),
-                          color: const Color(0xff66aaff),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(14.0),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: <Widget>[
-                                Column(
-                                  children: <Widget>[
-                                    Text(
-                                      '8',
-                                      style: TextStyle(
-                                        fontFamily: 'Avenir LT Std',
-                                        fontSize: 30,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    SizedBox(
-                                      width: 58.0,
-                                      child: Text(
-                                        'Promedio\nGeneral',
-                                        style: TextStyle(
-                                          fontFamily: 'Avenir LT Std',
-                                          fontSize: 11,
-                                          color: const Color(0xffffffff),
-                                          fontWeight: FontWeight.w300,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Image.asset('assets/images/div.png'),
-                                Column(
-                                  children: <Widget>[
-                                    Text(
-                                      '12',
-                                      style: TextStyle(
-                                        fontFamily: 'Avenir LT Std',
-                                        fontSize: 30,
-                                        color: const Color(0xffffffff),
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    SizedBox(
-                                      width: 65.0,
-                                      child: Text(
-                                        'Materias\nAprobadas',
-                                        style: TextStyle(
-                                          fontFamily: 'Avenir LT Std',
-                                          fontSize: 11,
-                                          color: const Color(0xffffffff),
-                                          fontWeight: FontWeight.w300,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Image.asset('assets/images/div.png'),
-                                Column(
-                                  children: <Widget>[
-                                    Text(
-                                      '24',
-                                      style: TextStyle(
-                                        fontFamily: 'Avenir LT Std',
-                                        fontSize: 30,
-                                        color: const Color(0xffffffff),
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    SizedBox(
-                                      width: 58.0,
-                                      child: Text(
-                                        'Materias\nRestantes',
-                                        style: TextStyle(
-                                          fontFamily: 'Avenir LT Std',
-                                          fontSize: 11,
-                                          color: const Color(0xffffffff),
-                                          fontWeight: FontWeight.w300,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    )
-                                  ],
-                                )
-                              ]),
-                        ),
-                      ),
-                    ),
-                  ),
+                      child: QuickBar(
+                    prom: 8,
+                    aprobadas: 10,
+                    restantes: 38,
+                  )),
                   SizedBox(
                     height: 30,
                   ),
@@ -388,7 +316,9 @@ class HomePage extends StatelessWidget {
                       ),
                       InkWell(
                         borderRadius: BorderRadius.circular(26),
-                        onTap: () {},
+                        onTap: () {
+                          showNuevaMateria(context);
+                        },
                         child: Container(
                           child: Center(
                             child: Text(
@@ -425,18 +355,87 @@ class HomePage extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                IconButton(
-                  icon: Image.asset('assets/images/info.png'),
-                  onPressed: () {},
+                Stack(
+                  children: <Widget>[
+                    Positioned(
+                      right: 4,
+                      top: 4,
+                      child: CircleAvatar(
+                        backgroundColor: _isPressedInfo ? blue : white,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Image.asset(buttons['info'][indexInfo]),
+                      onPressed: () => {
+                        setState(() {
+                          _isPressedInfo = !_isPressedInfo;
+                          _isPressedHome = false;
+                          _isPressedUser = false;
+                          if (indexInfo == 0)
+                            indexInfo++;
+                          else
+                            indexInfo--;
+                          indexHome = 0;
+                          indexUser = 0;
+                        })
+                      },
+                    ),
+                  ],
                 ),
-                IconButton(
-                  icon: Image.asset('assets/images/home.png'),
-                  onPressed: () {},
+                Stack(
+                  children: <Widget>[
+                    Positioned(
+                      right: 4,
+                      top: 4,
+                      child: CircleAvatar(
+                        backgroundColor: _isPressedHome ? blue : white,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Image.asset(buttons['home'][indexHome]),
+                      onPressed: () => {
+                        setState(() {
+                          _isPressedHome = !_isPressedHome;
+                          _isPressedInfo = false;
+                          _isPressedUser = false;
+                          if (indexHome == 0) {
+                            indexHome++;
+                          } else
+                            indexHome--;
+                          indexInfo = 0;
+                          indexUser = 0;
+                        })
+                      },
+                    ),
+                  ],
                 ),
-                IconButton(
-                  icon: Image.asset('assets/images/user.png'),
-                  onPressed: () {},
-                )
+                Stack(
+                  children: <Widget>[
+                    Positioned(
+                      right: 4,
+                      top: 4,
+                      child: CircleAvatar(
+                        backgroundColor: _isPressedUser ? blue : white,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Image.asset(buttons['user'][indexUser]),
+                      onPressed: () => {
+                        setState(() {
+                          _isPressedUser = !_isPressedUser;
+                          _isPressedHome = false;
+                          _isPressedInfo = false;
+                          if (indexUser == 0)
+                            indexUser++;
+                          else
+                            indexUser--;
+                          indexInfo = 0;
+                          indexHome = 0;
+                        })
+                      },
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -449,6 +448,15 @@ class HomePage extends StatelessWidget {
         context: context,
         builder: (BuildContext context) {
           return DialogNuevaNota();
+        });
+  }
+
+  void showNuevaMateria(BuildContext context) {
+    showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (BuildContext context) {
+          return DialogNuevaMateria();
         });
   }
 }

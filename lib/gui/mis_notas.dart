@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mis_notas/business/subject.dart';
+import 'package:mis_notas/data/datamanager.dart';
 import 'package:mis_notas/widgets/notas_style.dart';
 import 'package:mis_notas/widgets/options_button.dart';
 import 'package:mis_notas/widgets/search_bar.dart';

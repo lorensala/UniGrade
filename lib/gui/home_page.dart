@@ -5,6 +5,7 @@ import 'package:mis_notas/widgets/dialog_nuevamateria.dart';
 import 'package:mis_notas/widgets/dialog_nuevanota.dart';
 import 'package:mis_notas/widgets/main_button.dart';
 import 'package:mis_notas/widgets/quick_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -22,11 +23,19 @@ class _HomePageState extends State<HomePage> {
   int indexHome = 0;
   int indexUser = 0;
 
+  final db = FirebaseFirestore.instance;
+
   var buttons = {
     'info': ['assets/images/info.png', 'assets/images/info_white.png'],
     'home': ['assets/images/home.png', 'assets/images/home_white.png'],
     'user': ['assets/images/user.png', 'assets/images/user_white.png']
   };
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -289,6 +298,8 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(26),
                         onTap: () {
                           showNuevaNota(context);
+
+                          //showNuevaNota(context);
                         },
                         child: Container(
                           child: Center(

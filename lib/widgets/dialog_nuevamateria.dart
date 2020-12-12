@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mis_notas/business/subject.dart';
+import 'package:mis_notas/data/datamanager.dart';
 
 class DialogNuevaMateria extends StatelessWidget {
+  final db = DataManager();
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -80,7 +84,10 @@ class DialogNuevaMateria extends StatelessWidget {
                   children: <Widget>[
                     InkWell(
                       borderRadius: BorderRadius.circular(26),
-                      onTap: () {},
+                      onTap: () {
+                        db.addNota(7);
+                        Navigator.pop(context);
+                      },
                       child: Container(
                         width: 129.0,
                         height: 37.0,

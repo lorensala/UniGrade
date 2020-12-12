@@ -1,44 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:mis_notas/business/student.dart';
+import 'package:mis_notas/business/subject.dart';
+import 'package:mis_notas/data/datamanager.dart';
 import 'package:mis_notas/widgets/colors.dart';
 import 'package:mis_notas/widgets/dialog_nuevamateria.dart';
 import 'package:mis_notas/widgets/dialog_nuevanota.dart';
 import 'package:mis_notas/widgets/main_button.dart';
 import 'package:mis_notas/widgets/quick_bar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
+class HomePage extends StatelessWidget {
+  final db = DataManager();
 
-//TODO: Acomodar la logica para los btones de la nav bar, o sacarla a a la mierda
-
-class _HomePageState extends State<HomePage> {
-  bool _isPressedInfo = false;
-  bool _isPressedHome = false;
-  bool _isPressedUser = false;
-
-  int indexInfo = 0;
-  int indexHome = 0;
-  int indexUser = 0;
-
-  final db = FirebaseFirestore.instance;
-
-  var buttons = {
+  final Map<String, List<String>> buttons = {
     'info': ['assets/images/info.png', 'assets/images/info_white.png'],
     'home': ['assets/images/home.png', 'assets/images/home_white.png'],
     'user': ['assets/images/user.png', 'assets/images/user_white.png']
   };
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    print('==========rebuild=============');
+
+    //final student = Provider.of<Student>(context, listen: false);
+
     return Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -143,11 +129,16 @@ class _HomePageState extends State<HomePage> {
                     height: 20,
                   ),
                   Center(
-                      child: QuickBar(
-                    prom: 8,
-                    aprobadas: 10,
-                    restantes: 38,
-                  )),
+                    child: Consumer<Student>(
+                      builder: (context, student, child) {
+                        return QuickBar(
+                          prom: student.getPromedio(),
+                          aprobadas: 10,
+                          restantes: 38,
+                        );
+                      },
+                    ),
+                  ),
                   SizedBox(
                     height: 30,
                   ),
@@ -297,9 +288,8 @@ class _HomePageState extends State<HomePage> {
                       InkWell(
                         borderRadius: BorderRadius.circular(26),
                         onTap: () {
+                          //student.addPromedio();
                           showNuevaNota(context);
-
-                          //showNuevaNota(context);
                         },
                         child: Container(
                           child: Center(
@@ -372,24 +362,12 @@ class _HomePageState extends State<HomePage> {
                       right: 4,
                       top: 4,
                       child: CircleAvatar(
-                        backgroundColor: _isPressedInfo ? blue : white,
+                        backgroundColor: white,
                       ),
                     ),
                     IconButton(
-                      icon: Image.asset(buttons['info'][indexInfo]),
-                      onPressed: () => {
-                        setState(() {
-                          _isPressedInfo = !_isPressedInfo;
-                          _isPressedHome = false;
-                          _isPressedUser = false;
-                          if (indexInfo == 0)
-                            indexInfo++;
-                          else
-                            indexInfo--;
-                          indexHome = 0;
-                          indexUser = 0;
-                        })
-                      },
+                      icon: Image.asset(buttons['info'][0]),
+                      onPressed: () => {},
                     ),
                   ],
                 ),
@@ -399,24 +377,12 @@ class _HomePageState extends State<HomePage> {
                       right: 4,
                       top: 4,
                       child: CircleAvatar(
-                        backgroundColor: _isPressedHome ? blue : white,
+                        backgroundColor: white,
                       ),
                     ),
                     IconButton(
-                      icon: Image.asset(buttons['home'][indexHome]),
-                      onPressed: () => {
-                        setState(() {
-                          _isPressedHome = !_isPressedHome;
-                          _isPressedInfo = false;
-                          _isPressedUser = false;
-                          if (indexHome == 0) {
-                            indexHome++;
-                          } else
-                            indexHome--;
-                          indexInfo = 0;
-                          indexUser = 0;
-                        })
-                      },
+                      icon: Image.asset(buttons['home'][0]),
+                      onPressed: () => {},
                     ),
                   ],
                 ),
@@ -426,24 +392,12 @@ class _HomePageState extends State<HomePage> {
                       right: 4,
                       top: 4,
                       child: CircleAvatar(
-                        backgroundColor: _isPressedUser ? blue : white,
+                        backgroundColor: white,
                       ),
                     ),
                     IconButton(
-                      icon: Image.asset(buttons['user'][indexUser]),
-                      onPressed: () => {
-                        setState(() {
-                          _isPressedUser = !_isPressedUser;
-                          _isPressedHome = false;
-                          _isPressedInfo = false;
-                          if (indexUser == 0)
-                            indexUser++;
-                          else
-                            indexUser--;
-                          indexInfo = 0;
-                          indexHome = 0;
-                        })
-                      },
+                      icon: Image.asset(buttons['user'][0]),
+                      onPressed: () => {},
                     ),
                   ],
                 ),
@@ -459,15 +413,16 @@ class _HomePageState extends State<HomePage> {
         context: context,
         builder: (BuildContext context) {
           return DialogNuevaNota();
-        });
+        }).then((subject) => subject);
   }
 
   void showNuevaMateria(BuildContext context) {
     showDialog(
-        barrierDismissible: true,
-        context: context,
-        builder: (BuildContext context) {
-          return DialogNuevaMateria();
-        });
+      barrierDismissible: true,
+      context: context,
+      builder: (BuildContext context) {
+        return DialogNuevaMateria();
+      },
+    ).then((value) => value);
   }
 }

@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:mis_notas/business/subject.dart';
 
 class MateriaCard extends StatelessWidget {
-  final String name;
-  final String asset;
-  final Color color;
+  /* This widgets represents the subejct's bar styles, each one with it's
+  color, name, and icon asset.
+  
+  [subject] uses a Subject objet to get it's properties and set the values
+  to the widget.
 
-  MateriaCard(this.name, this.asset, this.color);
+   */
+
+  final Subject _subject;
+
+  MateriaCard(this._subject);
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +30,10 @@ class MateriaCard extends StatelessWidget {
               height: 79.0,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(26.0),
-                color: color,
+                color: Color(_subject.getColor()),
               ),
               child: Text(
-                name,
+                _subject.getName(),
                 style: TextStyle(
                   fontFamily: 'Avenir LT Std',
                   fontSize: 25,
@@ -45,7 +52,7 @@ class MateriaCard extends StatelessWidget {
               shape: CircleBorder(),
               child: CircleAvatar(
                 backgroundColor: Colors.transparent,
-                child: Image.asset(asset),
+                child: Image.asset(_subject.getIcon()),
                 radius: 43.5,
               ),
             ),

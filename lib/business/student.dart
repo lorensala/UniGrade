@@ -2,16 +2,34 @@ import 'package:flutter/foundation.dart';
 
 class Student extends ChangeNotifier {
   String _fullname;
-  double _promedio;
+  double _average = 0;
+  double _realAverage = 0;
+  int _passed = 0;
+  int _left = 0;
 
-  addPromedio() {
-    _promedio++;
+  addPassed() {
+    _passed++;
     notifyListeners();
   }
 
-  double getPromedio() => _promedio;
+  subLeft() {
+    _left--;
+  }
+
+  addLeft() {
+    _left++;
+  }
+
+  double getAverage() => _average;
 
   String getFullname() => _fullname;
 
-  Student(this._fullname, this._promedio);
+  double getRealAverage() => _realAverage;
+
+  int getPassed() => _passed;
+
+  int getLeft() => _left;
+
+  Student(this._fullname, this._average, this._realAverage, this._passed,
+      this._left);
 }

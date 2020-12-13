@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+//TODO: los colores deberian ser al reves, al apretar deberia ser azul.
+
 class OptionButton extends StatefulWidget {
   final String _name;
   final Function _onTap;

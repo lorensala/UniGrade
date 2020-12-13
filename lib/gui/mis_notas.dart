@@ -5,8 +5,6 @@ import 'package:mis_notas/widgets/notas_style.dart';
 import 'package:mis_notas/widgets/options_button.dart';
 import 'package:mis_notas/widgets/search_bar.dart';
 
-//TODO: Agregar la barra de busqueda.
-
 class MisNotas extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

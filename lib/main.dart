@@ -15,10 +15,9 @@ void main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<Student>(
-        create: (context) => Student('Lorenzo Sala', 7.45),
-      ),
+          create: (context) => Student('Lorenzo Sala', 7.45, 6.54, 14, 45)),
       ChangeNotifierProvider<Subject>(
-        create: (context) => Subject('aasud', 1, 'AED', 'asgds', '173'),
+        create: (context) => Subject('aasud', 1, 'AED', 'asgds', 173),
       )
     ],
     child: MaterialApp(

@@ -132,9 +132,9 @@ class HomePage extends StatelessWidget {
                     child: Consumer<Student>(
                       builder: (context, student, child) {
                         return QuickBar(
-                          prom: student.getPromedio(),
-                          aprobadas: 10,
-                          restantes: 38,
+                          prom: student.getAverage(),
+                          aprobadas: student.getPassed(),
+                          restantes: student.getLeft(),
                         );
                       },
                     ),
@@ -423,6 +423,6 @@ class HomePage extends StatelessWidget {
       builder: (BuildContext context) {
         return DialogNuevaMateria();
       },
-    ).then((value) => value);
+    ).then((value) {});
   }
 }

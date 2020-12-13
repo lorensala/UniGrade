@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:mis_notas/business/subject.dart';
-import 'package:mis_notas/data/datamanager.dart';
+
+import 'package:mis_notas/entities/student.dart';
+import 'package:mis_notas/entities/subject.dart';
+
+import 'package:mis_notas/data/subject_dao.dart';
+
 import 'package:mis_notas/widgets/notas_style.dart';
 import 'package:mis_notas/widgets/options_button.dart';
 import 'package:mis_notas/widgets/search_bar.dart';
 
-class MisNotas extends StatelessWidget {
+class MisNotas extends StatefulWidget {
+  @override
+  _MisNotasState createState() => _MisNotasState();
+}
+
+var _subjectDao = new SubjectDao();
+
+class _MisNotasState extends State<MisNotas> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,11 +74,11 @@ class MisNotas extends StatelessWidget {
                           crossAxisAlignment: WrapCrossAlignment.end,
                           //alignment: WrapAlignment.spaceAround,
                           children: <Widget>[
-                            OptionButton('Cursando', null),
-                            OptionButton('Aprobadas', null),
-                            OptionButton('Libre', null),
-                            OptionButton('Promoción', null),
-                            OptionButton('Ap. Directa', null),
+                            OptionButton('Cursando', true),
+                            OptionButton('Aprobadas', false),
+                            OptionButton('Libre', false),
+                            OptionButton('Promoción', false),
+                            OptionButton('Ap. Directa', false),
                           ],
                         ),
                         SizedBox(
@@ -76,15 +87,36 @@ class MisNotas extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Expanded(
-                    child: ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        return NotaCard();
-                      },
-                    ),
-                  )
+                  FutureBuilder(
+                      future: _subjectDao
+                          .getAllSubjectsByUser(Student('Lorenzo Sala')),
+                      builder: (context, snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return Center(child: CircularProgressIndicator());
+
+                          default:
+                            if (snapshot.hasError)
+                              return Text('error');
+                            else
+                              return Expanded(
+                                child: ListView.builder(
+                                  physics: BouncingScrollPhysics(),
+                                  itemCount: snapshot.data.length,
+                                  itemBuilder: (context, index) {
+                                    Subject sub = snapshot.data[index];
+                                    print(sub.getGradesTP());
+                                    return NotaCard(
+                                        sub.getName(),
+                                        sub.getGradesP(),
+                                        sub.getGradesT(),
+                                        sub.getGradesTP(),
+                                        sub.getNf());
+                                  },
+                                ),
+                              );
+                        }
+                      })
                 ],
               )),
         ));

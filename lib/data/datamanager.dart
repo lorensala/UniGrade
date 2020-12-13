@@ -1,5 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mis_notas/business/subject.dart';
+import 'package:mis_notas/entities/subject.dart';
 
 class DataManager {
   static final DataManager _singleton = DataManager._internal();

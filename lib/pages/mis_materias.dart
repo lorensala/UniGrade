@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/data/subject_dao.dart';
 import 'package:mis_notas/widgets/materia_style.dart';
 import 'package:mis_notas/widgets/options_button.dart';
@@ -61,21 +62,23 @@ class _MisMateriasState extends State<MisMaterias> {
             ),
 
             // Filtreos
+
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  OptionButton('Cursando', null),
-                  OptionButton('Aprobadas', null),
-                  OptionButton('Restantes', null)
+                  OptionButton('Cursando', true),
+                  OptionButton('Aprobadas', false),
+                  OptionButton('Restantes', false)
                 ],
               ),
             ),
 
             // ListView builder
             FutureBuilder(
-                future: _subjectDao.getAllSubjects(),
+                future:
+                    _subjectDao.getAllSubjectsByUser(Student('Lorenzo Sala')),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mis_notas/business/subject.dart';
+
+import 'package:mis_notas/entities/subject.dart';
 
 class MateriaCard extends StatelessWidget {
   /* This widgets represents the subejct's bar styles, each one with it's
@@ -9,6 +10,8 @@ class MateriaCard extends StatelessWidget {
   to the widget.
 
    */
+
+  //TODO: No deberia mostrar nota final si no tiene.....
 
   final Subject _subject;
 

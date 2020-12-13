@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:mis_notas/business/student.dart';
-import 'package:mis_notas/business/subject.dart';
-import 'package:mis_notas/data/datamanager.dart';
+
+import 'package:mis_notas/entities/student.dart';
+
 import 'package:mis_notas/widgets/colors.dart';
 import 'package:mis_notas/widgets/dialog_nuevamateria.dart';
 import 'package:mis_notas/widgets/dialog_nuevanota.dart';
 import 'package:mis_notas/widgets/main_button.dart';
 import 'package:mis_notas/widgets/quick_bar.dart';
+
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
-  final db = DataManager();
-
   final Map<String, List<String>> buttons = {
     'info': ['assets/images/info.png', 'assets/images/info_white.png'],
     'home': ['assets/images/home.png', 'assets/images/home_white.png'],

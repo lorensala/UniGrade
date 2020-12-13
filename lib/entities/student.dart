@@ -6,6 +6,7 @@ class Student extends ChangeNotifier {
   double _realAverage = 0;
   int _passed = 0;
   int _left = 0;
+  int _id = 1;
 
   addPassed() {
     _passed++;
@@ -20,6 +21,8 @@ class Student extends ChangeNotifier {
     _left++;
   }
 
+  int getId() => _id;
+
   double getAverage() => _average;
 
   String getFullname() => _fullname;
@@ -30,6 +33,5 @@ class Student extends ChangeNotifier {
 
   int getLeft() => _left;
 
-  Student(this._fullname, this._average, this._realAverage, this._passed,
-      this._left);
+  Student(this._fullname);
 }

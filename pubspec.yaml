@@ -28,7 +28,8 @@ dependencies:
   flutter_svg: ^0.17.4
   provider: ^4.3.2
   simple_animations: ^2.2.3
-  syncfusion_flutter_charts: ^18.3.50
+  syncfusion_flutter_charts: ^18.3.53
+  syncfusion_flutter_gauges: ^18.3.53
 
 dev_dependencies:
   flutter_test:
@@ -38,39 +39,11 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter.
 flutter:
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/006-chemistry.png
-    - assets/images/043-student.png
-    - assets/images/list.png
-    - assets/images/home.png
-    - assets/images/011-director.png
-    - assets/images/backgroundgreen.png
-    - assets/images/008-paper.png
-    - assets/images/014-math.png
-    - assets/images/menu_icon.png
-    - assets/images/person.png
-    - assets/images/line.png
-    - assets/images/div.png
-    - assets/images/005-books.png
-    - assets/images/001-test.png
-    - assets/images/030-cup.png
-    - assets/images/3.0x/backarrow.png
-    - assets/images/037-laptop.png
-    - assets/images/3.0x/bluebar.png
-    - assets/images/3.0x/divgrey.png
-    - assets/images/002-ruler.png
-    - assets/images/home.png
-    - assets/images/user.png
-    - assets/images/info.png
-    - assets/images/home_white.png
-    - assets/images/user_white.png
-    - assets/images/info_white.png
+    - assets/images/
     # An image asset can refer to one or more resolution-specific "variants", see
     # https://flutter.dev/assets-and-images/#resolution-aware.
     # For details regarding adding assets from package dependencies, see
@@ -80,6 +53,7 @@ flutter:
     # "family" key with the font family name, and a "fonts" key with a
     # list giving the asset and other descriptors for the font. For
     # example:
+
   fonts:
     - family: Avenir LT Std
       fonts:

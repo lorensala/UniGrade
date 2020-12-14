@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mis_notas/entities/career.dart';
+import 'package:mis_notas/entities/student.dart';
 
 import 'package:mis_notas/entities/subject.dart';
 
 import 'package:mis_notas/data/subject_dao.dart';
+import 'package:mis_notas/entities/university.dart';
 
 class DialogNuevaNota extends StatefulWidget {
   @override
@@ -56,7 +59,13 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: FutureBuilder(
-                        future: _subjectDao.getAllSubjects(),
+                        future: _subjectDao.getAllSubjectsByUser(Student(
+                            'Lorenzo Sala',
+                            '',
+                            [],
+                            '',
+                            University([Career('Ingeniería en Sistemas')],
+                                'UTN', 'UTN-FRC'))),
                         builder: (context, snapshot) {
                           switch (snapshot.connectionState) {
                             case ConnectionState.waiting:
@@ -156,7 +165,7 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
                     InkWell(
                       borderRadius: BorderRadius.circular(26),
                       onTap: () {
-                        _subjectDao.addNota(int.parse(_nota.text),
+                        _subjectDao.addGrade(int.parse(_nota.text),
                             _selectedSubject, _selectedType);
                       },
                       child: Container(

@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mis_notas/entities/state.dart';
+import 'package:mis_notas/entities/state_record.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
 import 'package:mis_notas/data/datamanager.dart';
@@ -6,13 +8,60 @@ import 'package:mis_notas/data/datamanager.dart';
 class SubjectDao {
   final db = DataManager();
 
+  Future<List<Subject>> getSubjectsBySearch(String searchParam) async {
+    List<Subject> list = List<Subject>();
+    CollectionReference collReference;
+
+    try {
+      collReference = FirebaseFirestore.instance
+          .collection('student')
+          .doc('sw98JGNJh4XL9WRVVzBN')
+          .collection('career_student')
+          .doc('Kynm7JSEA7ZyPpgyD9jp')
+          .collection('subject_student');
+
+      Future<QuerySnapshot> docs = FirebaseFirestore.instance
+          .collection(collReference.path)
+          .where('name', isLessThanOrEqualTo: searchParam)
+          .get();
+
+      await docs.then((value) {
+        value.docs.forEach((element) {
+          Map<String, dynamic> sub = element.data();
+
+          if (sub != null) {
+            var subject = mapper(sub);
+            print(subject);
+            list.add(subject);
+          }
+
+          print('=====succed====');
+        });
+      });
+    } catch (e) {
+      print(e);
+      print('=======error======');
+    }
+
+    return list;
+  }
+
   Future<List<Subject>> getAllSubjectsWithNoState(Student student) async {
     List<Subject> list = List<Subject>();
+    CollectionReference collReference;
+
     try {
+      collReference = FirebaseFirestore.instance
+          .collection('student')
+          .doc('sw98JGNJh4XL9WRVVzBN')
+          .collection('career_student')
+          .doc('Kynm7JSEA7ZyPpgyD9jp')
+          .collection('subject_student');
+
       Future<QuerySnapshot> docs = FirebaseFirestore.instance
-          .collection('student_subjects')
-          .where('studentId', isEqualTo: student.getId())
-          //.where('state', isNotEqualTo: '')
+          .collection(collReference.path)
+          .where('state', isEqualTo: '')
+          .orderBy('name')
           .get();
 
       await docs.then((value) {
@@ -38,12 +87,19 @@ class SubjectDao {
 
   Future<List<Subject>> getAllSubjectsByUser(Student student) async {
     List<Subject> list = List<Subject>();
+    CollectionReference collReference;
+
     try {
-      Future<QuerySnapshot> docs = FirebaseFirestore.instance
+      collReference = FirebaseFirestore.instance
           .collection('student')
-          .doc('mBvFeLfKrcKVCwdhAa7V')
-          .collection('student_subjects')
-          //.where('short_name', isEqualTo: '')
+          .doc('sw98JGNJh4XL9WRVVzBN')
+          .collection('career_student')
+          .doc('Kynm7JSEA7ZyPpgyD9jp')
+          .collection('subject_student');
+
+      Future<QuerySnapshot> docs = FirebaseFirestore.instance
+          .collection(collReference.path)
+          .orderBy('name')
           .get();
 
       await docs.then((value) {
@@ -65,7 +121,7 @@ class SubjectDao {
     return list;
   }
 
-  Future<List<Subject>> getAllSubjects() async {
+  /* Future<List<Subject>> getAllSubjects() async {
     List<Subject> list = List<Subject>();
 
     try {
@@ -91,27 +147,39 @@ class SubjectDao {
     }
 
     return list;
-  }
+  } */
 
-  Future<void> addSubjectStudent(Subject subject, String condition) {
+  Future<void> updateSubjectCondition(Subject subject, String condition) async {
+    String _docId;
+    DocumentReference _docRef;
+
     try {
-      CollectionReference coll = FirebaseFirestore.instance
+      Future<QuerySnapshot> _subCollection = FirebaseFirestore.instance
           .collection('student')
-          .doc('mBvFeLfKrcKVCwdhAa7V')
-          .collection('student_subjects');
+          .doc('sw98JGNJh4XL9WRVVzBN')
+          .collection('career_student')
+          .doc('Kynm7JSEA7ZyPpgyD9jp')
+          .collection('subject_student')
+          .where('name', isEqualTo: subject.getName())
+          .orderBy('name')
+          .get();
 
-      return coll
-          .add({
-            'name': subject.getName(),
+      await _subCollection.then((value) {
+        _docId = value.docs[0].id;
+      });
+
+      if (_docId != null)
+        _docRef = FirebaseFirestore.instance
+            .collection('student')
+            .doc('sw98JGNJh4XL9WRVVzBN')
+            .collection('career_student')
+            .doc('Kynm7JSEA7ZyPpgyD9jp')
+            .collection('subject_student')
+            .doc(_docId);
+
+      return _docRef
+          .update({
             'state': condition,
-            'gradesP': [],
-            'gradesT': [],
-            'gradesTP': [],
-            'nf': -1,
-            'year': subject.getYear(),
-            'short_name': subject.getShortName(),
-            'color': subject.getColor(),
-            'icon': subject.getIcon(),
           })
           .then((value) =>
               print('============ Subject added succesfully ============'))
@@ -133,34 +201,29 @@ class SubjectDao {
         ? gradesP = new List<int>.from(sub['gradesP'])
         : gradesP = [];
 
-    print(gradesP);
-
     sub['gradesT'] != null
         ? gradesT = new List<int>.from(sub['gradesT'])
         : gradesT = [];
-
-    print(gradesT);
 
     sub['gradesTP'] != null
         ? gradesTp = new List<int>.from(sub['gradesTP'])
         : gradesTp = [];
 
-    print(gradesTp);
-
     sub['nf'] != null ? nf = sub['nf'] : nf = -1;
 
-    print(nf);
-
-    return Subject(sub['name'], sub['year'], sub['short_name'], sub['icon'],
-        int.parse(sub['color']), gradesP, gradesT, gradesTp, nf);
+    return Subject(
+        sub['name'],
+        sub['year'],
+        gradesP,
+        gradesT,
+        gradesTp,
+        nf,
+        StateRecord(State(sub['state']), DateTime.now()),
+        sub['type'],
+        sub['icon']);
   }
 
-  Subject mapperReadOnly(Map<String, dynamic> sub) {
-    return Subject(sub['name'], sub['year'], sub['short_name'], sub['icon'],
-        int.parse(sub['color']), [], [], [], -1);
-  }
-
-  Future<void> addSubject(Subject subject) {
+  /* Future<void> addSubject(Subject subject) {
     try {
       CollectionReference coll =
           FirebaseFirestore.instance.collection('subject');
@@ -181,8 +244,8 @@ class SubjectDao {
       return null;
     }
   }
-
-  Future<void> addNota(int nota, Subject subject, String type) async {
+ */
+  Future<void> addGrade(int nota, Subject subject, String type) async {
     List<int> _grades = List<int>();
     var _docRef;
     var _myType;

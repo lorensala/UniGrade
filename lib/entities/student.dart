@@ -1,37 +1,32 @@
 import 'package:flutter/foundation.dart';
+import 'package:mis_notas/entities/subject.dart';
+import 'package:mis_notas/entities/university.dart';
 
 class Student extends ChangeNotifier {
   String _fullname;
-  double _average = 0;
-  double _realAverage = 0;
-  int _passed = 0;
-  int _left = 0;
-  int _id = 1;
+  String _uid;
+  University _university;
+  String _profilePic;
+  List<Subject> _subjects;
 
-  addPassed() {
-    _passed++;
-    notifyListeners();
-  }
-
-  subLeft() {
-    _left--;
-  }
-
-  addLeft() {
-    _left++;
-  }
-
-  int getId() => _id;
-
-  double getAverage() => _average;
+  /* TODO: Aplica a todas las clases. Modificar las funciones por properties.
+  get fullname => _fullname;  
+  */
+  String getId() => _uid;
 
   String getFullname() => _fullname;
 
-  double getRealAverage() => _realAverage;
+  University getUniversity() => _university;
 
-  int getPassed() => _passed;
+  String getProfilePic() => _profilePic;
 
-  int getLeft() => _left;
+  List<Subject> getSubjecs() => _subjects;
 
-  Student(this._fullname);
+  Student(this._fullname, this._profilePic, this._subjects, this._uid,
+      this._university);
+
+  void test() {
+    _fullname = 'Lorencio Sala';
+    notifyListeners();
+  }
 }

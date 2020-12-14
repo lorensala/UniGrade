@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mis_notas/entities/career.dart';
+import 'package:mis_notas/entities/university.dart';
 
 import 'package:mis_notas/pages/home_page.dart';
 import 'package:mis_notas/pages/mis_estadistica.dart';
@@ -14,13 +16,19 @@ import 'entities/student.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  Student('Lorenzo Sala', '', [], '',
+      University([Career('Ingeniería en Sistemas')], 'UTN', 'UTN-FRC'));
 
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<Student>(
-          create: (context) => Student('Lorenzo Sala')),
-      ChangeNotifierProvider<ValueNotifier<bool>>(
-          create: (_) => ValueNotifier<bool>(true)),
+          create: (context) => Student(
+              'Lorenzo\nSala',
+              '',
+              [],
+              '',
+              University(
+                  [Career('Ingeniería en Sistemas')], 'UTN', 'UTN-FRC'))),
     ],
     child: MaterialApp(
         initialRoute: '/',

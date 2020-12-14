@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/data/subject_dao.dart';
-import 'package:mis_notas/widgets/materia_style.dart';
+
+import 'package:mis_notas/entities/career.dart';
+import 'package:mis_notas/entities/student.dart';
+import 'package:mis_notas/entities/university.dart';
+
+import 'package:mis_notas/widgets/subject_card_style.dart';
 import 'package:mis_notas/widgets/options_button.dart';
 import 'package:mis_notas/widgets/search_bar.dart';
 
@@ -77,8 +81,13 @@ class _MisMateriasState extends State<MisMaterias> {
 
             // ListView builder
             FutureBuilder(
-                future:
-                    _subjectDao.getAllSubjectsByUser(Student('Lorenzo Sala')),
+                future: _subjectDao.getAllSubjectsByUser(Student(
+                    'Lorenzo Sala',
+                    '',
+                    [],
+                    '',
+                    University(
+                        [Career('Ingeniería en Sistemas')], 'UTN', 'UTN-FRC'))),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
@@ -92,7 +101,7 @@ class _MisMateriasState extends State<MisMaterias> {
                           itemCount: snapshot.data.length,
                           itemBuilder: (context, index) {
                             print(snapshot.data[index].getName());
-                            return MateriaCard(snapshot.data[index]);
+                            return SubjectCard(snapshot.data[index]);
                           },
                           physics: BouncingScrollPhysics(),
                         ));

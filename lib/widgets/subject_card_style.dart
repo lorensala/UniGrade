@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:mis_notas/entities/subject.dart';
 
-class MateriaCard extends StatelessWidget {
+class SubjectCard extends StatelessWidget {
   /* This widgets represents the subejct's bar styles, each one with it's
   color, name, and icon asset.
   
@@ -11,11 +11,11 @@ class MateriaCard extends StatelessWidget {
 
    */
 
-  //TODO: No deberia mostrar nota final si no tiene.....
-
   final Subject _subject;
 
-  MateriaCard(this._subject);
+  SubjectCard(this._subject);
+
+  // TODO: Hay que modificar los strings.
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class MateriaCard extends StatelessWidget {
               height: 79.0,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(26.0),
-                color: Color(_subject.getColor()),
+                color: _subject.getColor(),
               ),
               child: Text(
                 _subject.getName(),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:mis_notas/entities/career.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
+import 'package:mis_notas/entities/university.dart';
 
 import 'package:mis_notas/data/datamanager.dart';
 import 'package:mis_notas/data/subject_dao.dart';
@@ -24,7 +26,6 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
     'Promoción Teórica',
     'Promoción Práctica',
     'Aprobación Directa',
-    'Abandonada'
   ];
 
   Subject _selectedSubject;
@@ -34,7 +35,8 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
 
   @override
   void initState() {
-    _subjects = _subjectDao.getAllSubjects();
+    _subjects = _subjectDao.getAllSubjectsByUser(Student('Lorenzo Sala', '', [],
+        '', University([Career('Ingeniería en Sistemas')], 'UTN', 'UTN-FRC')));
     super.initState();
   }
 
@@ -145,7 +147,7 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
                       onTap: () {
                         if (_selectedCondition != null &&
                             _selectedSubject != null) {
-                          _subjectDao.addSubjectStudent(
+                          _subjectDao.updateSubjectCondition(
                               _selectedSubject, _selectedCondition);
 
                           Navigator.pop(context);

@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class NotaCard extends StatelessWidget {
+class GradeCard extends StatelessWidget {
   final String name;
   final List<int> notasP;
   final List<int> notasT;
   final List<int> notasTP;
   final int notaF;
 
-  NotaCard(this.name, this.notasP, this.notasT, this.notasTP, this.notaF);
+  GradeCard(this.name, this.notasP, this.notasT, this.notasTP, this.notaF);
+
+  //TODO: No deberia mostrar nota final si no tiene.....
 
   @override
   Widget build(BuildContext context) {

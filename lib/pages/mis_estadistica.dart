@@ -1,11 +1,35 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:mis_notas/widgets/main_button.dart';
+import 'package:flutter/material.dart';
+
+import 'package:mis_notas/widgets/text_style.dart';
+import 'package:mis_notas/widgets/statistics_container.dart';
+
+import 'package:mis_notas/entities/student.dart';
+
+import 'package:provider/provider.dart';
+
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-class MisEstadisticas extends StatelessWidget {
+class MisEstadisticas extends StatefulWidget {
+  @override
+  _MisEstadisticasState createState() => _MisEstadisticasState();
+}
+
+class _MisEstadisticasState extends State<MisEstadisticas> {
+  List<String> _years = [
+    'Primer año',
+    'Segundo año',
+    'Tercer año',
+    'Cuarto año',
+    'Quinto año'
+  ];
+
+  var _selectedYear = 'Primer año';
+
   @override
   Widget build(BuildContext context) {
+    var _student = Provider.of<Student>(context);
+
     return Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
@@ -42,7 +66,7 @@ class MisEstadisticas extends StatelessWidget {
                           fontFamily: 'Avenir LT Std',
                           fontSize: 30,
                           color: const Color(0xff000000),
-                          fontWeight: FontWeight.w900,
+                          fontWeight: FontWeight.w800,
                           height: 0.9666666666666667,
                         ),
                         textAlign: TextAlign.left,
@@ -69,7 +93,7 @@ class MisEstadisticas extends StatelessWidget {
                       fontFamily: 'Avenir LT Std',
                       fontSize: 22,
                       color: Colors.black,
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w800,
                     ),
                     textAlign: TextAlign.left,
                   ),
@@ -77,58 +101,67 @@ class MisEstadisticas extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
                   child: Container(
-                    child: Expanded(
-                      child: SfRadialGauge(
-                        axes: <RadialAxis>[
-                          RadialAxis(
-                            minimum: 0,
-                            maximum: 100,
-                            startAngle: 270,
-                            endAngle: 270,
-                            showLabels: false,
-                            showTicks: false,
-                            radiusFactor: 0.8,
-                            axisLineStyle: AxisLineStyle(
-                              thickness: 0.14,
-                              cornerStyle: CornerStyle.startCurve,
-                              //color: Colors.amber,
-                              thicknessUnit: GaugeSizeUnit.factor,
-                            ),
-                            pointers: <GaugePointer>[
-                              RangePointer(
-                                  gradient: SweepGradient(
-                                      colors: [Colors.blue, Colors.blue[200]],
-                                      stops: <double>[0.25, 0.60]),
-                                  value: 50,
-                                  cornerStyle: CornerStyle.bothCurve,
-                                  width: 0.14,
-                                  sizeUnit: GaugeSizeUnit.factor,
-                                  enableAnimation: true,
-                                  animationDuration: 600,
-                                  animationType: AnimationType.linear),
-                              MarkerPointer(
-                                  value: 50,
-                                  color: Colors.blue,
-                                  markerType: MarkerType.circle,
-                                  markerHeight: 22,
-                                  markerWidth: 22,
-                                  enableAnimation: true,
-                                  animationDuration: 600,
-                                  animationType: AnimationType.linear)
-                            ],
-                            annotations: <GaugeAnnotation>[
-                              GaugeAnnotation(
-                                  positionFactor: 0.08,
-                                  angle: 90,
-                                  widget: CircleAvatar(
-                                    radius: 95,
-                                    child:
-                                        Image.asset('assets/images/person.png'),
-                                  ))
-                            ],
-                          )
-                        ],
-                      ),
+                    child: SfRadialGauge(
+                      axes: <RadialAxis>[
+                        RadialAxis(
+                          minimum: 0,
+                          maximum: 100,
+                          startAngle: 270,
+                          endAngle: 270,
+                          showLabels: false,
+                          showTicks: false,
+                          radiusFactor: 0.8,
+                          axisLineStyle: AxisLineStyle(
+                            thickness: 0.14,
+                            cornerStyle: CornerStyle.bothCurve,
+                            //color: Colors.amber,
+                            thicknessUnit: GaugeSizeUnit.factor,
+                          ),
+                          pointers: <GaugePointer>[
+                            RangePointer(
+                                gradient: SweepGradient(
+                                    colors: [Colors.blue, Colors.blue[200]],
+                                    stops: <double>[0.25, 0.60]),
+                                value: 50,
+                                cornerStyle: CornerStyle.bothCurve,
+                                width: 0.14,
+                                sizeUnit: GaugeSizeUnit.factor,
+                                enableAnimation: true,
+                                animationDuration: 600,
+                                animationType: AnimationType.linear),
+                            MarkerPointer(
+                                value: 50,
+                                color: Colors.blue,
+                                markerType: MarkerType.circle,
+                                markerHeight: 22,
+                                markerWidth: 22,
+                                enableAnimation: true,
+                                animationDuration: 600,
+                                animationType: AnimationType.linear)
+                          ],
+                          annotations: <GaugeAnnotation>[
+                            GaugeAnnotation(
+                                positionFactor: 0.08,
+                                angle: 90,
+                                widget: Hero(
+                                  tag: 'profilePic',
+                                  child: Container(
+                                    width: 190.0,
+                                    height: 188.0,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.elliptical(9999.0, 9999.0)),
+                                      image: DecorationImage(
+                                        image: NetworkImage(
+                                            _student.getProfilePic()),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                ))
+                          ],
+                        )
+                      ],
                     ),
                     height: 300,
                     decoration: BoxDecoration(
@@ -141,12 +174,7 @@ class MisEstadisticas extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(24, 5, 24, 0),
                   child: Text(
                     'Información General:',
-                    style: TextStyle(
-                      fontFamily: 'Avenir LT Std',
-                      fontSize: 22,
-                      color: const Color(0xff000000),
-                      fontWeight: FontWeight.w900,
-                    ),
+                    style: headerText,
                     textAlign: TextAlign.left,
                   ),
                 ),
@@ -159,46 +187,8 @@ class MisEstadisticas extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       itemCount: 4,
                       itemBuilder: (context, index) {
-                        //TODO: Crear widget que represente este container.
-                        return Padding(
-                          padding: EdgeInsets.only(left: 24),
-                          child: Container(
-                            width: 151.0,
-                            height: 151.0,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(26.0),
-                              color: const Color(0xfff7f7f7),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  '8,37',
-                                  style: TextStyle(
-                                    fontFamily: 'Avenir LT Std',
-                                    fontSize: 50,
-                                    color: const Color(0xff000000),
-                                    fontWeight: FontWeight.w900,
-                                  ),
-                                  textAlign: TextAlign.left,
-                                ),
-                                SizedBox(
-                                  width: 106.0,
-                                  child: Text(
-                                    'Promedio\nsin aplazos',
-                                    style: TextStyle(
-                                      fontFamily: 'Avenir LT Std',
-                                      fontSize: 18,
-                                      color: const Color(0xff000000),
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        );
+                        return StatisticsContainer(
+                            '8.45', 'Promedio\nsin aplazos');
                       },
                     ),
                   ),
@@ -211,7 +201,7 @@ class MisEstadisticas extends StatelessWidget {
                       fontFamily: 'Avenir LT Std',
                       fontSize: 22,
                       color: const Color(0xff000000),
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w800,
                     ),
                     textAlign: TextAlign.left,
                   ),
@@ -229,37 +219,27 @@ class MisEstadisticas extends StatelessWidget {
                         ),
                         child: Padding(
                           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          child: FutureBuilder(
-                              future: null,
-                              builder: (context, snapshot) {
-                                switch (snapshot.connectionState) {
-                                  case ConnectionState.waiting:
-                                    return Center(
-                                        child: CircularProgressIndicator());
-                                  default:
-                                    return DropdownButtonHideUnderline(
-                                      child: DropdownButton(
-                                          value: null,
-                                          onChanged: null,
-                                          hint: new Text(
-                                            'Primero Año',
-                                            style: TextStyle(
-                                                fontFamily: 'Avenir LT Std'),
-                                          ),
-                                          items:
-                                              null /* snapshot.data
-                                        .map<DropdownMenuItem<Subject>>(
-                                            (Subject sub) {
-                                      print(sub.getName());
-                                      return DropdownMenuItem<Subject>(
-                                        value: sub,
-                                        child: Text(sub.getName()),
-                                      );
-                                    }).toList(), */
-                                          ),
-                                    );
-                                }
-                              }),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              value: _selectedYear,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _selectedYear = newValue;
+                                });
+                              },
+                              hint: new Text(
+                                'Primero Año',
+                                style: TextStyle(fontFamily: 'Avenir LT Std'),
+                              ),
+                              items: _years
+                                  .map<DropdownMenuItem<String>>((String year) {
+                                return DropdownMenuItem<String>(
+                                  value: year,
+                                  child: Text(year),
+                                );
+                              }).toList(),
+                            ),
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -281,46 +261,8 @@ class MisEstadisticas extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       itemCount: 4,
                       itemBuilder: (context, index) {
-                        //TODO: Crear widget que represente este container.
-                        return Padding(
-                          padding: EdgeInsets.only(left: 24),
-                          child: Container(
-                            width: 151.0,
-                            height: 151.0,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(26.0),
-                              color: const Color(0xfff7f7f7),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  '8,37',
-                                  style: TextStyle(
-                                    fontFamily: 'Avenir LT Std',
-                                    fontSize: 50,
-                                    color: const Color(0xff000000),
-                                    fontWeight: FontWeight.w900,
-                                  ),
-                                  textAlign: TextAlign.left,
-                                ),
-                                SizedBox(
-                                  width: 106.0,
-                                  child: Text(
-                                    'Promedio\nsin aplazos',
-                                    style: TextStyle(
-                                      fontFamily: 'Avenir LT Std',
-                                      fontSize: 18,
-                                      color: const Color(0xff000000),
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        );
+                        return StatisticsContainer(
+                            '8.45', 'Promedio\nsin aplazos');
                       },
                     ),
                   ),
@@ -333,7 +275,7 @@ class MisEstadisticas extends StatelessWidget {
                       fontFamily: 'Avenir LT Std',
                       fontSize: 22,
                       color: const Color(0xff000000),
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w800,
                     ),
                     textAlign: TextAlign.left,
                   ),
@@ -347,46 +289,8 @@ class MisEstadisticas extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       itemCount: 4,
                       itemBuilder: (context, index) {
-                        //TODO: Crear widget que represente este container.
-                        return Padding(
-                          padding: EdgeInsets.only(left: 24),
-                          child: Container(
-                            width: 151.0,
-                            height: 151.0,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(26.0),
-                              color: const Color(0xfff7f7f7),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  '8,37',
-                                  style: TextStyle(
-                                    fontFamily: 'Avenir LT Std',
-                                    fontSize: 50,
-                                    color: const Color(0xff000000),
-                                    fontWeight: FontWeight.w900,
-                                  ),
-                                  textAlign: TextAlign.left,
-                                ),
-                                SizedBox(
-                                  width: 106.0,
-                                  child: Text(
-                                    'Promedio\nsin aplazos',
-                                    style: TextStyle(
-                                      fontFamily: 'Avenir LT Std',
-                                      fontSize: 18,
-                                      color: const Color(0xff000000),
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        );
+                        return StatisticsContainer(
+                            '8.45', 'Promedio\nsin aplazos');
                       },
                     ),
                   ),

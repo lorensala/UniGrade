@@ -35,8 +35,15 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
 
   @override
   void initState() {
-    _subjects = _subjectDao.getAllSubjectsByUser(Student('Lorenzo Sala', '', [],
-        '', University([Career('Ingeniería en Sistemas')], 'UTN', 'UTN-FRC')));
+    //TODO: Hardcoded
+    _subjects = _subjectDao.getAllSubjectsByUser(Student(
+        'Lorenzo Sala',
+        '',
+        [],
+        '',
+        University([Career('Ingeniería en Sistemas')], 'UTN', 'UTN-FRC'),
+        [],
+        ''));
     super.initState();
   }
 
@@ -95,7 +102,6 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
                                   items: snapshot.data
                                       .map<DropdownMenuItem<Subject>>(
                                           (Subject sub) {
-                                    print(sub.getName());
                                     return DropdownMenuItem<Subject>(
                                       value: sub,
                                       child: Text(sub.getName()),

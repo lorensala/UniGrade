@@ -16,12 +16,28 @@ class DialogNuevaNota extends StatefulWidget {
 class _DialogNuevaNotaState extends State<DialogNuevaNota> {
   var _selectedSubject;
   var _selectedType;
+  var _subjects;
 
   TextEditingController _nota = new TextEditingController();
 
   SubjectDao _subjectDao = new SubjectDao();
 
   var _types = ['Práctico', 'Teórico', 'TP', 'Final'];
+
+  @override
+  void initState() {
+    //TODO:
+    _subjects = _subjectDao.getAllSubjectsByUser(Student(
+        'Lorenzo Sala',
+        '',
+        [],
+        '',
+        University([Career('Ingeniería en Sistemas')], 'UTN', 'UTN-FRC'),
+        [],
+        ''));
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +75,7 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: FutureBuilder(
-                        future: _subjectDao.getAllSubjectsByUser(Student(
-                            'Lorenzo Sala',
-                            '',
-                            [],
-                            '',
-                            University([Career('Ingeniería en Sistemas')],
-                                'UTN', 'UTN-FRC'))),
+                        future: _subjects,
                         builder: (context, snapshot) {
                           switch (snapshot.connectionState) {
                             case ConnectionState.waiting:

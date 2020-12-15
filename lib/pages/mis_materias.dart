@@ -8,6 +8,7 @@ import 'package:mis_notas/entities/university.dart';
 import 'package:mis_notas/widgets/subject_card_style.dart';
 import 'package:mis_notas/widgets/options_button.dart';
 import 'package:mis_notas/widgets/search_bar.dart';
+import 'package:provider/provider.dart';
 
 class MisMaterias extends StatefulWidget {
   @override
@@ -53,7 +54,7 @@ class _MisMateriasState extends State<MisMaterias> {
                   fontFamily: 'Avenir LT Std',
                   fontSize: 30,
                   color: const Color(0xff000000),
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.w800,
                   height: 0.9666666666666667,
                 ),
                 textAlign: TextAlign.left,
@@ -81,13 +82,8 @@ class _MisMateriasState extends State<MisMaterias> {
 
             // ListView builder
             FutureBuilder(
-                future: _subjectDao.getAllSubjectsByUser(Student(
-                    'Lorenzo Sala',
-                    '',
-                    [],
-                    '',
-                    University(
-                        [Career('Ingeniería en Sistemas')], 'UTN', 'UTN-FRC'))),
+                future: _subjectDao
+                    .getAllSubjectsByUser(Provider.of<Student>(context)),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:

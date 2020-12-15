@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class GradeCard extends StatelessWidget {
@@ -9,8 +10,6 @@ class GradeCard extends StatelessWidget {
   final int notaF;
 
   GradeCard(this.name, this.notasP, this.notasT, this.notasTP, this.notaF);
-
-  //TODO: No deberia mostrar nota final si no tiene.....
 
   @override
   Widget build(BuildContext context) {
@@ -50,9 +49,9 @@ class GradeCard extends StatelessWidget {
                       name,
                       style: TextStyle(
                         fontFamily: 'Avenir LT Std',
-                        fontSize: 14,
+                        fontSize: 17,
                         color: const Color(0xff000000),
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.w800,
                         height: 1.8571428571428572,
                       ),
                       textAlign: TextAlign.left,
@@ -97,42 +96,44 @@ class GradeCard extends StatelessWidget {
                     )
                   ],
                 ),
-                Column(
-                  children: <Widget>[
-                    SvgPicture.string(
-                      '<svg viewBox="229.0 337.5 98.5 1.0" ><path transform="translate(229.0, 337.5)" d="M 0 0 L 98.5 0" fill="none" stroke="#6df97f" stroke-width="4" stroke-miterlimit="4" stroke-linecap="round" /></svg>',
-                      allowDrawingOutsideViewBox: true,
-                    ),
-                    Text(
-                      'NOTA FINAL:',
-                      style: TextStyle(
-                        fontFamily: 'Avenir LT Std',
-                        fontSize: 11,
-                        color: const Color(0xff000000),
-                        fontWeight: FontWeight.w900,
-                        height: 2.3636363636363638,
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-                      child: Text(
-                        '10',
-                        style: TextStyle(
-                          fontFamily: 'Avenir LT Std',
-                          fontSize: 50,
-                          color: const Color(0xff000000),
-                          height: 0.52,
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
-                    SvgPicture.string(
-                      '<svg viewBox="229.0 337.5 98.5 1.0" ><path transform="translate(229.0, 337.5)" d="M 0 0 L 98.5 0" fill="none" stroke="#6df97f" stroke-width="4" stroke-miterlimit="4" stroke-linecap="round" /></svg>',
-                      allowDrawingOutsideViewBox: true,
-                    ),
-                  ],
-                )
+                notaF != -1
+                    ? Column(
+                        children: <Widget>[
+                          SvgPicture.string(
+                            '<svg viewBox="229.0 337.5 98.5 1.0" ><path transform="translate(229.0, 337.5)" d="M 0 0 L 98.5 0" fill="none" stroke="#6df97f" stroke-width="4" stroke-miterlimit="4" stroke-linecap="round" /></svg>',
+                            allowDrawingOutsideViewBox: true,
+                          ),
+                          Text(
+                            'NOTA FINAL:',
+                            style: TextStyle(
+                              fontFamily: 'Avenir LT Std',
+                              fontSize: 13,
+                              color: const Color(0xff000000),
+                              fontWeight: FontWeight.w800,
+                              height: 2.3636363636363638,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                            child: Text(
+                              '10',
+                              style: TextStyle(
+                                fontFamily: 'Avenir LT Std',
+                                fontSize: 50,
+                                color: const Color(0xff000000),
+                                height: 0.52,
+                              ),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          SvgPicture.string(
+                            '<svg viewBox="229.0 337.5 98.5 1.0" ><path transform="translate(229.0, 337.5)" d="M 0 0 L 98.5 0" fill="none" stroke="#6df97f" stroke-width="4" stroke-miterlimit="4" stroke-linecap="round" /></svg>',
+                            allowDrawingOutsideViewBox: true,
+                          ),
+                        ],
+                      )
+                    : Container()
               ],
             ),
           ),

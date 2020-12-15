@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:mis_notas/entities/student.dart';
+import 'package:mis_notas/services/statistics.dart';
 
 import 'package:mis_notas/widgets/colors.dart';
 import 'package:mis_notas/widgets/dialog_nuevamateria.dart';
@@ -21,9 +22,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('==========rebuild=============');
-
-    final _student = Provider.of<Student>(context, listen: false);
+    var _student = Provider.of<Student>(context, listen: false);
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -66,16 +65,18 @@ class HomePage extends StatelessWidget {
                           ),
                           textAlign: TextAlign.left,
                         ),
-                        Container(
-                          width: 120.0,
-                          height: 118.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                                Radius.elliptical(9999.0, 9999.0)),
-                            image: DecorationImage(
-                              image:
-                                  const AssetImage('assets/images/person.png'),
-                              fit: BoxFit.cover,
+                        Hero(
+                          tag: 'profilePic',
+                          child: Container(
+                            width: 120.0,
+                            height: 118.0,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                  Radius.elliptical(9999.0, 9999.0)),
+                              image: DecorationImage(
+                                image: NetworkImage(_student.getProfilePic()),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         )
@@ -128,12 +129,11 @@ class HomePage extends StatelessWidget {
                     height: 20,
                   ),
                   Center(
-                    child: QuickBar(
-                      prom: 8.45,
-                      aprobadas: 25,
-                      restantes: 43,
-                    ),
-                  ),
+                      child: QuickBar(
+                    prom: 8.54,
+                    aprobadas: 25,
+                    restantes: 43,
+                  )),
                   SizedBox(
                     height: 30,
                   ),
@@ -145,7 +145,7 @@ class HomePage extends StatelessWidget {
                         fontFamily: 'Avenir LT Std',
                         fontSize: 22,
                         color: const Color(0xff484848),
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.w800,
                       ),
                       textAlign: TextAlign.left,
                     ),
@@ -159,107 +159,18 @@ class HomePage extends StatelessWidget {
                         physics: BouncingScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         children: <Widget>[
-                          //TODO: Implementar todos los MainButton()
-                          MainButton(),
-                          Stack(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.only(top: 30),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(24, 0, 0, 0),
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(26),
-                                    onTap: () {
-                                      Navigator.pushNamed(context, '/misnotas');
-                                    },
-                                    child: Container(
-                                      width: 129.0,
-                                      height: 92.0,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(26.0),
-                                        color: const Color(0xffFFDCDC),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            17, 40, 0, 0),
-                                        child: Text(
-                                          'Mis\nNotas',
-                                          style: TextStyle(
-                                            fontFamily: 'Avenir LT Std',
-                                            fontSize: 18,
-                                            color: const Color(0xff484848),
-                                            fontWeight: FontWeight.w900,
-                                          ),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                top: 5,
-                                left: 63,
-                                child: Image.asset(
-                                  'assets/images/001-test.png',
-                                  width: 54.0,
-                                  height: 54.0,
-                                ),
-                              )
-                            ],
-                          ),
-                          Stack(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.only(top: 30),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(24, 0, 0, 0),
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(26),
-                                    onTap: () {
-                                      Navigator.pushNamed(
-                                          context, '/estadisticas');
-                                    },
-                                    child: Container(
-                                      width: 129.0,
-                                      height: 92.0,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(26.0),
-                                        color: const Color(0xffF5DCFF),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            17, 40, 0, 0),
-                                        child: Text(
-                                          'Mis\nEstadísticas',
-                                          style: TextStyle(
-                                            fontFamily: 'Avenir LT Std',
-                                            fontSize: 18,
-                                            color: const Color(0xff484848),
-                                            fontWeight: FontWeight.w900,
-                                          ),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                top: 5,
-                                left: 63,
-                                child: Image.asset(
-                                  'assets/images/030-cup.png',
-                                  width: 54.0,
-                                  height: 54.0,
-                                ),
-                              )
-                            ],
-                          )
+                          MainButton(
+                              'Mis\nMaterias',
+                              'assets/images/005-books.png',
+                              Color(0xFFF7F7F7),
+                              '/mismaterias'),
+                          MainButton('Mis\nNotas', 'assets/images/001-test.png',
+                              Color(0xFFFFDCDC), '/misnotas'),
+                          MainButton(
+                              'Mis\nEstadísticas',
+                              'assets/images/030-cup.png',
+                              Color(0xFFF5DCFF),
+                              '/estadisticas')
                         ],
                       ),
                     ),
@@ -272,7 +183,7 @@ class HomePage extends StatelessWidget {
                         fontFamily: 'Avenir LT Std',
                         fontSize: 22,
                         color: const Color(0xff484848),
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.w800,
                       ),
                       textAlign: TextAlign.left,
                     ),
@@ -295,7 +206,7 @@ class HomePage extends StatelessWidget {
                                 fontFamily: 'Avenir LT Std',
                                 fontSize: 14,
                                 color: const Color(0xff7c7979),
-                                fontWeight: FontWeight.w900,
+                                fontWeight: FontWeight.w800,
                               ),
                               textAlign: TextAlign.left,
                             ),
@@ -324,7 +235,7 @@ class HomePage extends StatelessWidget {
                                 fontFamily: 'Avenir LT Std',
                                 fontSize: 14,
                                 color: const Color(0xff7c7979),
-                                fontWeight: FontWeight.w900,
+                                fontWeight: FontWeight.w800,
                               ),
                               textAlign: TextAlign.left,
                             ),
@@ -357,9 +268,7 @@ class HomePage extends StatelessWidget {
                     Positioned(
                       right: 4,
                       top: 4,
-                      child: CircleAvatar(
-                        backgroundColor: white,
-                      ),
+                      child: CircleAvatar(backgroundColor: white),
                     ),
                     IconButton(
                       icon: Image.asset(buttons['info'][0]),

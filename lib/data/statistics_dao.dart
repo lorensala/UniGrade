@@ -8,9 +8,9 @@ class StatisticsDao {
     try {
       CollectionReference collRef = FirebaseFirestore.instance
           .collection('student')
-          .doc(_student.getDocId()[0])
+          .doc(_student.getCareerDocRefs()[0])
           .collection('career_student')
-          .doc(_student.getSubId())
+          .doc(_student.getStudentDocRef())
           .collection('subject_student');
 
       Future<QuerySnapshot> docs = FirebaseFirestore.instance
@@ -30,45 +30,5 @@ class StatisticsDao {
       print('=======error======');
     }
     return _list;
-  }
-
-  Future<String> getCarrerDocRefs(String _studentDocref) async {
-    Future<QuerySnapshot> _queryData = FirebaseFirestore.instance
-        .collection('student')
-        .doc(_studentDocref)
-        .collection('career_student')
-
-        // TODO: Este solo devuelve para sistemas.
-
-        .where('name', isEqualTo: 'Ingeniería en Sistemas de Informacion')
-        .get();
-
-    await _queryData.then((value) {
-      if (value.docs.isNotEmpty)
-        return value.docs[0].id;
-      else
-        return null;
-    });
-  }
-
-  Future<String> getStudentDocRef(String _studentId) async {
-    String _userId;
-
-    Future<QuerySnapshot> _queryData = FirebaseFirestore.instance
-        .collection('student')
-        .where(
-          'uid',
-          isEqualTo: _studentId,
-        )
-        .get();
-
-    _userId = await _queryData.then((value) {
-      if (value.docs.isNotEmpty)
-        return value.docs[0].id;
-      else
-        return null;
-    });
-
-    return _userId;
   }
 }

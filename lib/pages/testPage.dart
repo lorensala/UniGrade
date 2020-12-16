@@ -10,13 +10,12 @@ class TestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Student _student = Provider.of<Student>(context);
-
     return Scaffold(
       body: FlatButton(
           onPressed: () async {
-            List<Map<String, dynamic>> _list =
-                await _statisticsDao.getData(_student);
-            print(await _statisticsService.getAvgNf(_student, _list, 3));
+            //List<Map<String, dynamic>> _list = await _statisticsDao.getData(_student);
+
+            //await _statisticsDao.getStudentSDocRef(_student.getId());
           },
           child: Container(
             color: Colors.black,

@@ -5,7 +5,6 @@ import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/services/sing_in.dart';
 
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -24,7 +23,6 @@ class _LoginPageState extends State<LoginPage> {
           //alignment: Alignment.center,
           //mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            // TODO: cambiar este lottie, loopea mal. Hacerlos mas rápidos.
             Align(
                 alignment: Alignment.topRight,
                 child: Lottie.asset('assets/lottie/top.json')),
@@ -206,7 +204,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-
             Align(
                 alignment: Alignment.bottomLeft,
                 child: Lottie.asset('assets/lottie/buttom.json'))

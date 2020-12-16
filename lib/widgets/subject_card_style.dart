@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:mis_notas/entities/subject.dart';
+import 'package:mis_notas/support/text_formatter.dart';
 
 class SubjectCard extends StatelessWidget {
   /* This widgets represents the subejct's bar styles, each one with it's
@@ -19,8 +20,6 @@ class SubjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //String txt = _subject.getName();
-
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
       child: Stack(
@@ -37,15 +36,18 @@ class SubjectCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(26.0),
                 color: _subject.getColor(),
               ),
-              child: Text(
-                _subject.getName(),
-                style: TextStyle(
-                  fontFamily: 'Avenir LT Std',
-                  fontSize: 25,
-                  color: const Color(0xffffffff),
-                  height: 1.04,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  formatText(_subject.getName()),
+                  style: TextStyle(
+                    fontFamily: 'Avenir LT Std',
+                    fontSize: 25,
+                    color: const Color(0xffffffff),
+                    height: 1.04,
+                  ),
+                  textAlign: TextAlign.left,
                 ),
-                textAlign: TextAlign.left,
               ),
             ),
           ]),

@@ -52,6 +52,9 @@ Future<void> main() async {
         ChangeNotifierProvider<Student>(create: (context) => _activeStudent),
         ChangeNotifierProvider<StatisticsService>(
             create: (context) => StatisticsService()),
+        ChangeNotifierProvider<ValueNotifier<bool>>(
+          create: (context) => ValueNotifier<bool>(false),
+        )
       ],
       child: MaterialApp(
           theme: ThemeData(

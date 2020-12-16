@@ -32,11 +32,14 @@ class StatisticsDao {
     return _list;
   }
 
-  Future<String> getSubId(Student student) async {
+  Future<String> getCarrerDocRefs(String _studentDocref) async {
     Future<QuerySnapshot> _queryData = FirebaseFirestore.instance
         .collection('student')
-        .doc(student.getDocId()[0])
+        .doc(_studentDocref)
         .collection('career_student')
+
+        // TODO: Este solo devuelve para sistemas.
+
         .where('name', isEqualTo: 'Ingeniería en Sistemas de Informacion')
         .get();
 
@@ -48,14 +51,14 @@ class StatisticsDao {
     });
   }
 
-  Future<String> getDocId(Student student) async {
+  Future<String> getStudentDocRef(String _studentId) async {
     String _userId;
 
     Future<QuerySnapshot> _queryData = FirebaseFirestore.instance
         .collection('student')
         .where(
           'uid',
-          isEqualTo: student.getId(),
+          isEqualTo: _studentId,
         )
         .get();
 
@@ -69,6 +72,3 @@ class StatisticsDao {
     return _userId;
   }
 }
-
-// sw98JGNJh4XL9WRVVzBN idUser
-// Kynm7JSEA7ZyPpgyD9jp id carrer_stundet

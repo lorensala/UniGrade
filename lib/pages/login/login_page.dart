@@ -50,10 +50,6 @@ class LoginPage extends StatelessWidget {
                 _student.uid = await user.getIdToken();
                 _student.profilePic = user.photoURL;
 
-                print(_googleUser.user);
-                print(user.displayName);
-                print(user.photoURL);
-
                 Navigator.popAndPushNamed(context, '/homepage');
               });
             },

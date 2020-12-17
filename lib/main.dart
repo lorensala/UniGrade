@@ -5,6 +5,7 @@ import 'package:mis_notas/entities/career.dart';
 import 'package:mis_notas/entities/university.dart';
 
 import 'package:mis_notas/pages/home_page.dart';
+import 'package:mis_notas/pages/loading_screen.dart';
 import 'package:mis_notas/pages/login/login_page.dart';
 import 'package:mis_notas/pages/mis_estadistica.dart';
 import 'package:mis_notas/pages/mis_materias.dart';
@@ -13,20 +14,18 @@ import 'package:mis_notas/pages/mis_notas.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:mis_notas/services/statistics.dart';
+import 'package:mis_notas/widgets/new_user_login.dart';
 
 import 'package:provider/provider.dart';
 
 import 'entities/student.dart';
 
 void main() async {
-  print('entra');
   bool _isLoggedIn = false;
-  print('entra');
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  print('entra');
   Student _activeStudent = Student(
       '',
       '',
@@ -52,6 +51,7 @@ void main() async {
     child: MaterialApp(
         initialRoute: _isLoggedIn ? '/homepage' : '/login',
         routes: {
+          '/': (context) => NewUserLogin(),
           '/login': (context) => LoginPage(),
           '/homepage': (context) => HomePage(),
           '/mismaterias': (context) => MisMaterias(),

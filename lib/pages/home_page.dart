@@ -10,6 +10,8 @@ import 'package:mis_notas/entities/subject.dart';
 import 'package:mis_notas/entities/university.dart';
 import 'package:mis_notas/services/statistics.dart';
 
+import 'package:mis_notas/support/text_formatter.dart';
+
 import 'package:mis_notas/widgets/colors.dart';
 import 'package:mis_notas/widgets/dialog_nuevamateria.dart';
 import 'package:mis_notas/widgets/dialog_nuevanota.dart';
@@ -126,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text(
-                                  _student.getFullname(),
+                                  formatText(_student.getFullname()),
                                   style: TextStyle(
                                     fontFamily: 'Avenir LT Std',
                                     fontSize: 30,

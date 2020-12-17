@@ -16,7 +16,11 @@ class SubjectCard extends StatelessWidget {
 
   SubjectCard(this._subject);
 
-  // TODO: Hay que modificar los strings.
+  Map<String, Color> _colors = {
+    'software': Color(0xFFFC8370),
+    'analista': Color(0xFF62DDBD),
+    'basica': Color(0xFFB3A5EF)
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +35,10 @@ class SubjectCard extends StatelessWidget {
             Container(
               alignment: Alignment.bottomLeft,
               padding: EdgeInsets.fromLTRB(21, 15, 0, 15),
-              height: 79.0,
+              height: 110,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(26.0),
-                color: _subject.getColor(),
+                color: _colors[_subject.getType()],
               ),
               child: Align(
                 alignment: Alignment.centerLeft,
@@ -60,7 +64,7 @@ class SubjectCard extends StatelessWidget {
               child: CircleAvatar(
                 backgroundColor: Colors.transparent,
                 child: Image.asset(_subject.getIcon()),
-                radius: 43.5,
+                radius: 50,
               ),
             ),
           ),

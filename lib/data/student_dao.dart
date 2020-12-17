@@ -76,4 +76,116 @@ class StudentDao {
     }
     return _userId;
   }
+
+  Future<Student> addNewStudent(Student _student) async {
+    //TODO: Crear el data manager.
+
+    Student _newStudent = _student;
+
+    List<Map<String, dynamic>> _map = [
+      {
+        'duration': 'anual',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'state': '',
+        'type': 'software',
+        'year': 2,
+        'name': 'Sistemas Operativos',
+        'icon': 'assets/images/software.png'
+      },
+      {
+        'duration': 'anual',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'state': '',
+        'type': 'software',
+        'year': 1,
+        'name': 'Algoritmos y Estructuras de datos',
+        'icon': 'assets/images/software.png'
+      },
+      {
+        'duration': 'anual',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'state': '',
+        'type': 'analista',
+        'year': 3,
+        'name': 'Diseño de Sistemas',
+        'icon': 'assets/images/analista.png'
+      },
+      {
+        'duration': 'semestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'state': '',
+        'type': 'software',
+        'year': 2,
+        'name': 'Quimica',
+        'icon': 'assets/images/043-chemistry.png'
+      }
+    ];
+
+    CollectionReference collRef =
+        FirebaseFirestore.instance.collection('student');
+
+    await collRef.add({
+      'uid': _student.getId(),
+      'display_name': _student.getFullname(),
+      'profile_pic': _student.getProfilePic(),
+      'university': _student.getUniversityShortName()
+    });
+
+    var carPath = await getStudentsDocRef(_student.getId());
+
+    _newStudent.studentDocRef = carPath;
+
+    collRef = FirebaseFirestore.instance
+        .collection('student')
+        .doc(carPath)
+        .collection('career_student');
+
+    await collRef.add({'name': 'Ingeniería en Sistemas de Informacion'}).then(
+        (value) => print('===== Se anadio la carrera======='));
+
+    print(await getCarrerDocRefs(_student.getStudentDocRef()));
+
+    var subPath = await getCarrerDocRefs(carPath);
+
+    _newStudent.carrerDocRefs = [subPath];
+
+    var newcollRef = FirebaseFirestore.instance
+        .collection(collRef.path)
+        .doc(subPath)
+        .collection('subject_student');
+
+    _map.forEach((element) async {
+      await newcollRef
+          .add(element)
+          .then((value) => print('Se anadio la materia ${element['name']}'))
+          .catchError((error) => print(error));
+    });
+  }
 }
+
+//TODO: Considerar hacer esto en todas las clases.
+
+/* 
+class Human {
+  String name;
+  int age;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'age': age,
+    };
+  }
+} */

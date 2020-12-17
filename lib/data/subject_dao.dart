@@ -92,9 +92,9 @@ class SubjectDao {
     try {
       collReference = FirebaseFirestore.instance
           .collection('student')
-          .doc('sw98JGNJh4XL9WRVVzBN')
+          .doc(student.getStudentDocRef())
           .collection('career_student')
-          .doc('Kynm7JSEA7ZyPpgyD9jp')
+          .doc(student.getCareerDocRefs()[0])
           .collection('subject_student');
 
       Future<QuerySnapshot> docs = FirebaseFirestore.instance
@@ -152,6 +152,8 @@ class SubjectDao {
   Future<void> updateSubjectCondition(Subject subject, String condition) async {
     String _docId;
     DocumentReference _docRef;
+
+    //TODO: Necesita la referenia del path del usuario.
 
     try {
       Future<QuerySnapshot> _subCollection = FirebaseFirestore.instance

@@ -27,7 +27,7 @@ class StatisticsService extends ChangeNotifier {
       });
     }
 
-    return double.parse((_total / _count).toStringAsFixed(2));
+    return double.parse(((_total / _count)).toStringAsFixed(2));
   }
 
   Future<double> getAvgNfWithBadGrades(

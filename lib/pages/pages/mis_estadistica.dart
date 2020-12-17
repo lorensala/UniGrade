@@ -31,11 +31,9 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
     Student _student = Provider.of<Student>(context);
     Statistics _statistics = Provider.of<Statistics>(context, listen: false);
 
-    print(_statistics.getAvg().toString());
-
     //TODO: Fijarse que la cantidad de materias es dinamica.
 
-    double percentage = _statistics.getPassed() / 40;
+    int percentage = ((_statistics.getPassed() * 100 / 40)).round();
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -93,19 +91,6 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 10, 0, 0),
-                  child: Text(
-                    'Progreso:',
-                    style: TextStyle(
-                      fontFamily: 'Avenir LT Std',
-                      fontSize: 22,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w800,
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                ),
-                Padding(
                   padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
                   child: Container(
                     child: SfRadialGauge(
@@ -129,7 +114,7 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                                 gradient: SweepGradient(
                                     colors: [Colors.blue, Colors.blue[200]],
                                     stops: <double>[0.25, 0.60]),
-                                value: percentage,
+                                value: double.parse(percentage.toString()),
                                 cornerStyle: CornerStyle.bothCurve,
                                 width: 0.14,
                                 sizeUnit: GaugeSizeUnit.factor,
@@ -137,7 +122,7 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                                 animationDuration: 600,
                                 animationType: AnimationType.linear),
                             MarkerPointer(
-                                value: percentage,
+                                value: double.parse(percentage.toString()),
                                 color: Colors.blue,
                                 markerType: MarkerType.circle,
                                 markerHeight: 22,
@@ -195,8 +180,8 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                         physics: BouncingScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         children: <Widget>[
-                          StatisticsContainer(
-                              percentage.toString(), 'Carrera Completada'),
+                          StatisticsContainer(percentage.toString() + '%',
+                              'Carrera Completada'),
                           StatisticsContainer(_statistics.getAvg().toString(),
                               'Promedio\nsin aplazos'),
                           StatisticsContainer(

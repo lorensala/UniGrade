@@ -1,13 +1,12 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mis_notas/entities/career.dart';
+
 import 'package:mis_notas/entities/student.dart';
 
 import 'package:mis_notas/entities/subject.dart';
 
 import 'package:mis_notas/data/subject_dao.dart';
-import 'package:mis_notas/entities/university.dart';
 
 class DialogNuevaNota extends StatefulWidget {
   final Student _student;
@@ -22,6 +21,7 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
   var _selectedSubject;
   var _selectedType;
   var _subjects;
+  bool _hasSelectedData = true;
 
   TextEditingController _nota = new TextEditingController();
 
@@ -43,7 +43,7 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(26.0)),
         child: Container(
           width: 338.0,
-          height: 250.0,
+          height: 280.0,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 40, 20, 40),
             child: Column(
@@ -124,6 +124,7 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
                           onChanged: (newValue) {
                             setState(() {
                               _selectedType = newValue;
+                              _hasSelectedData = true;
                             });
                           },
                           items: _types
@@ -161,7 +162,6 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
                           WhitelistingTextInputFormatter(
                               RegExp(r'^(?:[1-9]|0[1-9]|10)$')),
                           LengthLimitingTextInputFormatter(2),
-                          //BlacklistingTextInputFormatter(RegExp(''))
                         ],
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
@@ -175,6 +175,10 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
                         if (_selectedSubject != null &&
                             _selectedType != null &&
                             _nota.text != '') {
+                          setState(() {
+                            _hasSelectedData = true;
+                          });
+
                           bool isDone = await _subjectDao.addGrade(
                               widget._student,
                               int.parse(_nota.text),
@@ -197,7 +201,9 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
                                   type: CoolAlertType.error,
                                   text: 'Error al añadir la nota');
                         } else {
-                          //TODO: mostrar que hay que ingresar los datos.
+                          setState(() {
+                            _hasSelectedData = false;
+                          });
                         }
                       },
                       child: Container(
@@ -222,6 +228,23 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
                     ),
                   ],
                 ),
+                SizedBox(
+                  height: 10,
+                ),
+                Visibility(
+                  visible: !_hasSelectedData,
+                  child: Center(
+                    child: Text(
+                      '¡No se seleccionaron datos!',
+                      style: TextStyle(
+                        fontFamily: 'Avenir LT Std',
+                        fontSize: 15,
+                        color: Colors.red,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ),

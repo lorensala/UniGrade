@@ -56,11 +56,12 @@ class _MainLoginState extends State<MainLogin> {
                       _isPressed = true;
                       UserCredential _userCredentials =
                           await signInWithGoogle();
+                      _isNew.value = false;
 
                       if (_userCredentials.additionalUserInfo.isNewUser) {
                         _isNew.value = true;
                       } else {
-                        Navigator.popAndPushNamed(context, '/homepage');
+                        Navigator.pushNamed(context, '/homepage');
                       }
                     },
                     child: Image.asset('assets/images/google.png'),

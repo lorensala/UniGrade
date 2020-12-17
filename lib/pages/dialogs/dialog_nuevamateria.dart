@@ -18,7 +18,9 @@ class DialogNuevaMateria extends StatefulWidget {
 }
 
 class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
-  var db = DataManager();
+  //var db = DataManager();
+
+  bool _hasSelectedData = true;
 
   SubjectDao _subjectDao = SubjectDao();
 
@@ -43,8 +45,7 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget._student.getFullname());
-
+    print('rebuild');
     return Dialog(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(26.0)),
@@ -52,7 +53,7 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
           width: 338.0,
           height: 250.0,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 40, 20, 40),
+            padding: const EdgeInsets.fromLTRB(20, 40, 20, 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -129,6 +130,7 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
                         onChanged: (newValue) {
                           setState(() {
                             _selectedCondition = newValue;
+                            _hasSelectedData = true;
                           });
                         },
                         items: _conditions
@@ -150,6 +152,9 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
                       onTap: () async {
                         if (_selectedCondition != null &&
                             _selectedSubject != null) {
+                          setState(() {
+                            _hasSelectedData = true;
+                          });
                           bool isDone =
                               await _subjectDao.updateSubjectCondition(
                                   widget._student,
@@ -173,7 +178,9 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
 
                           //Navigator.pop(context);
                         } else {
-                          //TODO: mostrar que hay que ingresar los datos.
+                          setState(() {
+                            _hasSelectedData = false;
+                          });
                         }
                       },
                       child: Container(
@@ -198,6 +205,23 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
                     ),
                   ],
                 ),
+                SizedBox(
+                  height: 10,
+                ),
+                Visibility(
+                  visible: !_hasSelectedData,
+                  child: Center(
+                    child: Text(
+                      '¡No se seleccionaron datos!',
+                      style: TextStyle(
+                        fontFamily: 'Avenir LT Std',
+                        fontSize: 15,
+                        color: Colors.red,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ),

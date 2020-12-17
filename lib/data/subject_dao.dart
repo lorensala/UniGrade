@@ -97,6 +97,8 @@ class SubjectDao {
           .doc(student.getCareerDocRefs()[0])
           .collection('subject_student');
 
+      print(collReference.path);
+
       Future<QuerySnapshot> docs = FirebaseFirestore.instance
           .collection(collReference.path)
           .orderBy('name')
@@ -115,7 +117,7 @@ class SubjectDao {
       });
     } catch (e) {
       print(e);
-      print('=======error======este');
+      print('=======error======');
     }
 
     return list;

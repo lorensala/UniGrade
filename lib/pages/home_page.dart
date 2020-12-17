@@ -275,7 +275,7 @@ class _HomePageState extends State<HomePage> {
                                 borderRadius: BorderRadius.circular(26),
                                 onTap: () {
                                   //student.addPromedio();
-                                  showNuevaNota(context);
+                                  showNuevaNota(context, _student);
                                 },
                                 child: Container(
                                   child: Center(
@@ -304,7 +304,7 @@ class _HomePageState extends State<HomePage> {
                               InkWell(
                                 borderRadius: BorderRadius.circular(26),
                                 onTap: () {
-                                  showNuevaMateria(context);
+                                  showNuevaMateria(context, _student);
                                 },
                                 child: Container(
                                   child: Center(
@@ -394,22 +394,22 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void showNuevaNota(BuildContext context) {
+  void showNuevaNota(BuildContext context, Student _student) {
     showDialog(
         barrierDismissible: true,
         context: context,
         builder: (BuildContext context) {
-          return DialogNuevaNota();
-        }).then((subject) => subject);
+          return DialogNuevaNota(_student);
+        });
   }
 
-  void showNuevaMateria(BuildContext context) {
+  void showNuevaMateria(BuildContext context, Student _student) {
     showDialog(
       barrierDismissible: true,
       context: context,
       builder: (BuildContext context) {
-        return DialogNuevaMateria();
+        return DialogNuevaMateria(_student);
       },
-    ).then((value) {});
+    );
   }
 }

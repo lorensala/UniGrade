@@ -9,6 +9,10 @@ import 'package:mis_notas/data/subject_dao.dart';
 import 'package:mis_notas/entities/university.dart';
 
 class DialogNuevaNota extends StatefulWidget {
+  final Student _student;
+
+  DialogNuevaNota(this._student);
+
   @override
   _DialogNuevaNotaState createState() => _DialogNuevaNotaState();
 }
@@ -26,15 +30,7 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
 
   @override
   void initState() {
-    //TODO:
-    _subjects = _subjectDao.getAllSubjectsByUser(Student(
-        'Lorenzo Sala',
-        '',
-        [],
-        '',
-        University([Career('Ingeniería en Sistemas')], 'UTN', 'UTN-FRC'),
-        [],
-        ''));
+    _subjects = _subjectDao.getAllSubjectsByUser(widget._student);
 
     super.initState();
   }

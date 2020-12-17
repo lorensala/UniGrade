@@ -1,10 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mis_notas/entities/student.dart';
-import 'package:mis_notas/services/sing_in.dart';
-import 'package:mis_notas/widgets/main_login.dart';
-import 'package:mis_notas/widgets/new_user_login.dart';
+
+import 'package:mis_notas/pages/login/main_login.dart';
+import 'package:mis_notas/pages/login/new_user_login.dart';
 
 import 'package:provider/provider.dart';
 

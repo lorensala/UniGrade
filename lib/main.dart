@@ -14,7 +14,7 @@ import 'package:mis_notas/pages/mis_notas.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:mis_notas/services/statistics.dart';
-import 'package:mis_notas/widgets/new_user_login.dart';
+import 'package:mis_notas/pages/login/new_user_login.dart';
 
 import 'package:provider/provider.dart';
 

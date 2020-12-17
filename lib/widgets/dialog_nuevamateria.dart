@@ -9,6 +9,9 @@ import 'package:mis_notas/data/datamanager.dart';
 import 'package:mis_notas/data/subject_dao.dart';
 
 class DialogNuevaMateria extends StatefulWidget {
+  final Student _student;
+
+  DialogNuevaMateria(this._student);
   @override
   _DialogNuevaMateriaState createState() => _DialogNuevaMateriaState();
 }
@@ -35,15 +38,8 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
 
   @override
   void initState() {
-    //TODO: Hardcoded
-    _subjects = _subjectDao.getAllSubjectsByUser(Student(
-        'Lorenzo Sala',
-        '',
-        [],
-        '',
-        University([Career('Ingeniería en Sistemas')], 'UTN', 'UTN-FRC'),
-        [],
-        ''));
+    _subjects = _subjectDao.getAllSubjectsByUser(widget._student);
+    print(_subjects);
     super.initState();
   }
 

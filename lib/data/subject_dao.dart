@@ -115,6 +115,7 @@ class SubjectDao {
       });
     } catch (e) {
       print(e);
+
       print('=======error======');
     }
 

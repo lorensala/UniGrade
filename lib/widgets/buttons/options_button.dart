@@ -25,7 +25,7 @@ class _OptionButtonState extends State<OptionButton> {
               fontFamily: 'Avenir LT Std',
               fontSize: 14,
               color: widget._isPressed ? colors[0] : colors[1],
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w800,
             ),
             textAlign: TextAlign.left,
           ),

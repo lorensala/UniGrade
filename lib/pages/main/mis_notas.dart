@@ -246,20 +246,33 @@ class _MisNotasState extends State<MisNotas> {
 
                           default:
                             if (snapshot.hasError) return Text('error');
-                            if (snapshot.hasData) {
+                            if (!snapshot.data.isEmpty) {
                               return Expanded(
                                 child: ListView.builder(
                                   physics: BouncingScrollPhysics(),
                                   itemCount: snapshot.data.length,
                                   itemBuilder: (context, index) {
                                     Subject sub = snapshot.data[index];
-                                    print(sub.getGradesTP());
                                     return GradeCard(sub);
                                   },
                                 ),
                               );
                             } else {
-                              return Text('No data');
+                              //TODO: Return something nice.
+                              return Padding(
+                                padding: EdgeInsets.all(20),
+                                child: Center(
+                                  child: Text(
+                                    'No existen materias en esta categoría :(',
+                                    style: TextStyle(
+                                      fontFamily: 'Avenir LT Std',
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ),
+                              );
                             }
                         }
                       })

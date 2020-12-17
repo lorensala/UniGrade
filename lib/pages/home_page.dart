@@ -432,11 +432,11 @@ class _HomePageState extends State<HomePage> {
                                           right: 4,
                                           top: 4,
                                           child: CircleAvatar(
-                                            backgroundColor: white,
+                                            backgroundColor: blue,
                                           ),
                                         ),
                                         IconButton(
-                                          icon: Image.asset(buttons['home'][0]),
+                                          icon: Image.asset(buttons['home'][1]),
                                           onPressed: () => {},
                                         ),
                                       ],

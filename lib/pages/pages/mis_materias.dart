@@ -101,6 +101,7 @@ class _MisMateriasState extends State<MisMaterias> {
             ),
 
             Padding(
+              //TODO: Implementar la busqueda si es posible.
               padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
               child: SearchBar(null),
             ),
@@ -233,9 +234,8 @@ class _MisMateriasState extends State<MisMaterias> {
                     case ConnectionState.waiting:
                       return Center(child: CircularProgressIndicator());
                     default:
-                      if (snapshot.hasError)
-                        return Text('error');
-                      else
+                      if (snapshot.hasError) return Text('error');
+                      if (!snapshot.data.isEmpty) {
                         return Expanded(
                             child: ListView.builder(
                           itemCount: snapshot.data.length,
@@ -244,6 +244,22 @@ class _MisMateriasState extends State<MisMaterias> {
                           },
                           physics: BouncingScrollPhysics(),
                         ));
+                      } else {
+                        return Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Center(
+                            child: Text(
+                              'No existen materias en esta categoría :(',
+                              style: TextStyle(
+                                fontFamily: 'Avenir LT Std',
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
                   }
                 })
           ],

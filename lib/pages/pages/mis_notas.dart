@@ -107,6 +107,7 @@ class _MisNotasState extends State<MisNotas> {
                     ),
                   ),
                   Padding(
+                    //TODO: Implementar la busqueda si es posible.
                     padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
                     child: SearchBar(null),
                   ),

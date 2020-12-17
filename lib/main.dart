@@ -5,11 +5,11 @@ import 'package:mis_notas/entities/career.dart';
 import 'package:mis_notas/entities/university.dart';
 import 'package:mis_notas/entities/student.dart';
 
-import 'package:mis_notas/pages/home_page.dart';
+import 'package:mis_notas/pages/main/home.dart';
 import 'package:mis_notas/pages/login/login_page.dart';
-import 'package:mis_notas/pages/main/mis_estadistica.dart';
-import 'package:mis_notas/pages/main/mis_materias.dart';
-import 'package:mis_notas/pages/main/mis_notas.dart';
+import 'package:mis_notas/pages/pages/mis_estadistica.dart';
+import 'package:mis_notas/pages/pages/mis_materias.dart';
+import 'package:mis_notas/pages/pages/mis_notas.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 
@@ -45,11 +45,15 @@ void main() async {
           create: (context) => Statistics(0, 0, 0)),
       ChangeNotifierProvider<ValueNotifier<bool>>(
         create: (context) => ValueNotifier<bool>(false),
-      )
+      ),
+      ChangeNotifierProvider<ValueNotifier<int>>(
+        create: (context) => ValueNotifier<int>(1),
+      ),
     ],
     child: MaterialApp(
         initialRoute: _isLoggedIn ? '/homepage' : '/login',
         routes: {
+          //TODO: Creo que no hace falta el new user login, probar.
           '/': (context) => NewUserLogin(),
           '/login': (context) => LoginPage(),
           '/homepage': (context) => HomePage(),

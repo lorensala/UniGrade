@@ -35,7 +35,7 @@ class _OptionButtonState extends State<OptionButton> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(26.0),
           color: widget._isPressed ? colors[1] : colors[0],
-          border: Border.all(width: 1.0, color: const Color(0xff66aaff)),
+          border: Border.all(width: 2.2, color: const Color(0xff66aaff)),
         ),
       ),
     );

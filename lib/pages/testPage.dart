@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mis_notas/data/statistics_dao.dart';
 import 'package:mis_notas/entities/student.dart';
-import 'package:mis_notas/services/statistics.dart';
+import 'package:mis_notas/services/statistics_service.dart';
 import 'package:provider/provider.dart';
 
 class TestPage extends StatelessWidget {

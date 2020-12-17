@@ -1,5 +1,6 @@
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
+import 'package:mis_notas/entities/statistics.dart';
 
 import 'package:mis_notas/widgets/styles/statistics_container.dart';
 
@@ -27,7 +28,14 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
 
   @override
   Widget build(BuildContext context) {
-    var _student = Provider.of<Student>(context);
+    Student _student = Provider.of<Student>(context);
+    Statistics _statistics = Provider.of<Statistics>(context, listen: false);
+
+    print(_statistics.getAvg().toString());
+
+    //TODO: Fijarse que la cantidad de materias es dinamica.
+
+    double percentage = _statistics.getPassed() / 40;
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -121,7 +129,7 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                                 gradient: SweepGradient(
                                     colors: [Colors.blue, Colors.blue[200]],
                                     stops: <double>[0.25, 0.60]),
-                                value: 50,
+                                value: percentage,
                                 cornerStyle: CornerStyle.bothCurve,
                                 width: 0.14,
                                 sizeUnit: GaugeSizeUnit.factor,
@@ -129,7 +137,7 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                                 animationDuration: 600,
                                 animationType: AnimationType.linear),
                             MarkerPointer(
-                                value: 50,
+                                value: percentage,
                                 color: Colors.blue,
                                 markerType: MarkerType.circle,
                                 markerHeight: 22,
@@ -183,15 +191,25 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                   padding: const EdgeInsets.fromLTRB(0, 10, 0, 18),
                   child: Container(
                     height: 130,
-                    child: ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 4,
-                      itemBuilder: (context, index) {
-                        return StatisticsContainer(
-                            '8.45', 'Promedio\nsin aplazos');
-                      },
-                    ),
+                    child: ListView(
+                        physics: BouncingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        children: <Widget>[
+                          StatisticsContainer(
+                              percentage.toString(), 'Carrera Completada'),
+                          StatisticsContainer(_statistics.getAvg().toString(),
+                              'Promedio\nsin aplazos'),
+                          StatisticsContainer(
+                              _statistics.getPassed().toString(),
+                              'Materias\nAprobadas'),
+                          StatisticsContainer(_statistics.getLeft().toString(),
+                              'Materias\nRestantes'),
+
+                          //StatisticsContainer('8.45', 'Promedio\nsin aplazos'),
+                          //StatisticsContainer('8.45', 'Promedio\nsin aplazos'),
+                          //StatisticsContainer('8.45', 'Promedio\nsin aplazos'),
+                          // StatisticsContainer('8.45', 'Promedio\nsin aplazos'),
+                        ]),
                   ),
                 ),
                 Padding(

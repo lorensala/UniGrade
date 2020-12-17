@@ -10,7 +10,7 @@ import 'package:mis_notas/entities/statistics.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
 import 'package:mis_notas/entities/university.dart';
-import 'package:mis_notas/services/statistics.dart';
+import 'package:mis_notas/services/statistics_service.dart';
 
 import 'package:mis_notas/support/text_formatter.dart';
 
@@ -80,6 +80,8 @@ class _HomePageState extends State<HomePage> {
     ValueNotifier<bool> _isNew = Provider.of<ValueNotifier<bool>>(context);
     Statistics _statistics = Provider.of<Statistics>(context, listen: false);
 
+    print(_statistics.getAvg());
+
     //TODO: Si el usuario es nuevo, mostrar un mensaje de bienvenida!!
 
     return WillPopScope(
@@ -126,13 +128,9 @@ class _HomePageState extends State<HomePage> {
                         );
                       default:
                         if (snapshot.hasError) return Text('error');
-
-                        var _newStats = new Statistics(snapshot.data[0],
-                            snapshot.data[1], snapshot.data[2]);
-
-                        print(_newStats.getAvg());
-
-                        _statistics = _newStats;
+                        _statistics.avg = snapshot.data[0];
+                        _statistics.left = snapshot.data[1];
+                        _statistics.passed = snapshot.data[2];
 
                         return Scaffold(
                             backgroundColor: Colors.white,
@@ -262,10 +260,13 @@ class _HomePageState extends State<HomePage> {
                                         height: 20,
                                       ),
                                       Center(
-                                          child: QuickBar(
-                                        prom: _statistics.getAvg(),
-                                        aprobadas: _statistics.getPassed(),
-                                        restantes: _statistics.getLeft(),
+                                          child: Consumer<Statistics>(
+                                        builder: (_, statistics, ___) =>
+                                            QuickBar(
+                                          prom: statistics.getAvg(),
+                                          aprobadas: statistics.getPassed(),
+                                          restantes: statistics.getLeft(),
+                                        ),
                                       )),
                                       SizedBox(
                                         height: 30,

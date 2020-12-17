@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mis_notas/entities/career.dart';
@@ -170,9 +171,32 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
                     ),
                     InkWell(
                       borderRadius: BorderRadius.circular(26),
-                      onTap: () {
-                        _subjectDao.addGrade(int.parse(_nota.text),
-                            _selectedSubject, _selectedType);
+                      onTap: () async {
+                        if (_selectedSubject != null &&
+                            _selectedType != null &&
+                            _nota.text != '') {
+                          bool isDone = await _subjectDao.addGrade(
+                              widget._student,
+                              int.parse(_nota.text),
+                              _selectedSubject,
+                              _selectedType);
+
+                          isDone
+                              ? CoolAlert.show(
+                                  borderRadius: 26,
+                                  title: 'Éxito',
+                                  backgroundColor: Colors.white,
+                                  context: context,
+                                  type: CoolAlertType.success,
+                                  text: 'Nota añadida con exito!')
+                              : CoolAlert.show(
+                                  borderRadius: 26,
+                                  title: 'Error',
+                                  backgroundColor: Colors.white,
+                                  context: context,
+                                  type: CoolAlertType.error,
+                                  text: 'Error al añadir la nota');
+                        }
                       },
                       child: Container(
                         width: 129.0,

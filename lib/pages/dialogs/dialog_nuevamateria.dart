@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 
-import 'package:mis_notas/entities/career.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
-import 'package:mis_notas/entities/university.dart';
 
 import 'package:mis_notas/data/datamanager.dart';
 import 'package:mis_notas/data/subject_dao.dart';
 
+import 'package:cool_alert/cool_alert.dart';
+
 class DialogNuevaMateria extends StatefulWidget {
   final Student _student;
+  final BuildContext context;
 
-  DialogNuevaMateria(this._student);
+  DialogNuevaMateria(this._student, this.context);
   @override
   _DialogNuevaMateriaState createState() => _DialogNuevaMateriaState();
 }
@@ -39,12 +40,13 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
   @override
   void initState() {
     _subjects = _subjectDao.getAllSubjectsByUser(widget._student);
-    print(_subjects);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    print(widget._student.getFullname());
+
     return Dialog(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(26.0)),
@@ -62,7 +64,7 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
                     fontFamily: 'Avenir LT Std',
                     fontSize: 22,
                     color: const Color(0xff000000),
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w800,
                   ),
                   textAlign: TextAlign.left,
                 ),
@@ -116,6 +118,7 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
                   width: 288.0,
                   height: 37.0,
                   decoration: BoxDecoration(
+                    //border: Border.all(color: Colors.red, width: 2),
                     borderRadius: BorderRadius.circular(26.0),
                     color: const Color(0xfff7f7f7),
                   ),
@@ -146,13 +149,33 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
                   children: <Widget>[
                     InkWell(
                       borderRadius: BorderRadius.circular(26),
-                      onTap: () {
+                      onTap: () async {
                         if (_selectedCondition != null &&
                             _selectedSubject != null) {
-                          _subjectDao.updateSubjectCondition(
-                              _selectedSubject, _selectedCondition);
+                          bool isDone =
+                              await _subjectDao.updateSubjectCondition(
+                                  widget._student,
+                                  _selectedSubject,
+                                  _selectedCondition);
+                          isDone
+                              ? CoolAlert.show(
+                                  borderRadius: 26,
+                                  title: 'Éxito',
+                                  backgroundColor: Colors.white,
+                                  context: context,
+                                  type: CoolAlertType.success,
+                                  text: '¡Materia actualizada con exito!')
+                              : CoolAlert.show(
+                                  borderRadius: 26,
+                                  title: 'Error',
+                                  backgroundColor: Colors.white,
+                                  context: context,
+                                  type: CoolAlertType.error,
+                                  text: 'Error al actualizar la nota');
 
-                          Navigator.pop(context);
+                          //Navigator.pop(context);
+                        } else {
+                          //TODO: mostrar que hay que ingresar los datos.
                         }
                       },
                       child: Container(

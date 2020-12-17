@@ -8,15 +8,14 @@ import 'package:mis_notas/entities/career.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
 import 'package:mis_notas/entities/university.dart';
-import 'package:mis_notas/services/statistics.dart';
 
 import 'package:mis_notas/support/text_formatter.dart';
 
 import 'package:mis_notas/widgets/colors.dart';
 import 'package:mis_notas/pages/dialogs/dialog_nuevamateria.dart';
 import 'package:mis_notas/pages/dialogs/dialog_nuevanota.dart';
-import 'package:mis_notas/widgets/main_button.dart';
-import 'package:mis_notas/widgets/quick_bar.dart';
+import 'package:mis_notas/widgets/buttons/main_button.dart';
+import 'package:mis_notas/widgets/components/quick_bar.dart';
 
 import 'package:provider/provider.dart';
 
@@ -403,12 +402,12 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
-  void showNuevaMateria(BuildContext context, Student _student) {
+  void showNuevaMateria(BuildContext _context, Student _student) {
     showDialog(
       barrierDismissible: true,
       context: context,
       builder: (BuildContext context) {
-        return DialogNuevaMateria(_student);
+        return DialogNuevaMateria(_student, _context);
       },
     );
   }

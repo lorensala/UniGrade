@@ -119,12 +119,7 @@ class _MisNotasState extends State<MisNotas> {
                                   itemBuilder: (context, index) {
                                     Subject sub = snapshot.data[index];
                                     print(sub.getGradesTP());
-                                    return GradeCard(
-                                        sub.getName(),
-                                        sub.getGradesP(),
-                                        sub.getGradesT(),
-                                        sub.getGradesTP(),
-                                        sub.getNf());
+                                    return GradeCard(sub);
                                   },
                                 ),
                               );

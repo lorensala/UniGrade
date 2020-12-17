@@ -18,8 +18,6 @@ class DialogNuevaMateria extends StatefulWidget {
 }
 
 class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
-  //TODO: Hay que traer las materias que no tengan estado,o esten libres/abandonas.
-
   var db = DataManager();
 
   SubjectDao _subjectDao = SubjectDao();

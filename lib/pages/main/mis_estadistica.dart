@@ -142,19 +142,16 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                             GaugeAnnotation(
                                 positionFactor: 0.08,
                                 angle: 90,
-                                widget: Hero(
-                                  tag: 'profilePic',
-                                  child: Container(
-                                    width: 190.0,
-                                    height: 188.0,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.elliptical(9999.0, 9999.0)),
-                                      image: DecorationImage(
-                                        image: NetworkImage(
-                                            _student.getProfilePic()),
-                                        fit: BoxFit.cover,
-                                      ),
+                                widget: Container(
+                                  width: 190.0,
+                                  height: 188.0,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.elliptical(9999.0, 9999.0)),
+                                    image: DecorationImage(
+                                      image: NetworkImage(
+                                          _student.getProfilePic()),
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
                                 ))

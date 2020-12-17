@@ -26,18 +26,15 @@ class _NewUserLoginState extends State<NewUserLogin> {
           padding: EdgeInsets.only(top: 200),
           child: Column(
             children: <Widget>[
-              Hero(
-                tag: 'uniGrade_text',
-                child: Text(
-                  'UniGrade',
-                  style: TextStyle(
-                    fontFamily: 'Avenir LT Std',
-                    fontSize: 50,
-                    color: const Color(0xff000000),
-                    fontWeight: FontWeight.w800,
-                  ),
-                  textAlign: TextAlign.left,
+              Text(
+                'UniGrade',
+                style: TextStyle(
+                  fontFamily: 'Avenir LT Std',
+                  fontSize: 50,
+                  color: const Color(0xff000000),
+                  fontWeight: FontWeight.w800,
                 ),
+                textAlign: TextAlign.left,
               ),
               Text(
                 '¡Organiza tu carrera!',
@@ -155,7 +152,7 @@ class _NewUserLoginState extends State<NewUserLogin> {
 
                           _student = await _studentDao.addNewStudent(_student);
 
-                          Navigator.pushNamed(context, '/homepage');
+                          Navigator.of(context).pushNamed('/homepage');
                         },
                         child: Container(
                           width: 129.0,

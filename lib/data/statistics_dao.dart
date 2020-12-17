@@ -8,9 +8,9 @@ class StatisticsDao {
     try {
       CollectionReference collRef = FirebaseFirestore.instance
           .collection('student')
-          .doc(_student.getCareerDocRefs()[0])
-          .collection('career_student')
           .doc(_student.getStudentDocRef())
+          .collection('career_student')
+          .doc(_student.getCareerDocRefs()[0])
           .collection('subject_student');
 
       Future<QuerySnapshot> docs = FirebaseFirestore.instance
@@ -21,6 +21,7 @@ class StatisticsDao {
       await docs.then((value) {
         value.docs.forEach((element) {
           Map<String, dynamic> _sub = element.data();
+
           if (_sub.isNotEmpty) _list.add(_sub);
         });
         print('=====succed====');

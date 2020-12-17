@@ -55,7 +55,7 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
                     fontFamily: 'Avenir LT Std',
                     fontSize: 22,
                     color: const Color(0xff000000),
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w800,
                   ),
                   textAlign: TextAlign.left,
                 ),
@@ -196,6 +196,8 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
                                   context: context,
                                   type: CoolAlertType.error,
                                   text: 'Error al añadir la nota');
+                        } else {
+                          //TODO: mostrar que hay que ingresar los datos.
                         }
                       },
                       child: Container(

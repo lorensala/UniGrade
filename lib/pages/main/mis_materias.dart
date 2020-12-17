@@ -5,9 +5,9 @@ import 'package:mis_notas/entities/career.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/university.dart';
 
-import 'package:mis_notas/widgets/subject_card_style.dart';
-import 'package:mis_notas/widgets/options_button.dart';
-import 'package:mis_notas/widgets/search_bar.dart';
+import 'package:mis_notas/widgets/styles/subject_card_style.dart';
+import 'package:mis_notas/widgets/buttons/options_button.dart';
+import 'package:mis_notas/widgets/components/search_bar.dart';
 import 'package:provider/provider.dart';
 
 class MisMaterias extends StatefulWidget {

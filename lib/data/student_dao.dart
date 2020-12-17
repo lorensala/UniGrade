@@ -155,8 +155,6 @@ class StudentDao {
     await collRef.add({'name': 'Ingeniería en Sistemas de Informacion'}).then(
         (value) => print('===== Se anadio la carrera======='));
 
-    print(await getCarrerDocRefs(_student.getStudentDocRef()));
-
     var subPath = await getCarrerDocRefs(carPath);
 
     _newStudent.carrerDocRefs = [subPath];

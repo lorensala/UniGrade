@@ -5,11 +5,10 @@ import 'package:mis_notas/entities/career.dart';
 import 'package:mis_notas/entities/university.dart';
 
 import 'package:mis_notas/pages/home_page.dart';
-import 'package:mis_notas/pages/loading_screen.dart';
 import 'package:mis_notas/pages/login/login_page.dart';
-import 'package:mis_notas/pages/mis_estadistica.dart';
-import 'package:mis_notas/pages/mis_materias.dart';
-import 'package:mis_notas/pages/mis_notas.dart';
+import 'package:mis_notas/pages/main/mis_estadistica.dart';
+import 'package:mis_notas/pages/main/mis_materias.dart';
+import 'package:mis_notas/pages/main/mis_notas.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 

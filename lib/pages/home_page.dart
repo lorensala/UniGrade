@@ -13,8 +13,8 @@ import 'package:mis_notas/services/statistics.dart';
 import 'package:mis_notas/support/text_formatter.dart';
 
 import 'package:mis_notas/widgets/colors.dart';
-import 'package:mis_notas/widgets/dialog_nuevamateria.dart';
-import 'package:mis_notas/widgets/dialog_nuevanota.dart';
+import 'package:mis_notas/pages/dialogs/dialog_nuevamateria.dart';
+import 'package:mis_notas/pages/dialogs/dialog_nuevanota.dart';
 import 'package:mis_notas/widgets/main_button.dart';
 import 'package:mis_notas/widgets/quick_bar.dart';
 

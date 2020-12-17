@@ -1,8 +1,7 @@
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 
-import 'package:mis_notas/widgets/text_style.dart';
-import 'package:mis_notas/widgets/statistics_container.dart';
+import 'package:mis_notas/widgets/styles/statistics_container.dart';
 
 import 'package:mis_notas/entities/student.dart';
 
@@ -174,7 +173,12 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                   padding: const EdgeInsets.fromLTRB(24, 5, 24, 0),
                   child: Text(
                     'Información General:',
-                    style: headerText,
+                    style: TextStyle(
+                      fontFamily: 'Avenir LT Std',
+                      fontSize: 22,
+                      color: const Color(0xff000000),
+                      fontWeight: FontWeight.w800,
+                    ),
                     textAlign: TextAlign.left,
                   ),
                 ),

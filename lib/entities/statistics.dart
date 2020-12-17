@@ -7,14 +7,16 @@ class Statistics extends ChangeNotifier {
   //double _realAvg;
   int _passed;
   int _left;
+  int _pp;
+  int _pt;
+  int _ap;
 
-  set avg(avg) => _avg;
+  set avg(avg) => _avg = avg;
   //set realAvg(avg) => _realAvg;
-  set passed(avg) => _passed;
-  set left(avg) => _left;
-
-  getAvg() => _avg;
+  set passed(passed) => _passed = passed;
+  set left(left) => _left = left;
+  double getAvg() => _avg;
   //getRealAvg() => _avg;
-  getPassed() => _passed;
-  getLeft() => _left;
+  int getPassed() => _passed;
+  int getLeft() => _left;
 }

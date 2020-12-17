@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import 'package:mis_notas/entities/career.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
-import 'package:mis_notas/entities/university.dart';
 
 import 'package:mis_notas/data/subject_dao.dart';
 
@@ -18,9 +16,45 @@ class MisNotas extends StatefulWidget {
   _MisNotasState createState() => _MisNotasState();
 }
 
-var _subjectDao = new SubjectDao();
-
 class _MisNotasState extends State<MisNotas> {
+  String condition = 'All';
+  bool isPressedAll = true;
+  bool isPressedCursando = false;
+  bool isPressedAprobadas = false;
+  bool isPressedLibre = false;
+  bool isPressedPP = false;
+  bool isPressedPT = false;
+  bool isPressedAD = false;
+
+  Future<List<Subject>> getData(Student _student, String condition) async {
+    var _subjectDao = new SubjectDao();
+
+    switch (condition) {
+      case 'All':
+        return await _subjectDao.getAllSubjectsByUser(_student);
+      case 'Cursando':
+        return await _subjectDao.getAllSubjectsByUserCondition(
+            _student, condition);
+      case 'Aprobadas':
+        return await _subjectDao.getAllSubjectsByUserCondition(
+            _student, condition);
+      case 'Libre':
+        return await _subjectDao.getAllSubjectsByUserCondition(
+            _student, condition);
+      case 'Promoción Práctica':
+        return await _subjectDao.getAllSubjectsByUserCondition(
+            _student, condition);
+      case 'Promoción Teórica':
+        return await _subjectDao.getAllSubjectsByUserCondition(
+            _student, condition);
+      case 'Aprobación Directa':
+        return await _subjectDao.getAllSubjectsByUserCondition(
+            _student, condition);
+      default:
+        return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,11 +121,114 @@ class _MisNotasState extends State<MisNotas> {
                           crossAxisAlignment: WrapCrossAlignment.end,
                           //alignment: WrapAlignment.spaceAround,
                           children: <Widget>[
-                            OptionButton('Cursando', true),
-                            OptionButton('Aprobadas', false),
-                            OptionButton('Libre', false),
-                            OptionButton('Promoción', false),
-                            OptionButton('Ap. Directa', false),
+                            InkWell(
+                              borderRadius: BorderRadius.circular(26),
+                              child: OptionButton('Todas', isPressedAll),
+                              onTap: () {
+                                setState(() {
+                                  isPressedAll = true;
+                                  isPressedCursando = false;
+                                  isPressedAprobadas = false;
+                                  isPressedLibre = false;
+                                  isPressedPP = false;
+                                  isPressedPT = false;
+                                  isPressedAD = false;
+                                  condition = 'All';
+                                });
+                              },
+                            ),
+                            InkWell(
+                                borderRadius: BorderRadius.circular(26),
+                                child:
+                                    OptionButton('Cursando', isPressedCursando),
+                                onTap: () {
+                                  setState(() {
+                                    isPressedAll = false;
+                                    isPressedCursando = true;
+                                    isPressedAprobadas = false;
+                                    isPressedLibre = false;
+                                    isPressedPP = false;
+                                    isPressedPT = false;
+                                    isPressedAD = false;
+                                    condition = 'Cursando';
+                                  });
+                                }),
+                            InkWell(
+                                borderRadius: BorderRadius.circular(26),
+                                child: OptionButton(
+                                    'Aprobadas', isPressedAprobadas),
+                                onTap: () {
+                                  setState(() {
+                                    isPressedAll = false;
+                                    isPressedCursando = false;
+                                    isPressedAprobadas = true;
+                                    isPressedLibre = false;
+                                    isPressedPP = false;
+                                    isPressedPT = false;
+                                    isPressedAD = false;
+                                    condition = 'Aprobadas';
+                                  });
+                                }),
+                            InkWell(
+                                borderRadius: BorderRadius.circular(26),
+                                child: OptionButton('Libre', isPressedLibre),
+                                onTap: () {
+                                  setState(() {
+                                    isPressedAll = false;
+                                    isPressedCursando = false;
+                                    isPressedAprobadas = false;
+                                    isPressedLibre = true;
+                                    isPressedPP = false;
+                                    isPressedPT = false;
+                                    isPressedAD = false;
+                                    condition = 'Aprobadas';
+                                  });
+                                }),
+                            InkWell(
+                                borderRadius: BorderRadius.circular(26),
+                                child: OptionButton('Prom. Prác.', isPressedPP),
+                                onTap: () {
+                                  setState(() {
+                                    isPressedAll = false;
+                                    isPressedCursando = false;
+                                    isPressedAprobadas = false;
+                                    isPressedLibre = false;
+                                    isPressedPP = true;
+                                    isPressedPT = false;
+                                    isPressedAD = false;
+                                    condition = 'Promoción Práctica';
+                                  });
+                                }),
+                            InkWell(
+                                borderRadius: BorderRadius.circular(26),
+                                child: OptionButton('Prom. Teó.', isPressedPT),
+                                onTap: () {
+                                  setState(() {
+                                    isPressedAll = false;
+                                    isPressedCursando = false;
+                                    isPressedAprobadas = false;
+                                    isPressedLibre = false;
+                                    isPressedPP = false;
+                                    isPressedPT = true;
+                                    isPressedAD = false;
+                                    condition = 'Promoción Teórica';
+                                  });
+                                }),
+                            InkWell(
+                                borderRadius: BorderRadius.circular(26),
+                                child: OptionButton('Ap. Directa', isPressedAD),
+                                onTap: () {
+                                  setState(() {
+                                    isPressedAll = false;
+                                    isPressedCursando = false;
+                                    isPressedAprobadas = false;
+                                    isPressedLibre = false;
+                                    isPressedPP = false;
+                                    isPressedPT = false;
+                                    isPressedAD = true;
+                                    condition = 'Aprobación Directa';
+                                  });
+                                }),
                           ],
                         ),
                         SizedBox(
@@ -101,17 +238,15 @@ class _MisNotasState extends State<MisNotas> {
                     ),
                   ),
                   FutureBuilder(
-                      future: _subjectDao
-                          .getAllSubjectsByUser(Provider.of<Student>(context)),
+                      future: getData(Provider.of<Student>(context), condition),
                       builder: (context, snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.waiting:
                             return Center(child: CircularProgressIndicator());
 
                           default:
-                            if (snapshot.hasError)
-                              return Text('error');
-                            else
+                            if (snapshot.hasError) return Text('error');
+                            if (snapshot.hasData) {
                               return Expanded(
                                 child: ListView.builder(
                                   physics: BouncingScrollPhysics(),
@@ -123,6 +258,9 @@ class _MisNotasState extends State<MisNotas> {
                                   },
                                 ),
                               );
+                            } else {
+                              return Text('No data');
+                            }
                         }
                       })
                 ],

@@ -84,6 +84,7 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
                               else
                                 return DropdownButtonHideUnderline(
                                   child: DropdownButton(
+                                    isExpanded: true,
                                     value: _selectedSubject,
                                     hint: new Text('Materia'),
                                     onChanged: (newValue) {

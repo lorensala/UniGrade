@@ -89,6 +89,7 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
                             default:
                               return DropdownButtonHideUnderline(
                                 child: DropdownButton(
+                                  isExpanded: true,
                                   value: _selectedSubject,
                                   onChanged: (newValue) {
                                     setState(() {

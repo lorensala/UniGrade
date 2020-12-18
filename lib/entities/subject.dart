@@ -42,11 +42,19 @@ class Subject extends ChangeNotifier {
   // TODO: Ver theme.of(context) como funciona y ver de hacer la carpeta con los Colores.
 
   Color getColor() {
-    switch (_type) {
-      case 'software':
-        return Color(0xFFFC8370);
-      case 'logica':
+    switch (_year.toString()) {
+      case '1':
+        return Color(0xFF4F5973);
+      case '2':
         return Color(0xFFB3A5EF);
+      case '3':
+        return Color(0xFF62DDBD);
+      case '4':
+        return Color(0xFFFFC305);
+      case '5':
+        return Color(0xFF96CBFF);
+      default:
+        return Colors.amber;
     }
   }
 }

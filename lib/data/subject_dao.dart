@@ -8,7 +8,7 @@ import 'package:mis_notas/data/datamanager.dart';
 class SubjectDao {
   final db = DataManager();
 
-  Future<List<Subject>> getSubjectsBySearch(String searchParam) async {
+  /* Future<List<Subject>> getSubjectsBySearch(String searchParam) async {
     List<Subject> list = List<Subject>();
     CollectionReference collReference;
 
@@ -44,7 +44,7 @@ class SubjectDao {
     }
 
     return list;
-  }
+  } */
 
   Future<List<Subject>> getAllSubjectsWithCondition(Student student) async {
     List<Subject> list = List<Subject>();
@@ -83,16 +83,16 @@ class SubjectDao {
     return list;
   }
 
-  Future<List<Subject>> getAllSubjectsWithNoState(Student student) async {
+  Future<List<Subject>> getAllSubjectsWithNoCondition(Student student) async {
     List<Subject> list = List<Subject>();
     CollectionReference collReference;
 
     try {
       collReference = FirebaseFirestore.instance
           .collection('student')
-          .doc('sw98JGNJh4XL9WRVVzBN')
+          .doc(student.getStudentDocRef())
           .collection('career_student')
-          .doc('Kynm7JSEA7ZyPpgyD9jp')
+          .doc(student.getCareerDocRefs()[0])
           .collection('subject_student');
 
       Future<QuerySnapshot> docs = FirebaseFirestore.instance
@@ -263,14 +263,22 @@ class SubjectDao {
             .doc(_student.getCareerDocRefs()[0])
             .collection('subject_student')
             .doc(_docId);
-
-      await _docRef.update({
-        'state': condition,
-      }).then((value) {
-        isDone = true;
-        print('============ Subject added succesfully ============');
-      }).catchError(
-          (error) => print('============ Error adding subject ============'));
+      if (condition != 'Abandonada') {
+        await _docRef.update({'state': condition, 'passed': true}).then(
+            (value) {
+          isDone = true;
+          print('============ Subject added succesfully ============');
+        }).catchError(
+            (error) => print('============ Error adding subject ============'));
+      } else {
+        await _docRef.update({
+          'state': condition,
+        }).then((value) {
+          isDone = true;
+          print('============ Subject added succesfully ============');
+        }).catchError(
+            (error) => print('============ Error adding subject ============'));
+      }
     } catch (e) {
       print('============ Error finding doc ============');
     }
@@ -282,6 +290,7 @@ class SubjectDao {
     var gradesP;
     var gradesT;
     var gradesTp;
+    var aplazos;
     var nf;
 
     sub['gradesP'] != null
@@ -296,6 +305,10 @@ class SubjectDao {
         ? gradesTp = new List<int>.from(sub['gradesTP'])
         : gradesTp = [];
 
+    sub['aplazos'] != null
+        ? aplazos = new List<int>.from(sub['gradesTP'])
+        : aplazos = [];
+
     sub['nf'] != null ? nf = sub['nf'] : nf = -1;
 
     return Subject(
@@ -307,7 +320,9 @@ class SubjectDao {
         nf,
         StateRecord(State(sub['state']), DateTime.now()),
         sub['type'],
-        sub['icon']);
+        sub['icon'],
+        sub['passed'],
+        aplazos);
   }
 
   /* Future<void> addSubject(Subject subject) {

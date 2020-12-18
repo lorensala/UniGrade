@@ -44,14 +44,16 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
         await _statisticsService.getSubjectsPassed(_student, _list, _year));
     _statisticsList
         .add(await _statisticsService.getSubjectsLeft(_student, _list, _year));
-    _statisticsList.add(
-        await _statisticsService.getSubjectsPromoP(_student, _list, _year));
-    _statisticsList.add(
-        await _statisticsService.getSubjectsPromoT(_student, _list, _year));
+    _statisticsList.add(await _statisticsService.getSubjectsCondition(
+        _student, _list, -1, 'Promoción Práctica'));
+    _statisticsList.add(await _statisticsService.getSubjectsCondition(
+        _student, _list, -1, 'Promoción Teórica'));
+    _statisticsList.add(await _statisticsService.getSubjectsCondition(
+        _student, _list, -1, 'Aprobación Directa'));
+    _statisticsList.add(await _statisticsService.getSubjectsCondition(
+        _student, _list, -1, 'Aprobación Directa'));
     _statisticsList
-        .add(await _statisticsService.getSubjectsApDir(_student, _list, _year));
-    _statisticsList.add(
-        await _statisticsService.getSubjectsRegulares(_student, _list, _year));
+        .add(await _statisticsService.getSubjectsCount(_student, _list, _year));
 
     return _statisticsList;
   }
@@ -316,8 +318,10 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                           );
                         default:
                           if (snapshot.data.isNotEmpty) {
+                            print(snapshot.data[7]);
                             int percentageYear =
-                                ((snapshot.data[1] * 100 / 40)).round();
+                                ((snapshot.data[1] * 100 / snapshot.data[7]))
+                                    .round();
 
                             return Padding(
                               padding: const EdgeInsets.fromLTRB(0, 10, 0, 18),

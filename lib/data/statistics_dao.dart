@@ -15,7 +15,7 @@ class StatisticsDao {
 
       Future<QuerySnapshot> docs = FirebaseFirestore.instance
           .collection(collRef.path)
-          .where('state', isNotEqualTo: '')
+          .where('passed', isEqualTo: true)
           .get();
 
       await docs.then((value) {

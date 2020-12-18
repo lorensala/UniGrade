@@ -3,21 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
 
-import 'package:mis_notas/data/datamanager.dart';
 import 'package:mis_notas/data/subject_dao.dart';
 
 import 'package:cool_alert/cool_alert.dart';
 
-class DialogNuevaMateria extends StatefulWidget {
+class DialogActualizarMateria extends StatefulWidget {
   final Student _student;
-  final BuildContext context;
 
-  DialogNuevaMateria(this._student, this.context);
+  DialogActualizarMateria(this._student);
   @override
   _DialogNuevaMateriaState createState() => _DialogNuevaMateriaState();
 }
 
-class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
+class _DialogNuevaMateriaState extends State<DialogActualizarMateria> {
   //var db = DataManager();
 
   bool _hasSelectedData = true;
@@ -30,6 +28,8 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
     'Promoción Teórica',
     'Promoción Práctica',
     'Aprobación Directa',
+    'Libre',
+    'Abandonada'
   ];
 
   Subject _selectedSubject;
@@ -39,7 +39,7 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
 
   @override
   void initState() {
-    _subjects = _subjectDao.getAllSubjectsByUser(widget._student);
+    _subjects = _subjectDao.getAllSubjectsWithNoCondition(widget._student);
     super.initState();
   }
 

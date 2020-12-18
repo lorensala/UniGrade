@@ -5,13 +5,16 @@ import 'package:mis_notas/entities/statistics.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
 
-import 'package:mis_notas/pages/dialogs/dialog_nuevamateria.dart';
-import 'package:mis_notas/pages/dialogs/dialog_nuevanota.dart';
+import 'package:mis_notas/pages/dialogs/dialog_actualizar_materia.dart';
+import 'package:mis_notas/pages/dialogs/dialog_modificar_nota.dart';
+import 'package:mis_notas/pages/dialogs/dialog_nueva_materia.dart';
+import 'package:mis_notas/pages/dialogs/dialog_nueva_nota.dart';
 
 import 'package:mis_notas/services/statistics_service.dart';
 import 'package:mis_notas/support/text_formatter.dart';
 
 import 'package:mis_notas/widgets/buttons/main_button.dart';
+import 'package:mis_notas/widgets/buttons/quick_buttons.dart';
 import 'package:mis_notas/widgets/components/quick_bar.dart';
 
 import 'package:provider/provider.dart';
@@ -33,14 +36,14 @@ class _MainPageState extends State<MainPage> {
         .add(await _statisticsService.getSubjectsLeft(_student, _list, -1));
     _dataList
         .add(await _statisticsService.getSubjectsPassed(_student, _list, -1));
-    _dataList
-        .add(await _statisticsService.getSubjectsPromoP(_student, _list, -1));
-    _dataList
-        .add(await _statisticsService.getSubjectsPromoT(_student, _list, -1));
-    _dataList
-        .add(await _statisticsService.getSubjectsApDir(_student, _list, -1));
-    _dataList.add(
-        await _statisticsService.getSubjectsRegulares(_student, _list, -1));
+    _dataList.add(await _statisticsService.getSubjectsCondition(
+        _student, _list, -1, 'Promoción Práctica'));
+    _dataList.add(await _statisticsService.getSubjectsCondition(
+        _student, _list, -1, 'Promoción Teórica'));
+    _dataList.add(await _statisticsService.getSubjectsCondition(
+        _student, _list, -1, 'Aprobación Directa'));
+    _dataList.add(await _statisticsService.getSubjectsCondition(
+        _student, _list, -1, 'Regular'));
 
     return _dataList;
   }
@@ -216,64 +219,45 @@ class _MainPageState extends State<MainPage> {
                     // Funciones rapidas
                     Padding(
                       padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
-                      child: Row(children: [
-                        InkWell(
-                          borderRadius: BorderRadius.circular(26),
-                          onTap: () {
-                            //student.addPromedio();
-                            showNuevaNota(context, _student);
-                          },
-                          child: Container(
-                            child: Center(
-                              child: Text(
-                                'Nueva Nota',
-                                style: TextStyle(
-                                  fontFamily: 'Avenir LT Std',
-                                  fontSize: 14,
-                                  color: const Color(0xff7c7979),
-                                  fontWeight: FontWeight.w800,
-                                ),
-                                textAlign: TextAlign.left,
-                              ),
+                      child: Wrap(
+                          spacing: 20,
+                          runSpacing: 10,
+                          crossAxisAlignment: WrapCrossAlignment.end,
+                          direction: Axis.horizontal,
+                          children: [
+                            InkWell(
+                                borderRadius: BorderRadius.circular(26),
+                                onTap: () {
+                                  //student.addPromedio();
+                                  showNuevaNota(context, _student);
+                                },
+                                child: QuickButton(
+                                    'Nueva Nota', Color(0xFFF5F5F5))),
+                            InkWell(
+                              borderRadius: BorderRadius.circular(26),
+                              onTap: () {
+                                showActualizarMateria(context, _student);
+                              },
+                              child: QuickButton(
+                                  'Actualizar Materia', Color(0xFFFFDCDC)),
                             ),
-                            width: 129.0,
-                            height: 35.0,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(26.0),
-                              color: const Color(0xfff0f0f0),
+                            InkWell(
+                              borderRadius: BorderRadius.circular(26),
+                              onTap: () {
+                                showNuevaMateria(context, _student);
+                              },
+                              child: QuickButton(
+                                  'Nueva Materia', Color(0xFFF5DCFF)),
                             ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 18,
-                        ),
-                        InkWell(
-                          borderRadius: BorderRadius.circular(26),
-                          onTap: () {
-                            showNuevaMateria(context, _student);
-                          },
-                          child: Container(
-                            child: Center(
-                              child: Text(
-                                'Nueva Materia',
-                                style: TextStyle(
-                                  fontFamily: 'Avenir LT Std',
-                                  fontSize: 14,
-                                  color: const Color(0xff7c7979),
-                                  fontWeight: FontWeight.w800,
-                                ),
-                                textAlign: TextAlign.left,
-                              ),
-                            ),
-                            width: 129.0,
-                            height: 35.0,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(26.0),
-                              color: const Color(0xffffdcdc),
-                            ),
-                          ),
-                        )
-                      ]),
+                            InkWell(
+                              borderRadius: BorderRadius.circular(26),
+                              onTap: () {
+                                showModificarNota(context, _student);
+                              },
+                              child: QuickButton(
+                                  'Modificar Nota', Color(0xFFCAFFC6)),
+                            )
+                          ]),
                     )
                   ],
                 ),
@@ -291,12 +275,32 @@ class _MainPageState extends State<MainPage> {
         });
   }
 
+  void showActualizarMateria(BuildContext _context, Student _student) {
+    showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (BuildContext context) {
+        return DialogActualizarMateria(_student);
+      },
+    );
+  }
+
   void showNuevaMateria(BuildContext _context, Student _student) {
     showDialog(
       barrierDismissible: true,
       context: context,
       builder: (BuildContext context) {
-        return DialogNuevaMateria(_student, _context);
+        return DialogNuevaMateria(_student);
+      },
+    );
+  }
+
+  void showModificarNota(BuildContext _context, Student _student) {
+    showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (BuildContext context) {
+        return DialogModificarNota(_student);
       },
     );
   }

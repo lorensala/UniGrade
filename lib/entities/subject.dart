@@ -8,11 +8,14 @@ class Subject extends ChangeNotifier {
   List<int> _gradesP;
   List<int> _gradesT;
   List<int> _gradesTP;
+  List<int> _aplazos;
   int _nf = -1;
   StateRecord _state;
   String _type;
   String _icon;
+  bool _passed;
 
+  List<int> getAplazos() => _aplazos;
   String getName() => _name;
   int getYear() => _year;
   List<int> getGradesP() => _gradesP;
@@ -22,9 +25,22 @@ class Subject extends ChangeNotifier {
   StateRecord getState() => _state;
   String getType() => _type;
   String getIcon() => _icon;
+  bool getPassed() => _passed;
 
-  Subject(this._name, this._year, this._gradesP, this._gradesT, this._gradesTP,
-      this._nf, this._state, this._type, this._icon);
+  set passed(passed) => _passed = passed;
+
+  Subject(
+      this._name,
+      this._year,
+      this._gradesP,
+      this._gradesT,
+      this._gradesTP,
+      this._nf,
+      this._state,
+      this._type,
+      this._icon,
+      this._passed,
+      this._aplazos);
 
   @override
   String toString() {

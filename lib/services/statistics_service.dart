@@ -3,7 +3,7 @@ import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
 
 class StatisticsService extends ChangeNotifier {
-  //TODO: El promedio debe calcularse en base a las que tienennota final
+  //TODO: El promedio debe calcularse en base a las que tienen nota final.
 
   Future<double> getAvgNf(
       Student _student, List<Subject> _list, int _year) async {
@@ -53,6 +53,17 @@ class StatisticsService extends ChangeNotifier {
     return _total / _count;
   }
 
+  Future<int> getSubjectsCount(
+      Student _student, List<Subject> _list, int _year) async {
+    int count = 0;
+
+    _list.forEach((element) {
+      if (element.getYear() == _year) count++;
+    });
+
+    return count;
+  }
+
   Future<int> getSubjectsLeft(
       Student _student, List<Subject> _list, int _year) async {
     // TODO: Hardcodeado el 40.
@@ -76,20 +87,15 @@ class StatisticsService extends ChangeNotifier {
       Student _student, List<Subject> _list, int _year) async {
     int _count = 0;
 
-    // TODO: Revisar condiciones de estado.
     if (_year == -1) {
       _list.forEach((element) {
-        if ((element.getState().getState().getName() != 'Cursando') &&
-            (element.getState().getState().getName() != '') &&
-            (element.getState().getState().getName() != 'Abandonada')) {
+        if (element.getPassed()) {
           _count++;
         }
       });
     } else {
       _list.forEach((element) {
-        if ((element.getState().getState().getName() != 'Cursando') &&
-            (element.getState().getState().getName() != '') &&
-            element.getYear() == _year) {
+        if (element.getPassed() && element.getYear() == _year) {
           _count++;
         }
       });
@@ -97,91 +103,19 @@ class StatisticsService extends ChangeNotifier {
     return _count;
   }
 
-  Future<int> getSubjectsRegulares(
-      Student _student, List<Subject> _list, int _year) async {
+  Future<int> getSubjectsCondition(Student _student, List<Subject> _list,
+      int _year, String _condition) async {
     int _count = 0;
 
-    // TODO: Revisar condiciones de estado.
     if (_year == -1) {
       _list.forEach((element) {
-        if (element.getState().getState().getName() == 'Regular') {
+        if (element.getState().getState().getName() == _condition) {
           _count++;
         }
       });
     } else {
       _list.forEach((element) {
-        if (element.getState().getState().getName() == 'Regular' &&
-            element.getYear() == _year) {
-          _count++;
-        }
-      });
-    }
-
-    return _count;
-  }
-
-  Future<int> getSubjectsPromoP(
-      Student _student, List<Subject> _list, int _year) async {
-    int _count = 0;
-
-    // TODO: Revisar condiciones de estado.
-    if (_year == -1) {
-      _list.forEach((element) {
-        if (element.getState().getState().getName() == 'Promoción Práctica') {
-          _count++;
-        }
-      });
-    } else {
-      _list.forEach((element) {
-        if (element.getState().getState().getName() == 'Promoción Práctica' &&
-            element.getYear() == _year) {
-          _count++;
-        }
-      });
-    }
-
-    return _count;
-  }
-
-  Future<int> getSubjectsPromoT(
-      Student _student, List<Subject> _list, int _year) async {
-    int _count = 0;
-
-    // TODO: Revisar condiciones de estado.
-
-    if (_year == -1) {
-      _list.forEach((element) {
-        if (element.getState().getState().getName() == 'Promoción Teórica') {
-          _count++;
-        }
-      });
-    } else {
-      _list.forEach((element) {
-        if (element.getState().getState().getName() == 'Promoción Teórica' &&
-            element.getYear() == _year) {
-          _count++;
-        }
-      });
-    }
-
-    return _count;
-  }
-
-  Future<int> getSubjectsApDir(
-      Student _student, List<Subject> _list, int _year) async {
-    int _count = 0;
-
-    // TODO: Revisar condiciones de estado.
-
-    if (_year == -1) {
-      _list.forEach((element) {
-        if (element.getState().getState().getName() == 'Aprobación Directa') {
-          _count++;
-        }
-      });
-    } else {
-      _list.forEach((element) {
-        if (element.getState().getState().getName() == 'Aprobación Directa' &&
+        if (element.getState().getState().getName() == _condition &&
             element.getYear() == _year) {
           _count++;
         }

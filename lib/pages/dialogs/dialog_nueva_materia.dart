@@ -19,27 +19,37 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
   //var db = DataManager();
 
   bool _hasSelectedData = true;
+  bool _habilitarRecursado = false;
 
   SubjectDao _subjectDao = SubjectDao();
 
   Subject _selectedSubject;
 
   Future<List<Subject>> _subjectsNoCondition;
-  Future<List<Subject>> _allSubjects;
 
   @override
   void initState() {
     _subjectsNoCondition =
         _subjectDao.getAllSubjectsWithNoCondition(widget._student);
-
-    _allSubjects = _subjectDao.getAllSubjectsByUser(widget._student);
+    //Este trae de todas las materias sin condicion.
 
     super.initState();
   }
 
+  List<Subject> getSubjectsRecursar(List<Subject> _subjectsList) {
+    List<Subject> _aux = new List<Subject>();
+    _subjectsList.forEach((subject) {
+      if (subject.getState().getState().getName() == 'Libre' ||
+          subject.getState().getState().getName() == 'Abandonada') {
+        _aux.add(subject);
+      }
+    });
+
+    return _aux;
+  }
+
   @override
   Widget build(BuildContext context) {
-    print('rebuild');
     return Dialog(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(26.0)),
@@ -66,7 +76,14 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
                 ),
                 Row(
                   children: <Widget>[
-                    Checkbox(value: false, onChanged: (null)),
+                    Checkbox(
+                      value: _habilitarRecursado,
+                      onChanged: (value) {
+                        setState(() {
+                          _habilitarRecursado = value;
+                        });
+                      },
+                    ),
                     Text(
                       'Habilitar recursada',
                       style: TextStyle(
@@ -91,7 +108,13 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: FutureBuilder(
-                        future: _subjectsNoCondition,
+                        future: _habilitarRecursado
+                            ? _subjectDao
+                                .getAllSubjectsByUser(widget._student)
+                                .then((_list) {
+                                return getSubjectsRecursar(_list);
+                              })
+                            : _subjectsNoCondition,
                         builder: (context, snapshot) {
                           switch (snapshot.connectionState) {
                             case ConnectionState.waiting:
@@ -134,16 +157,21 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
                     InkWell(
                       borderRadius: BorderRadius.circular(26),
                       onTap: () async {
-                        /* if (
-                            _selectedSubject != null) {
+                        if (_selectedSubject != null) {
                           setState(() {
                             _hasSelectedData = true;
                           });
-                          bool isDone =
-                              await _subjectDao.updateSubjectCondition(
-                                  widget._student,
-                                  _selectedSubject,
-                                  );
+
+                          bool isDone = false;
+
+                          if (!_habilitarRecursado)
+                            isDone = await _subjectDao.updateSubjectCondition(
+                                widget._student, _selectedSubject, 'Cursando');
+                          else {
+                            isDone = await _subjectDao.addSubject(
+                                widget._student, _selectedSubject);
+                          }
+
                           isDone
                               ? CoolAlert.show(
                                   borderRadius: 26,
@@ -159,13 +187,11 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
                                   context: context,
                                   type: CoolAlertType.error,
                                   text: 'Error al actualizar la nota');
-
-                          //Navigator.pop(context);
                         } else {
                           setState(() {
                             _hasSelectedData = false;
                           });
-                        } */
+                        }
                       },
                       child: Container(
                         width: 129.0,

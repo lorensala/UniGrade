@@ -175,7 +175,7 @@ class _DialogNuevaMateriaState extends State<DialogActualizarMateria> {
                                   backgroundColor: Colors.white,
                                   context: context,
                                   type: CoolAlertType.error,
-                                  text: 'Error al actualizar la nota');
+                                  text: 'Error al actualizar la materia');
 
                           //Navigator.pop(context);
                         } else {

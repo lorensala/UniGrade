@@ -14,7 +14,9 @@ class Subject extends ChangeNotifier {
   String _type;
   String _icon;
   bool _passed;
+  String _duration;
 
+  String getDuration() => _duration;
   List<int> getAplazos() => _aplazos;
   String getName() => _name;
   int getYear() => _year;
@@ -40,7 +42,8 @@ class Subject extends ChangeNotifier {
       this._type,
       this._icon,
       this._passed,
-      this._aplazos);
+      this._aplazos,
+      this._duration);
 
   @override
   String toString() {

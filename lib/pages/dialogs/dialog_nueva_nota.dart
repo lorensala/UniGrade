@@ -31,7 +31,7 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
 
   @override
   void initState() {
-    _subjects = _subjectDao.getAllSubjectsByUser(widget._student);
+    _subjects = _subjectDao.getAllSubjectsWithCondition(widget._student);
 
     super.initState();
   }

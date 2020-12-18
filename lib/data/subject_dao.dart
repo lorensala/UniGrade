@@ -263,7 +263,8 @@ class SubjectDao {
             .doc(_student.getCareerDocRefs()[0])
             .collection('subject_student')
             .doc(_docId);
-      if (condition != 'Abandonada') {
+
+      if (condition != 'Abandonada' && condition != 'Libre') {
         await _docRef.update({'state': condition, 'passed': true}).then(
             (value) {
           isDone = true;
@@ -322,31 +323,46 @@ class SubjectDao {
         sub['type'],
         sub['icon'],
         sub['passed'],
-        aplazos);
+        aplazos,
+        sub['duration']);
   }
 
-  /* Future<void> addSubject(Subject subject) {
+  Future<bool> addSubject(Student _student, Subject subject) async {
+    bool isDone = false;
     try {
-      CollectionReference coll =
-          FirebaseFirestore.instance.collection('subject');
-      return coll
-          .add({
-            'color': subject.getColor(),
-            'icon': subject.getIcon(),
-            'name': subject.getName(),
-            'short_name': subject.getShortName(),
-            'year': subject.getYear(),
-          })
-          .then((value) =>
-              print('============ Subject added succesfully ============'))
-          .catchError((error) =>
-              print('============ Error adding subject ============'));
+      CollectionReference coll = FirebaseFirestore.instance
+          .collection('student')
+          .doc(_student.getStudentDocRef())
+          .collection('career_student')
+          .doc(_student.getCareerDocRefs()[0])
+          .collection('subject_student');
+
+      await coll.add({
+        'duration': subject.getDuration(),
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'aplazos': [],
+        'nf': -1,
+        'state': 'Cursando',
+        'type': subject.getType(),
+        'year': 1,
+        'name': subject.getName(),
+        'icon': subject.getIcon(),
+        'passed': false
+      }).then((value) {
+        isDone = true;
+        print('============ Subject added succesfully ============');
+      }).catchError(
+          (error) => print('============ Error adding subject ============'));
     } catch (e) {
       print('============ Error finding doc ============');
       return null;
     }
+
+    return isDone;
   }
- */
+
   Future<bool> addGrade(
       Student _student, int nota, Subject subject, String type) async {
     List<int> _grades = List<int>();

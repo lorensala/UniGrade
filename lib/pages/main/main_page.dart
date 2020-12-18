@@ -1,10 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
-import 'package:mis_notas/data/statistics_dao.dart';
+import 'package:mis_notas/data/subject_dao.dart';
 import 'package:mis_notas/entities/statistics.dart';
 import 'package:mis_notas/entities/student.dart';
+import 'package:mis_notas/entities/subject.dart';
 
 import 'package:mis_notas/pages/dialogs/dialog_nuevamateria.dart';
 import 'package:mis_notas/pages/dialogs/dialog_nuevanota.dart';
@@ -26,14 +25,22 @@ class _MainPageState extends State<MainPage> {
   Future<List> getDataStatistics(Student _student) async {
     List _dataList = new List();
     StatisticsService _statisticsService = new StatisticsService();
-    StatisticsDao _statisticsDao = new StatisticsDao();
-    List<Map<String, dynamic>> _list = await _statisticsDao.getData(_student);
+    SubjectDao _subjectDao = SubjectDao();
+    List<Subject> _list = await _subjectDao.getAllSubjectsByUser(_student);
 
     _dataList.add(await _statisticsService.getAvgNf(_student, _list, -1));
     _dataList
         .add(await _statisticsService.getSubjectsLeft(_student, _list, -1));
     _dataList
         .add(await _statisticsService.getSubjectsPassed(_student, _list, -1));
+    _dataList
+        .add(await _statisticsService.getSubjectsPromoP(_student, _list, -1));
+    _dataList
+        .add(await _statisticsService.getSubjectsPromoT(_student, _list, -1));
+    _dataList
+        .add(await _statisticsService.getSubjectsApDir(_student, _list, -1));
+    _dataList.add(
+        await _statisticsService.getSubjectsRegulares(_student, _list, -1));
 
     return _dataList;
   }
@@ -41,6 +48,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     Student _student = Provider.of<Student>(context);
+
     Statistics _statistics = Provider.of<Statistics>(context, listen: false);
 
     return FutureBuilder(
@@ -51,9 +59,14 @@ class _MainPageState extends State<MainPage> {
               return Center(child: Container(color: Colors.transparent));
             default:
               if (snapshot.hasError) return Text('error');
+
               _statistics.avg = snapshot.data[0];
               _statistics.left = snapshot.data[1];
               _statistics.passed = snapshot.data[2];
+              _statistics.pp = snapshot.data[3];
+              _statistics.pt = snapshot.data[4];
+              _statistics.ap = snapshot.data[5];
+              _statistics.reg = snapshot.data[6];
 
               return Padding(
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -173,17 +186,14 @@ class _MainPageState extends State<MainPage> {
                           children: <Widget>[
                             MainButton(
                                 'Mis\nMaterias',
-                                'assets/images/005-books.png',
+                                'assets/images/materias.png',
                                 Color(0xFFF7F7F7),
                                 '/mismaterias'),
-                            MainButton(
-                                'Mis\nNotas',
-                                'assets/images/001-test.png',
-                                Color(0xFFFFDCDC),
-                                '/misnotas'),
+                            MainButton('Mis\nNotas', 'assets/images/notas.png',
+                                Color(0xFFFFDCDC), '/misnotas'),
                             MainButton(
                                 'Mis\nEstadísticas',
-                                'assets/images/030-cup.png',
+                                'assets/images/estadisticas.png',
                                 Color(0xFFF5DCFF),
                                 '/estadisticas')
                           ],

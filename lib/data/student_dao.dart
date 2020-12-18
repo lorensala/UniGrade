@@ -83,17 +83,71 @@ class StudentDao {
     Student _newStudent = _student;
 
     List<Map<String, dynamic>> _map = [
+      //Primer Año
       {
         'duration': 'anual',
         'gradesP': [],
         'gradesT': [],
         'gradesTP': [],
+        'aplazos': [],
         'nf': -1,
         'state': '',
-        'type': 'software',
-        'year': 2,
-        'name': 'Sistemas Operativos',
-        'icon': 'assets/images/software.png'
+        'type': 'calculo',
+        'year': 1,
+        'name': 'Análisis Matemático I',
+        'icon': 'assets/images/matematica.png'
+      },
+      {
+        'duration': 'anual',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'aplazos': [],
+        'nf': -1,
+        'state': '',
+        'type': 'idioma',
+        'year': 1,
+        'name': 'Ingles I',
+        'icon': 'assets/images/ingles.png'
+      },
+      {
+        'duration': 'anual',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'aplazos': [],
+        'nf': -1,
+        'state': '',
+        'type': 'calculo',
+        'year': 1,
+        'name': 'Álgebra y Geometría Analítica',
+        'icon': 'assets/images/algebra.png'
+      },
+      {
+        'duration': 'anual',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'aplazos': [],
+        'nf': -1,
+        'state': '',
+        'type': 'calculo',
+        'year': 1,
+        'name': 'Física I',
+        'icon': 'assets/images/fisica.png'
+      },
+      {
+        'duration': 'semestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'aplazos': [],
+        'nf': -1,
+        'state': '',
+        'type': 'otros',
+        'year': 1,
+        'name': 'Ingeniería y Sociedad',
+        'icon': 'assets/images/default.png'
       },
       {
         'duration': 'anual',
@@ -101,6 +155,7 @@ class StudentDao {
         'gradesT': [],
         'gradesTP': [],
         'nf': -1,
+        'aplazos': [],
         'state': '',
         'type': 'software',
         'year': 1,
@@ -108,15 +163,30 @@ class StudentDao {
         'icon': 'assets/images/software.png'
       },
       {
-        'duration': 'anual',
+        'duration': 'semestral',
         'gradesP': [],
         'gradesT': [],
         'gradesTP': [],
         'nf': -1,
         'state': '',
+        'aplazos': [],
+        'type': 'hardware',
+        'year': 1,
+        'name': 'Arquitectura de Computadoras',
+        'icon': 'assets/images/aco.png'
+      },
+
+      {
+        'duration': 'semestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'state': '',
+        'aplazos': [],
         'type': 'analista',
-        'year': 3,
-        'name': 'Diseño de Sistemas',
+        'year': 1,
+        'name': 'Sistemas y Organizaciones',
         'icon': 'assets/images/analista.png'
       },
       {
@@ -126,11 +196,242 @@ class StudentDao {
         'gradesTP': [],
         'nf': -1,
         'state': '',
+        'aplazos': [],
+        'type': 'logica',
+        'year': 1,
+        'name': 'Matemática Discreta',
+        'icon': 'assets/images/logica.png'
+      },
+      // Segundo Año
+
+      {
+        'duration': 'anual',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'aplazos': [],
+        'nf': -1,
+        'state': '',
+        'type': 'calculo',
+        'year': 2,
+        'name': 'Análisis Matemático II',
+        'icon': 'assets/images/matematica.png'
+      },
+
+      {
+        'duration': 'anual',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'aplazos': [],
+        'nf': -1,
+        'state': '',
+        'type': 'calculo',
+        'year': 2,
+        'name': 'Física II',
+        'icon': 'assets/images/fisica2.png'
+      },
+      {
+        'duration': 'anual',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'aplazos': [],
+        'nf': -1,
+        'state': '',
+        'type': 'analista',
+        'year': 2,
+        'name': 'Análisis de Sistemas',
+        'icon': 'assets/images/analista.png'
+      },
+      {
+        'duration': 'anual',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'aplazos': [],
+        'nf': -1,
+        'state': '',
+        'type': 'idioma',
+        'year': 2,
+        'name': 'Ingles II',
+        'icon': 'assets/images/ingles.png'
+      },
+
+      {
+        'duration': 'anual',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'state': '',
+        'aplazos': [],
         'type': 'software',
         'year': 2,
+        'name': 'Sistemas Operativos',
+        'icon': 'assets/images/software.png'
+      },
+
+      {
+        'duration': 'semestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'otros',
+        'year': 2,
         'name': 'Quimica',
-        'icon': 'assets/images/043-chemistry.png'
-      }
+        'icon': 'assets/images/quimica.png'
+      },
+
+      {
+        'duration': 'semestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'logica',
+        'year': 2,
+        'name': 'Sintaxis y Semántica de los Lenguajes',
+        'icon': 'assets/images/logica.png'
+      },
+      {
+        'duration': 'semestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'calculo',
+        'year': 2,
+        'name': 'Probabilidades y Estadísticas',
+        'icon': 'assets/images/pye.png'
+      },
+      {
+        'duration': 'semestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'software',
+        'year': 2,
+        'name': 'Paradigmas de Programación',
+        'icon': 'assets/images/software.png'
+      },
+
+      // Tercer Año
+
+      {
+        'duration': 'anual',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'analista',
+        'year': 3,
+        'name': 'Diseño de Sistemas',
+        'icon': 'assets/images/analista.png'
+      },
+      {
+        'duration': 'anual',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'otros',
+        'year': 3,
+        'name': 'Sistemas de Representacion',
+        'icon': 'assets/images/srp.png'
+      },
+      {
+        'duration': 'anual',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'hardware',
+        'year': 3,
+        'name': 'Comunicaciones',
+        'icon': 'assets/images/com.png'
+      },
+      {
+        'duration': 'semestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'otros',
+        'year': 3,
+        'name': 'Economia',
+        'icon': 'assets/images/default.png'
+      },
+      {
+        'duration': 'semestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'software',
+        'year': 3,
+        'name': 'Programación de Aplicaciones Visuales I',
+        'icon': 'assets/images/software.png'
+      },
+      {
+        'duration': 'semestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'software',
+        'year': 3,
+        'name': 'Tecnología de Software Base',
+        'icon': 'assets/images/software.png'
+      },
+      {
+        'duration': 'semestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'calculo',
+        'year': 3,
+        'name': 'Matemática Superior',
+        'icon': 'assets/images/matsup.png'
+      },
+      {
+        'duration': 'semestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'software',
+        'year': 3,
+        'name': 'Gestion de Datos',
+        'icon': 'assets/images/gda.png'
+      },
     ];
 
     CollectionReference collRef =

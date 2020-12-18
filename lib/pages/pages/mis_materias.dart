@@ -31,11 +31,11 @@ class _MisMateriasState extends State<MisMaterias> {
 
     switch (condition) {
       case 'All':
-        return await _subjectDao.getAllSubjectsByUser(_student);
+        return await _subjectDao.getAllSubjectsByUserOrderByYear(_student);
       case 'Cursando':
         return await _subjectDao.getAllSubjectsByUserCondition(
             _student, condition);
-      case 'Aprobadas':
+      case 'Aprobada':
         return await _subjectDao.getAllSubjectsByUserCondition(
             _student, condition);
       case 'Libre':
@@ -159,7 +159,7 @@ class _MisMateriasState extends State<MisMaterias> {
                           isPressedPP = false;
                           isPressedPT = false;
                           isPressedAD = false;
-                          condition = 'Aprobadas';
+                          condition = 'Aprobada';
                         });
                       }),
                   InkWell(
@@ -174,7 +174,7 @@ class _MisMateriasState extends State<MisMaterias> {
                           isPressedPP = false;
                           isPressedPT = false;
                           isPressedAD = false;
-                          condition = 'Aprobadas';
+                          condition = 'Libre';
                         });
                       }),
                   InkWell(

@@ -1,6 +1,9 @@
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
+import 'package:mis_notas/data/subject_dao.dart';
 import 'package:mis_notas/entities/statistics.dart';
+import 'package:mis_notas/entities/subject.dart';
+import 'package:mis_notas/services/statistics_service.dart';
 
 import 'package:mis_notas/widgets/styles/statistics_container.dart';
 
@@ -16,7 +19,7 @@ class MisEstadisticas extends StatefulWidget {
 }
 
 class _MisEstadisticasState extends State<MisEstadisticas> {
-  List<String> _years = [
+  List<String> _yearsHint = [
     'Primer año',
     'Segundo año',
     'Tercer año',
@@ -24,7 +27,34 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
     'Quinto año'
   ];
 
-  var _selectedYear = 'Primer año';
+  int _selectedYear = 1;
+
+  Future<List> getYearStatisticsData(Student _student, int _year) async {
+    List _statisticsList = new List();
+
+    var _subjectDao = SubjectDao();
+    var _statisticsService = StatisticsService();
+
+    List<Subject> _list =
+        await _subjectDao.getAllSubjectsWithCondition(_student);
+
+    _statisticsList
+        .add(await _statisticsService.getAvgNf(_student, _list, _year));
+    _statisticsList.add(
+        await _statisticsService.getSubjectsPassed(_student, _list, _year));
+    _statisticsList
+        .add(await _statisticsService.getSubjectsLeft(_student, _list, _year));
+    _statisticsList.add(
+        await _statisticsService.getSubjectsPromoP(_student, _list, _year));
+    _statisticsList.add(
+        await _statisticsService.getSubjectsPromoT(_student, _list, _year));
+    _statisticsList
+        .add(await _statisticsService.getSubjectsApDir(_student, _list, _year));
+    _statisticsList.add(
+        await _statisticsService.getSubjectsRegulares(_student, _list, _year));
+
+    return _statisticsList;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -190,10 +220,16 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                           StatisticsContainer(_statistics.getLeft().toString(),
                               'Materias\nRestantes'),
 
-                          //StatisticsContainer('8.45', 'Promedio\nsin aplazos'),
-                          //StatisticsContainer('8.45', 'Promedio\nsin aplazos'),
-                          //StatisticsContainer('8.45', 'Promedio\nsin aplazos'),
-                          // StatisticsContainer('8.45', 'Promedio\nsin aplazos'),
+                          //TODO: StatisticsContainer('8.45', 'Promedio\con aplazos'),
+                          StatisticsContainer(
+                              _statistics.getReg().toString(), 'Regulares\n'),
+                          StatisticsContainer(_statistics.getPP().toString(),
+                              'Promoción\nPráctica'),
+                          StatisticsContainer(_statistics.getPT().toString(),
+                              'Promoción\nTeórica'),
+                          StatisticsContainer(_statistics.getAP().toString(),
+                              'Aprobación\nDirecta'),
+                          //
                         ]),
                   ),
                 ),
@@ -225,24 +261,34 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton(
-                              value: _selectedYear,
-                              onChanged: (newValue) {
-                                setState(() {
-                                  _selectedYear = newValue;
-                                });
-                              },
-                              hint: new Text(
-                                'Primero Año',
-                                style: TextStyle(fontFamily: 'Avenir LT Std'),
-                              ),
-                              items: _years
-                                  .map<DropdownMenuItem<String>>((String year) {
-                                return DropdownMenuItem<String>(
-                                  value: year,
-                                  child: Text(year),
-                                );
-                              }).toList(),
-                            ),
+                                value: _selectedYear,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _selectedYear = newValue;
+                                  });
+                                },
+                                items: [
+                                  DropdownMenuItem<int>(
+                                    value: 1,
+                                    child: Text('Primer año'),
+                                  ),
+                                  DropdownMenuItem<int>(
+                                    value: 2,
+                                    child: Text('Segundo año'),
+                                  ),
+                                  DropdownMenuItem<int>(
+                                    value: 3,
+                                    child: Text('Tercer año'),
+                                  ),
+                                  DropdownMenuItem<int>(
+                                    value: 4,
+                                    child: Text('Cuarto año'),
+                                  ),
+                                  DropdownMenuItem<int>(
+                                    value: 5,
+                                    child: Text('Quinto año'),
+                                  ),
+                                ]),
                           ),
                         ),
                       ),
@@ -256,21 +302,63 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 18),
-                  child: Container(
-                    height: 130,
-                    child: ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 4,
-                      itemBuilder: (context, index) {
-                        return StatisticsContainer(
-                            '8.45', 'Promedio\nsin aplazos');
-                      },
-                    ),
-                  ),
-                ),
+                FutureBuilder(
+                    future: getYearStatisticsData(_student, _selectedYear),
+                    builder: (context, snapshot) {
+                      switch (snapshot.connectionState) {
+                        case (ConnectionState.waiting):
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 18),
+                            child: Container(
+                                height: 130,
+                                child:
+                                    Center(child: CircularProgressIndicator())),
+                          );
+                        default:
+                          if (snapshot.data.isNotEmpty) {
+                            int percentageYear =
+                                ((snapshot.data[1] * 100 / 40)).round();
+
+                            return Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 18),
+                              child: Container(
+                                height: 130,
+                                child: ListView(
+                                    physics: BouncingScrollPhysics(),
+                                    scrollDirection: Axis.horizontal,
+                                    children: [
+                                      StatisticsContainer(
+                                          percentageYear.toString() + '%',
+                                          'Año\ncompletado'),
+                                      StatisticsContainer(
+                                          snapshot.data[0].toString(),
+                                          'Promedio\nanual'),
+                                      StatisticsContainer(
+                                          snapshot.data[1].toString(),
+                                          'Materias\nAprobadas'),
+                                      StatisticsContainer(
+                                          snapshot.data[2].toString(),
+                                          'Materias\nRestantes'),
+                                      StatisticsContainer(
+                                          snapshot.data[6].toString(),
+                                          'Regulares\n'),
+                                      StatisticsContainer(
+                                          snapshot.data[3].toString(),
+                                          'Promoción\nPráctica'),
+                                      StatisticsContainer(
+                                          snapshot.data[4].toString(),
+                                          'Promoción\nTeórica'),
+                                      StatisticsContainer(
+                                          snapshot.data[5].toString(),
+                                          'Aprobación\nDirecta'),
+                                    ]),
+                              ),
+                            );
+                          } else {
+                            return Text('no data');
+                          }
+                      }
+                    }),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(24, 5, 24, 0),
                   child: Text(
@@ -288,15 +376,13 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                   padding: const EdgeInsets.fromLTRB(0, 10, 0, 18),
                   child: Container(
                     height: 130,
-                    child: ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 4,
-                      itemBuilder: (context, index) {
-                        return StatisticsContainer(
-                            '8.45', 'Promedio\nsin aplazos');
-                      },
-                    ),
+                    child: ListView(
+                        physics: BouncingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        children: <Widget>[
+                          StatisticsContainer('AED', 'Mejor\nPromedio'),
+                          StatisticsContainer('DSI', 'Peor\nPromedio'),
+                        ]),
                   ),
                 ),
               ],

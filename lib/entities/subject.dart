@@ -15,7 +15,9 @@ class Subject extends ChangeNotifier {
   String _icon;
   bool _passed;
   String _duration;
+  bool _elect;
 
+  bool getElect() => _elect;
   String getDuration() => _duration;
   List<int> getAplazos() => _aplazos;
   String getName() => _name;
@@ -43,7 +45,8 @@ class Subject extends ChangeNotifier {
       this._icon,
       this._passed,
       this._aplazos,
-      this._duration);
+      this._duration,
+      this._elect);
 
   @override
   String toString() {

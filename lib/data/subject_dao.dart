@@ -8,44 +8,6 @@ import 'package:mis_notas/data/datamanager.dart';
 class SubjectDao {
   final db = DataManager();
 
-  /* Future<List<Subject>> getSubjectsBySearch(String searchParam) async {
-    List<Subject> list = List<Subject>();
-    CollectionReference collReference;
-
-    try {
-      collReference = FirebaseFirestore.instance
-          .collection('student')
-          .doc('sw98JGNJh4XL9WRVVzBN')
-          .collection('career_student')
-          .doc('Kynm7JSEA7ZyPpgyD9jp')
-          .collection('subject_student');
-
-      Future<QuerySnapshot> docs = FirebaseFirestore.instance
-          .collection(collReference.path)
-          .where('name', isLessThanOrEqualTo: searchParam)
-          .get();
-
-      await docs.then((value) {
-        value.docs.forEach((element) {
-          Map<String, dynamic> sub = element.data();
-
-          if (sub != null) {
-            var subject = mapper(sub);
-            print(subject);
-            list.add(subject);
-          }
-
-          print('=====succed====');
-        });
-      });
-    } catch (e) {
-      print(e);
-      print('=======error======');
-    }
-
-    return list;
-  } */
-
   Future<List<Subject>> getAllSubjectsWithCondition(Student student) async {
     List<Subject> list = List<Subject>();
     CollectionReference collReference;
@@ -196,6 +158,45 @@ class SubjectDao {
     return list;
   }
 
+  Future<List<Subject>> getAllElectiveSubjectsByUserOrderByYear(
+      Student student) async {
+    List<Subject> list = List<Subject>();
+    CollectionReference collReference;
+
+    try {
+      collReference = FirebaseFirestore.instance
+          .collection('student')
+          .doc(student.getStudentDocRef())
+          .collection('career_student')
+          .doc(student.getCareerDocRefs()[0])
+          .collection('subject_student');
+
+      Future<QuerySnapshot> docs = FirebaseFirestore.instance
+          .collection(collReference.path)
+          .where('elect', isEqualTo: true)
+          .orderBy('year')
+          .get();
+
+      await docs.then((value) {
+        value.docs.forEach((element) {
+          Map<String, dynamic> sub = element.data();
+          if (sub != null) {
+            var subject = mapper(sub);
+            list.add(subject);
+          }
+
+          print('=====succed====');
+        });
+      });
+    } catch (e) {
+      print(e);
+
+      print('=======error======');
+    }
+
+    return list;
+  }
+
   Future<List<Subject>> getAllSubjectsByUserCondition(
       Student student, String condition) async {
     List<Subject> list = List<Subject>();
@@ -292,7 +293,7 @@ class SubjectDao {
     var gradesT;
     var gradesTp;
     var aplazos;
-    var nf;
+    var elect;
 
     sub['gradesP'] != null
         ? gradesP = new List<int>.from(sub['gradesP'])
@@ -310,7 +311,7 @@ class SubjectDao {
         ? aplazos = new List<int>.from(sub['gradesTP'])
         : aplazos = [];
 
-    sub['nf'] != null ? nf = sub['nf'] : nf = -1;
+    sub['elect'] != null ? elect = sub['elect'] : elect = false;
 
     return Subject(
         sub['name'],
@@ -318,13 +319,14 @@ class SubjectDao {
         gradesP,
         gradesT,
         gradesTp,
-        nf,
+        sub['nf'],
         StateRecord(State(sub['state']), DateTime.now()),
         sub['type'],
         sub['icon'],
         sub['passed'],
         aplazos,
-        sub['duration']);
+        sub['duration'],
+        elect);
   }
 
   Future<bool> addSubject(Student _student, Subject subject) async {

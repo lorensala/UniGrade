@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mis_notas/data/subject_dao.dart';
 
-import 'package:mis_notas/entities/career.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
-import 'package:mis_notas/entities/university.dart';
 
 import 'package:mis_notas/widgets/styles/subject_card_style.dart';
 import 'package:mis_notas/widgets/buttons/options_button.dart';
-import 'package:mis_notas/widgets/components/search_bar.dart';
 import 'package:provider/provider.dart';
 
 class MisMaterias extends StatefulWidget {
@@ -29,12 +26,16 @@ class _MisMateriasState extends State<MisMaterias> {
   bool isPressedPT = false;
   bool isPressedAD = false;
   bool isPressedAb = false;
+  bool isPressedEl = false;
 
   Future<List<Subject>> getData(Student _student, String condition) async {
     var _subjectDao = new SubjectDao();
 
     if (condition == 'All')
       return await _subjectDao.getAllSubjectsByUserOrderByYear(_student);
+    else if (condition == 'elect')
+      return await _subjectDao
+          .getAllElectiveSubjectsByUserOrderByYear(_student);
     else
       return await _subjectDao.getAllSubjectsByUserCondition(
           _student, condition);
@@ -130,6 +131,7 @@ class _MisMateriasState extends State<MisMaterias> {
                         isPressedPT = false;
                         isPressedAD = false;
                         isPressedAb = false;
+                        isPressedEl = false;
                         condition = 'All';
                       });
                     },
@@ -147,6 +149,7 @@ class _MisMateriasState extends State<MisMaterias> {
                           isPressedPT = false;
                           isPressedAD = false;
                           isPressedAb = false;
+                          isPressedEl = false;
                           condition = 'Cursando';
                         });
                       }),
@@ -163,6 +166,7 @@ class _MisMateriasState extends State<MisMaterias> {
                           isPressedPT = false;
                           isPressedAD = false;
                           isPressedAb = false;
+                          isPressedEl = false;
                           condition = 'Regular';
                         });
                       }),
@@ -179,6 +183,7 @@ class _MisMateriasState extends State<MisMaterias> {
                           isPressedPT = false;
                           isPressedAD = false;
                           isPressedAb = false;
+                          isPressedEl = false;
                           condition = 'Promoción Práctica';
                         });
                       }),
@@ -195,6 +200,7 @@ class _MisMateriasState extends State<MisMaterias> {
                           isPressedPT = true;
                           isPressedAD = false;
                           isPressedAb = false;
+                          isPressedEl = false;
                           condition = 'Promoción Teórica';
                         });
                       }),
@@ -211,6 +217,7 @@ class _MisMateriasState extends State<MisMaterias> {
                           isPressedPT = false;
                           isPressedAD = true;
                           isPressedAb = false;
+                          isPressedEl = false;
                           condition = 'Aprobación Directa';
                         });
                       }),
@@ -227,6 +234,7 @@ class _MisMateriasState extends State<MisMaterias> {
                           isPressedPT = false;
                           isPressedAD = false;
                           isPressedAb = false;
+                          isPressedEl = false;
                           condition = 'Libre';
                         });
                       }),
@@ -243,7 +251,25 @@ class _MisMateriasState extends State<MisMaterias> {
                           isPressedPT = false;
                           isPressedAD = false;
                           isPressedAb = true;
+                          isPressedEl = false;
                           condition = 'Abandonada';
+                        });
+                      }),
+                  InkWell(
+                      borderRadius: BorderRadius.circular(26),
+                      child: OptionButton('Elec.', isPressedEl),
+                      onTap: () {
+                        setState(() {
+                          isPressedAll = false;
+                          isPressedCursando = false;
+                          isPressedAprobadas = false;
+                          isPressedLibre = false;
+                          isPressedPP = false;
+                          isPressedPT = false;
+                          isPressedAD = false;
+                          isPressedAb = false;
+                          isPressedEl = true;
+                          condition = 'elect';
                         });
                       }),
                 ],

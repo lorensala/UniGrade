@@ -13,7 +13,7 @@ class StatisticsService extends ChangeNotifier {
     int _count = 0;
     if (_year == -1) {
       _list.forEach((element) {
-        if (element.getNf() != -1) {
+        if (element.getNf() != -1 && !element.getElect()) {
           _total += element.getNf();
           _count += 1;
         }
@@ -90,13 +90,15 @@ class StatisticsService extends ChangeNotifier {
 
     if (_year == -1) {
       _list.forEach((element) {
-        if (element.getPassed()) {
+        if (element.getPassed() && !element.getElect()) {
           _count++;
         }
       });
     } else {
       _list.forEach((element) {
-        if (element.getPassed() && element.getYear() == _year) {
+        if (element.getPassed() &&
+            !element.getElect() &&
+            element.getYear() == _year) {
           _count++;
         }
       });

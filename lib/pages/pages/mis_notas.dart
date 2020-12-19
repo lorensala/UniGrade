@@ -92,9 +92,11 @@ class _MisNotasState extends State<MisNotas> {
                     ),
                   ),
                   Padding(
-                    //TODO: Implementar la busqueda si es posible.
-                    padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
-                    child: SearchBar(null),
+                    padding: const EdgeInsets.fromLTRB(24, 10, 0, 0),
+                    child: SvgPicture.string(
+                      '<svg viewBox="24.0 151.5 255.5 1.0" ><path transform="translate(24.0, 151.5)" d="M 0 0 L 255.5 0" fill="none" stroke="#66aaff" stroke-width="4" stroke-miterlimit="4" stroke-linecap="round" /></svg>',
+                      allowDrawingOutsideViewBox: true,
+                    ),
                   ),
                   // Filtros
                   Padding(

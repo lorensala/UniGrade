@@ -57,7 +57,7 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
 
     //TODO: Fijarse que la cantidad de materias es dinamica. Hardcoded
 
-    int percentage = ((_statistics.getPassed() * 100 / 50)).round();
+    int percentage = ((_statistics.getPassed() * 100 / 40)).round();
 
     return Scaffold(
         backgroundColor: Colors.white,

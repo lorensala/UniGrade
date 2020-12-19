@@ -414,7 +414,9 @@ class StudentDao {
         'year': 3,
         'name': 'Programación de Aplicaciones Visuales I',
         'icon': 'assets/images/software.png',
-        'passed': false
+        'passed': false,
+        'elect': true,
+        'points': 2
       },
       {
         'duration': 'semestral',
@@ -428,7 +430,9 @@ class StudentDao {
         'year': 3,
         'name': 'Tecnología de Software Base',
         'icon': 'assets/images/software.png',
-        'passed': false
+        'passed': false,
+        'elect': true,
+        'points': 2
       },
       {
         'duration': 'semestral',

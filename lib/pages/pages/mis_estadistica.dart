@@ -19,14 +19,6 @@ class MisEstadisticas extends StatefulWidget {
 }
 
 class _MisEstadisticasState extends State<MisEstadisticas> {
-  List<String> _yearsHint = [
-    'Primer año',
-    'Segundo año',
-    'Tercer año',
-    'Cuarto año',
-    'Quinto año'
-  ];
-
   int _selectedYear = 1;
 
   Future<List> getYearStatisticsData(Student _student, int _year) async {
@@ -45,13 +37,13 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
     _statisticsList
         .add(await _statisticsService.getSubjectsLeft(_student, _list, _year));
     _statisticsList.add(await _statisticsService.getSubjectsCondition(
-        _student, _list, -1, 'Promoción Práctica'));
+        _student, _list, _year, 'Promoción Práctica'));
     _statisticsList.add(await _statisticsService.getSubjectsCondition(
-        _student, _list, -1, 'Promoción Teórica'));
+        _student, _list, _year, 'Promoción Teórica'));
     _statisticsList.add(await _statisticsService.getSubjectsCondition(
-        _student, _list, -1, 'Aprobación Directa'));
+        _student, _list, _year, 'Aprobación Directa'));
     _statisticsList.add(await _statisticsService.getSubjectsCondition(
-        _student, _list, -1, 'Aprobación Directa'));
+        _student, _list, _year, 'Aprobación Directa'));
     _statisticsList
         .add(await _statisticsService.getSubjectsCount(_student, _list, _year));
 
@@ -63,9 +55,9 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
     Student _student = Provider.of<Student>(context);
     Statistics _statistics = Provider.of<Statistics>(context, listen: false);
 
-    //TODO: Fijarse que la cantidad de materias es dinamica.
+    //TODO: Fijarse que la cantidad de materias es dinamica. Hardcoded
 
-    int percentage = ((_statistics.getPassed() * 100 / 40)).round();
+    int percentage = ((_statistics.getPassed() * 100 / 50)).round();
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -317,8 +309,7 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                                     Center(child: CircularProgressIndicator())),
                           );
                         default:
-                          if (snapshot.data.isNotEmpty) {
-                            print(snapshot.data[7]);
+                          if (snapshot.data.isNotEmpty && snapshot.hasData) {
                             int percentageYear =
                                 ((snapshot.data[1] * 100 / snapshot.data[7]))
                                     .round();

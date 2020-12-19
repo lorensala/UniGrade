@@ -264,9 +264,7 @@ class SubjectDao {
             .collection('subject_student')
             .doc(_docId);
 
-      if (condition != 'Abandonada' &&
-          condition != 'Libre' &&
-          condition != 'Cursando') {
+      if (subject.getNf() != -1) {
         await _docRef.update({'state': condition, 'passed': true}).then(
             (value) {
           isDone = true;
@@ -368,6 +366,7 @@ class SubjectDao {
   Future<bool> addGrade(
       Student _student, int nota, Subject subject, String type) async {
     List<int> _grades = List<int>();
+    List<int> _aplazos = List<int>();
     var _docRef;
     var _myType;
     bool _isDone = false;
@@ -416,12 +415,25 @@ class SubjectDao {
           }
         });
       } else {
-        await docs.then((value) {
-          _docRef = value.docs[0].reference;
-        });
+        if (nota > 5) {
+          await docs.then((value) {
+            _docRef = value.docs[0].reference;
+          });
+        } else {
+          await docs.then((value) {
+            int size = value.docs[0].data()['aplazos'].length;
+            _docRef = value.docs[0].reference;
+
+            if (size != 0)
+              for (int i = 0; i < size; i++) {
+                _aplazos.add(value.docs[0].data()['aplazos']);
+              }
+          });
+        }
       }
 
       _grades.add(nota);
+      _aplazos.add(nota);
 
       _materia = _docRef;
     } catch (e) {
@@ -439,11 +451,19 @@ class SubjectDao {
       }).catchError((error) =>
           print('============ Error during grade adding ============'));
     } else {
-      await _materia.update({'nf': nota}).then((value) {
-        _isDone = true;
-        print('============ New grade: $nota added ============');
-      }).catchError((error) =>
-          print('============ Error during grade adding ============'));
+      if (nota > 5) {
+        await _materia.update({'nf': nota}).then((value) {
+          _isDone = true;
+          print('============ New grade: $nota added ============');
+        }).catchError((error) =>
+            print('============ Error during grade adding ============'));
+      } else {
+        await _materia.update({'aplazos': _aplazos}).then((value) {
+          _isDone = true;
+          print('============ New grade: $nota added ============');
+        }).catchError((error) =>
+            print('============ Error during grade adding ============'));
+      }
     }
 
     return _isDone;

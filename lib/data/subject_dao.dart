@@ -264,7 +264,9 @@ class SubjectDao {
             .collection('subject_student')
             .doc(_docId);
 
-      if (condition != 'Abandonada' && condition != 'Libre') {
+      if (condition != 'Abandonada' &&
+          condition != 'Libre' &&
+          condition != 'Cursando') {
         await _docRef.update({'state': condition, 'passed': true}).then(
             (value) {
           isDone = true;

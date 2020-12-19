@@ -12,25 +12,27 @@ class DialogActualizarMateria extends StatefulWidget {
 
   DialogActualizarMateria(this._student);
   @override
-  _DialogNuevaMateriaState createState() => _DialogNuevaMateriaState();
+  _DialogActualizarMateriaState createState() =>
+      _DialogActualizarMateriaState();
 }
 
-class _DialogNuevaMateriaState extends State<DialogActualizarMateria> {
+class _DialogActualizarMateriaState extends State<DialogActualizarMateria> {
   //var db = DataManager();
 
   bool _hasSelectedData = true;
+  bool _isEmpty = false;
 
   SubjectDao _subjectDao = SubjectDao();
 
   List<String> _conditions = [
-    'Cursando',
-    'Aprobada',
+    'Regular',
     'Promoción Teórica',
     'Promoción Práctica',
     'Aprobación Directa',
     'Libre',
     'Abandonada'
   ];
+  List<String> _conditionsEmpty = ['Libre', 'Abandonada', 'Aprobación Directa'];
 
   Subject _selectedSubject;
   String _selectedCondition;
@@ -39,7 +41,8 @@ class _DialogNuevaMateriaState extends State<DialogActualizarMateria> {
 
   @override
   void initState() {
-    _subjects = _subjectDao.getAllSubjectsWithNoCondition(widget._student);
+    _subjects =
+        _subjectDao.getAllSubjectsByUserCondition(widget._student, 'Cursando');
     super.initState();
   }
 
@@ -58,7 +61,7 @@ class _DialogNuevaMateriaState extends State<DialogActualizarMateria> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Nueva Materia',
+                  'Actualizar Materia',
                   style: TextStyle(
                     fontFamily: 'Avenir LT Std',
                     fontSize: 22,
@@ -91,9 +94,13 @@ class _DialogNuevaMateriaState extends State<DialogActualizarMateria> {
                                 child: DropdownButton(
                                   isExpanded: true,
                                   value: _selectedSubject,
-                                  onChanged: (newValue) {
+                                  onChanged: (Subject newValue) {
                                     setState(() {
                                       _selectedSubject = newValue;
+                                      if (newValue.getGradesP().isEmpty &&
+                                          newValue.getGradesT().isEmpty &&
+                                          newValue.getGradesTP().isEmpty)
+                                        _isEmpty = true;
                                     });
                                   },
                                   hint: new Text('Materia'),
@@ -134,10 +141,15 @@ class _DialogNuevaMateriaState extends State<DialogActualizarMateria> {
                             _hasSelectedData = true;
                           });
                         },
-                        items: _conditions
-                            .map((String action) => DropdownMenuItem(
-                                value: action, child: Text(action)))
-                            .toList(),
+                        items: _isEmpty
+                            ? _conditionsEmpty
+                                .map((String action) => DropdownMenuItem(
+                                    value: action, child: Text(action)))
+                                .toList()
+                            : _conditions
+                                .map((String action) => DropdownMenuItem(
+                                    value: action, child: Text(action)))
+                                .toList(),
                       ),
                     ),
                   ),
@@ -161,21 +173,25 @@ class _DialogNuevaMateriaState extends State<DialogActualizarMateria> {
                                   widget._student,
                                   _selectedSubject,
                                   _selectedCondition);
-                          isDone
-                              ? CoolAlert.show(
-                                  borderRadius: 26,
-                                  title: 'Éxito',
-                                  backgroundColor: Colors.white,
-                                  context: context,
-                                  type: CoolAlertType.success,
-                                  text: '¡Materia actualizada con exito!')
-                              : CoolAlert.show(
-                                  borderRadius: 26,
-                                  title: 'Error',
-                                  backgroundColor: Colors.white,
-                                  context: context,
-                                  type: CoolAlertType.error,
-                                  text: 'Error al actualizar la materia');
+                          if (isDone) {
+                            await CoolAlert.show(
+                                borderRadius: 26,
+                                title: 'Éxito',
+                                backgroundColor: Colors.white,
+                                context: context,
+                                type: CoolAlertType.success,
+                                text: '¡Materia actualizada con exito!');
+
+                            Navigator.pop(context);
+                          } else {
+                            CoolAlert.show(
+                                borderRadius: 26,
+                                title: 'Error',
+                                backgroundColor: Colors.white,
+                                context: context,
+                                type: CoolAlertType.error,
+                                text: 'Error al actualizar la materia');
+                          }
 
                           //Navigator.pop(context);
                         } else {

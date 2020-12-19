@@ -172,21 +172,24 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
                                 widget._student, _selectedSubject);
                           }
 
-                          isDone
-                              ? CoolAlert.show(
-                                  borderRadius: 26,
-                                  title: 'Éxito',
-                                  backgroundColor: Colors.white,
-                                  context: context,
-                                  type: CoolAlertType.success,
-                                  text: '¡Materia actualizada con exito!')
-                              : CoolAlert.show(
-                                  borderRadius: 26,
-                                  title: 'Error',
-                                  backgroundColor: Colors.white,
-                                  context: context,
-                                  type: CoolAlertType.error,
-                                  text: 'Error al actualizar la nota');
+                          if (isDone) {
+                            await CoolAlert.show(
+                                borderRadius: 26,
+                                title: 'Éxito',
+                                backgroundColor: Colors.white,
+                                context: context,
+                                type: CoolAlertType.success,
+                                text: '¡Materia agregada con exito!');
+
+                            Navigator.pop(context);
+                          } else
+                            CoolAlert.show(
+                                borderRadius: 26,
+                                title: 'Error',
+                                backgroundColor: Colors.white,
+                                context: context,
+                                type: CoolAlertType.error,
+                                text: 'Error al agregar la materia');
                         } else {
                           setState(() {
                             _hasSelectedData = false;

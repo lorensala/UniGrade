@@ -29,30 +29,11 @@ class _MisMateriasState extends State<MisMaterias> {
   Future<List<Subject>> getData(Student _student, String condition) async {
     var _subjectDao = new SubjectDao();
 
-    switch (condition) {
-      case 'All':
-        return await _subjectDao.getAllSubjectsByUserOrderByYear(_student);
-      case 'Cursando':
-        return await _subjectDao.getAllSubjectsByUserCondition(
-            _student, condition);
-      case 'Aprobada':
-        return await _subjectDao.getAllSubjectsByUserCondition(
-            _student, condition);
-      case 'Libre':
-        return await _subjectDao.getAllSubjectsByUserCondition(
-            _student, condition);
-      case 'Promoción Práctica':
-        return await _subjectDao.getAllSubjectsByUserCondition(
-            _student, condition);
-      case 'Promoción Teórica':
-        return await _subjectDao.getAllSubjectsByUserCondition(
-            _student, condition);
-      case 'Aprobación Directa':
-        return await _subjectDao.getAllSubjectsByUserCondition(
-            _student, condition);
-      default:
-        return null;
-    }
+    if (condition == 'All')
+      return await _subjectDao.getAllSubjectsByUserOrderByYear(_student);
+    else
+      return await _subjectDao.getAllSubjectsByUserCondition(
+          _student, condition);
   }
 
   @override
@@ -149,7 +130,7 @@ class _MisMateriasState extends State<MisMaterias> {
                       }),
                   InkWell(
                       borderRadius: BorderRadius.circular(26),
-                      child: OptionButton('Aprobadas', isPressedAprobadas),
+                      child: OptionButton('Regulares', isPressedAprobadas),
                       onTap: () {
                         setState(() {
                           isPressedAll = false;
@@ -159,7 +140,7 @@ class _MisMateriasState extends State<MisMaterias> {
                           isPressedPP = false;
                           isPressedPT = false;
                           isPressedAD = false;
-                          condition = 'Aprobada';
+                          condition = 'Regular';
                         });
                       }),
                   InkWell(

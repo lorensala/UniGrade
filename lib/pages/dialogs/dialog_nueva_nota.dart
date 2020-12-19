@@ -20,7 +20,7 @@ class DialogNuevaNota extends StatefulWidget {
 class _DialogNuevaNotaState extends State<DialogNuevaNota> {
   var _selectedSubject;
   var _selectedType;
-  var _subjects;
+  Future<List<Subject>> _subjects;
   bool _hasSelectedData = true;
 
   TextEditingController _nota = new TextEditingController();
@@ -71,39 +71,47 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
                   ),
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: FutureBuilder(
-                        future: _subjects,
-                        builder: (context, snapshot) {
-                          switch (snapshot.connectionState) {
-                            case ConnectionState.waiting:
-                              return Center(child: CircularProgressIndicator());
+                    child: FutureBuilder(future: _subjects.then((_list) {
+                      List<Subject> _aux = new List<Subject>();
+                      _list.forEach((subject) {
+                        if (subject.getState().getState().getName() !=
+                                'Libre' &&
+                            subject.getState().getState().getName() !=
+                                'Abandonada' &&
+                            subject.getNf() == -1) _aux.add(subject);
+                      });
+                      return _aux;
+                    }), builder: (context, snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return Center(child: CircularProgressIndicator());
 
-                            default:
-                              if (snapshot.hasError)
-                                return Text('Unable to grab data');
-                              else
-                                return DropdownButtonHideUnderline(
-                                  child: DropdownButton(
-                                    isExpanded: true,
-                                    value: _selectedSubject,
-                                    hint: new Text('Materia'),
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        _selectedSubject = newValue;
-                                      });
-                                    },
-                                    items: snapshot.data
-                                        .map<DropdownMenuItem<Subject>>(
-                                            (Subject sub) {
-                                      return DropdownMenuItem<Subject>(
-                                        value: sub,
-                                        child: Text(sub.getName()),
-                                      );
-                                    }).toList(),
-                                  ),
-                                );
-                          }
-                        }),
+                        default:
+                          if (snapshot.hasError)
+                            return Text('Unable to grab data');
+                          else
+                            return DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                isExpanded: true,
+                                value: _selectedSubject,
+                                hint: new Text('Materia'),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _selectedSubject = newValue;
+                                  });
+                                },
+                                items: snapshot.data
+                                    .map<DropdownMenuItem<Subject>>(
+                                        (Subject sub) {
+                                  return DropdownMenuItem<Subject>(
+                                    value: sub,
+                                    child: Text(sub.getName()),
+                                  );
+                                }).toList(),
+                              ),
+                            );
+                      }
+                    }),
                   ),
                 ),
                 SizedBox(
@@ -186,21 +194,28 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
                               _selectedSubject,
                               _selectedType);
 
-                          isDone
-                              ? CoolAlert.show(
-                                  borderRadius: 26,
-                                  title: 'Éxito',
-                                  backgroundColor: Colors.white,
-                                  context: context,
-                                  type: CoolAlertType.success,
-                                  text: 'Nota añadida con exito!')
-                              : CoolAlert.show(
-                                  borderRadius: 26,
-                                  title: 'Error',
-                                  backgroundColor: Colors.white,
-                                  context: context,
-                                  type: CoolAlertType.error,
-                                  text: 'Error al añadir la nota');
+                          if (isDone) {
+                            await CoolAlert.show(
+                                borderRadius: 26,
+                                title: 'Éxito',
+                                backgroundColor: Colors.white,
+                                context: context,
+                                type: CoolAlertType.success,
+                                text: 'Nota añadida con exito!');
+
+                            if (_selectedType == 'Final')
+                              Navigator.pop(context);
+
+                            _nota.text = '';
+                          } else {
+                            CoolAlert.show(
+                                borderRadius: 26,
+                                title: 'Error',
+                                backgroundColor: Colors.white,
+                                context: context,
+                                type: CoolAlertType.error,
+                                text: 'Error al añadir la nota');
+                          }
                         } else {
                           setState(() {
                             _hasSelectedData = false;

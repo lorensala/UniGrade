@@ -29,30 +29,11 @@ class _MisNotasState extends State<MisNotas> {
   Future<List<Subject>> getData(Student _student, String condition) async {
     var _subjectDao = new SubjectDao();
 
-    switch (condition) {
-      case 'All':
-        return await _subjectDao.getAllSubjectsByUser(_student);
-      case 'Cursando':
-        return await _subjectDao.getAllSubjectsByUserCondition(
-            _student, condition);
-      case 'Aprobadas':
-        return await _subjectDao.getAllSubjectsByUserCondition(
-            _student, condition);
-      case 'Libre':
-        return await _subjectDao.getAllSubjectsByUserCondition(
-            _student, condition);
-      case 'Promoción Práctica':
-        return await _subjectDao.getAllSubjectsByUserCondition(
-            _student, condition);
-      case 'Promoción Teórica':
-        return await _subjectDao.getAllSubjectsByUserCondition(
-            _student, condition);
-      case 'Aprobación Directa':
-        return await _subjectDao.getAllSubjectsByUserCondition(
-            _student, condition);
-      default:
-        return null;
-    }
+    if (condition == 'All')
+      return await _subjectDao.getAllSubjectsByUserOrderByYear(_student);
+    else
+      return await _subjectDao.getAllSubjectsByUserCondition(
+          _student, condition);
   }
 
   @override
@@ -157,7 +138,7 @@ class _MisNotasState extends State<MisNotas> {
                             InkWell(
                                 borderRadius: BorderRadius.circular(26),
                                 child: OptionButton(
-                                    'Aprobadas', isPressedAprobadas),
+                                    'Regulares', isPressedAprobadas),
                                 onTap: () {
                                   setState(() {
                                     isPressedAll = false;
@@ -167,7 +148,7 @@ class _MisNotasState extends State<MisNotas> {
                                     isPressedPP = false;
                                     isPressedPT = false;
                                     isPressedAD = false;
-                                    condition = 'Aprobadas';
+                                    condition = 'Regular';
                                   });
                                 }),
                             InkWell(
@@ -182,7 +163,7 @@ class _MisNotasState extends State<MisNotas> {
                                     isPressedPP = false;
                                     isPressedPT = false;
                                     isPressedAD = false;
-                                    condition = 'Aprobadas';
+                                    condition = 'Libre';
                                   });
                                 }),
                             InkWell(

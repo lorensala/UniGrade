@@ -95,7 +95,8 @@ class StudentDao {
         'type': 'calculo',
         'year': 1,
         'name': 'Análisis Matemático I',
-        'icon': 'assets/images/matematica.png'
+        'icon': 'assets/images/matematica.png',
+        'passed': false
       },
       {
         'duration': 'anual',
@@ -108,7 +109,8 @@ class StudentDao {
         'type': 'idioma',
         'year': 1,
         'name': 'Ingles I',
-        'icon': 'assets/images/ingles.png'
+        'icon': 'assets/images/ingles.png',
+        'passed': false
       },
       {
         'duration': 'anual',
@@ -121,7 +123,8 @@ class StudentDao {
         'type': 'calculo',
         'year': 1,
         'name': 'Álgebra y Geometría Analítica',
-        'icon': 'assets/images/algebra.png'
+        'icon': 'assets/images/algebra.png',
+        'passed': false
       },
       {
         'duration': 'anual',
@@ -134,7 +137,8 @@ class StudentDao {
         'type': 'calculo',
         'year': 1,
         'name': 'Física I',
-        'icon': 'assets/images/fisica.png'
+        'icon': 'assets/images/fisica.png',
+        'passed': false
       },
       {
         'duration': 'semestral',
@@ -147,7 +151,8 @@ class StudentDao {
         'type': 'otros',
         'year': 1,
         'name': 'Ingeniería y Sociedad',
-        'icon': 'assets/images/default.png'
+        'icon': 'assets/images/default.png',
+        'passed': false
       },
       {
         'duration': 'anual',
@@ -159,8 +164,9 @@ class StudentDao {
         'state': '',
         'type': 'software',
         'year': 1,
-        'name': 'Algoritmos y Estructuras de datos',
-        'icon': 'assets/images/software.png'
+        'name': 'Algoritmos y Estructuras de Datos',
+        'icon': 'assets/images/software.png',
+        'passed': false
       },
       {
         'duration': 'semestral',
@@ -173,7 +179,8 @@ class StudentDao {
         'type': 'hardware',
         'year': 1,
         'name': 'Arquitectura de Computadoras',
-        'icon': 'assets/images/aco.png'
+        'icon': 'assets/images/aco.png',
+        'passed': false
       },
 
       {
@@ -187,7 +194,8 @@ class StudentDao {
         'type': 'analista',
         'year': 1,
         'name': 'Sistemas y Organizaciones',
-        'icon': 'assets/images/analista.png'
+        'icon': 'assets/images/analista.png',
+        'passed': false
       },
       {
         'duration': 'semestral',
@@ -200,7 +208,8 @@ class StudentDao {
         'type': 'logica',
         'year': 1,
         'name': 'Matemática Discreta',
-        'icon': 'assets/images/logica.png'
+        'icon': 'assets/images/logica.png',
+        'passed': false
       },
       // Segundo Año
 
@@ -215,7 +224,8 @@ class StudentDao {
         'type': 'calculo',
         'year': 2,
         'name': 'Análisis Matemático II',
-        'icon': 'assets/images/matematica.png'
+        'icon': 'assets/images/matematica.png',
+        'passed': false
       },
 
       {
@@ -229,7 +239,8 @@ class StudentDao {
         'type': 'calculo',
         'year': 2,
         'name': 'Física II',
-        'icon': 'assets/images/fisica2.png'
+        'icon': 'assets/images/fisica2.png',
+        'passed': false
       },
       {
         'duration': 'anual',
@@ -242,7 +253,8 @@ class StudentDao {
         'type': 'analista',
         'year': 2,
         'name': 'Análisis de Sistemas',
-        'icon': 'assets/images/analista.png'
+        'icon': 'assets/images/analista.png',
+        'passed': false
       },
       {
         'duration': 'anual',
@@ -255,7 +267,8 @@ class StudentDao {
         'type': 'idioma',
         'year': 2,
         'name': 'Ingles II',
-        'icon': 'assets/images/ingles.png'
+        'icon': 'assets/images/ingles.png',
+        'passed': false
       },
 
       {
@@ -269,7 +282,8 @@ class StudentDao {
         'type': 'software',
         'year': 2,
         'name': 'Sistemas Operativos',
-        'icon': 'assets/images/software.png'
+        'icon': 'assets/images/software.png',
+        'passed': false
       },
 
       {
@@ -283,7 +297,8 @@ class StudentDao {
         'type': 'otros',
         'year': 2,
         'name': 'Quimica',
-        'icon': 'assets/images/quimica.png'
+        'icon': 'assets/images/quimica.png',
+        'passed': false
       },
 
       {
@@ -297,7 +312,8 @@ class StudentDao {
         'type': 'logica',
         'year': 2,
         'name': 'Sintaxis y Semántica de los Lenguajes',
-        'icon': 'assets/images/logica.png'
+        'icon': 'assets/images/logica.png',
+        'passed': false
       },
       {
         'duration': 'semestral',
@@ -310,7 +326,8 @@ class StudentDao {
         'type': 'calculo',
         'year': 2,
         'name': 'Probabilidades y Estadísticas',
-        'icon': 'assets/images/pye.png'
+        'icon': 'assets/images/pye.png',
+        'passed': false
       },
       {
         'duration': 'semestral',
@@ -323,7 +340,8 @@ class StudentDao {
         'type': 'software',
         'year': 2,
         'name': 'Paradigmas de Programación',
-        'icon': 'assets/images/software.png'
+        'icon': 'assets/images/software.png',
+        'passed': false
       },
 
       // Tercer Año
@@ -339,7 +357,8 @@ class StudentDao {
         'type': 'analista',
         'year': 3,
         'name': 'Diseño de Sistemas',
-        'icon': 'assets/images/analista.png'
+        'icon': 'assets/images/analista.png',
+        'passed': false
       },
       {
         'duration': 'anual',
@@ -352,7 +371,8 @@ class StudentDao {
         'type': 'otros',
         'year': 3,
         'name': 'Sistemas de Representacion',
-        'icon': 'assets/images/srp.png'
+        'icon': 'assets/images/srp.png',
+        'passed': false
       },
       {
         'duration': 'anual',
@@ -365,7 +385,8 @@ class StudentDao {
         'type': 'hardware',
         'year': 3,
         'name': 'Comunicaciones',
-        'icon': 'assets/images/com.png'
+        'icon': 'assets/images/com.png',
+        'passed': false
       },
       {
         'duration': 'semestral',
@@ -378,7 +399,8 @@ class StudentDao {
         'type': 'otros',
         'year': 3,
         'name': 'Economia',
-        'icon': 'assets/images/default.png'
+        'icon': 'assets/images/default.png',
+        'passed': false
       },
       {
         'duration': 'semestral',
@@ -391,7 +413,10 @@ class StudentDao {
         'type': 'software',
         'year': 3,
         'name': 'Programación de Aplicaciones Visuales I',
-        'icon': 'assets/images/software.png'
+        'icon': 'assets/images/software.png',
+        'passed': false,
+        'elect': true,
+        'points': 2
       },
       {
         'duration': 'semestral',
@@ -404,7 +429,10 @@ class StudentDao {
         'type': 'software',
         'year': 3,
         'name': 'Tecnología de Software Base',
-        'icon': 'assets/images/software.png'
+        'icon': 'assets/images/software.png',
+        'passed': false,
+        'elect': true,
+        'points': 2
       },
       {
         'duration': 'semestral',
@@ -417,7 +445,8 @@ class StudentDao {
         'type': 'calculo',
         'year': 3,
         'name': 'Matemática Superior',
-        'icon': 'assets/images/matsup.png'
+        'icon': 'assets/images/matsup.png',
+        'passed': false
       },
       {
         'duration': 'semestral',
@@ -430,7 +459,8 @@ class StudentDao {
         'type': 'software',
         'year': 3,
         'name': 'Gestion de Datos',
-        'icon': 'assets/images/gda.png'
+        'icon': 'assets/images/gda.png',
+        'passed': false
       },
     ];
 

@@ -8,7 +8,7 @@ import 'package:mis_notas/data/datamanager.dart';
 class SubjectDao {
   final db = DataManager();
 
-  Future<List<Subject>> getSubjectsBySearch(String searchParam) async {
+  /* Future<List<Subject>> getSubjectsBySearch(String searchParam) async {
     List<Subject> list = List<Subject>();
     CollectionReference collReference;
 
@@ -44,7 +44,7 @@ class SubjectDao {
     }
 
     return list;
-  }
+  } */
 
   Future<List<Subject>> getAllSubjectsWithCondition(Student student) async {
     List<Subject> list = List<Subject>();
@@ -83,16 +83,16 @@ class SubjectDao {
     return list;
   }
 
-  Future<List<Subject>> getAllSubjectsWithNoState(Student student) async {
+  Future<List<Subject>> getAllSubjectsWithNoCondition(Student student) async {
     List<Subject> list = List<Subject>();
     CollectionReference collReference;
 
     try {
       collReference = FirebaseFirestore.instance
           .collection('student')
-          .doc('sw98JGNJh4XL9WRVVzBN')
+          .doc(student.getStudentDocRef())
           .collection('career_student')
-          .doc('Kynm7JSEA7ZyPpgyD9jp')
+          .doc(student.getCareerDocRefs()[0])
           .collection('subject_student');
 
       Future<QuerySnapshot> docs = FirebaseFirestore.instance
@@ -264,13 +264,22 @@ class SubjectDao {
             .collection('subject_student')
             .doc(_docId);
 
-      await _docRef.update({
-        'state': condition,
-      }).then((value) {
-        isDone = true;
-        print('============ Subject added succesfully ============');
-      }).catchError(
-          (error) => print('============ Error adding subject ============'));
+      if (subject.getNf() != -1) {
+        await _docRef.update({'state': condition, 'passed': true}).then(
+            (value) {
+          isDone = true;
+          print('============ Subject added succesfully ============');
+        }).catchError(
+            (error) => print('============ Error adding subject ============'));
+      } else {
+        await _docRef.update({
+          'state': condition,
+        }).then((value) {
+          isDone = true;
+          print('============ Subject added succesfully ============');
+        }).catchError(
+            (error) => print('============ Error adding subject ============'));
+      }
     } catch (e) {
       print('============ Error finding doc ============');
     }
@@ -282,6 +291,7 @@ class SubjectDao {
     var gradesP;
     var gradesT;
     var gradesTp;
+    var aplazos;
     var nf;
 
     sub['gradesP'] != null
@@ -296,6 +306,10 @@ class SubjectDao {
         ? gradesTp = new List<int>.from(sub['gradesTP'])
         : gradesTp = [];
 
+    sub['aplazos'] != null
+        ? aplazos = new List<int>.from(sub['gradesTP'])
+        : aplazos = [];
+
     sub['nf'] != null ? nf = sub['nf'] : nf = -1;
 
     return Subject(
@@ -307,34 +321,52 @@ class SubjectDao {
         nf,
         StateRecord(State(sub['state']), DateTime.now()),
         sub['type'],
-        sub['icon']);
+        sub['icon'],
+        sub['passed'],
+        aplazos,
+        sub['duration']);
   }
 
-  /* Future<void> addSubject(Subject subject) {
+  Future<bool> addSubject(Student _student, Subject subject) async {
+    bool isDone = false;
     try {
-      CollectionReference coll =
-          FirebaseFirestore.instance.collection('subject');
-      return coll
-          .add({
-            'color': subject.getColor(),
-            'icon': subject.getIcon(),
-            'name': subject.getName(),
-            'short_name': subject.getShortName(),
-            'year': subject.getYear(),
-          })
-          .then((value) =>
-              print('============ Subject added succesfully ============'))
-          .catchError((error) =>
-              print('============ Error adding subject ============'));
+      CollectionReference coll = FirebaseFirestore.instance
+          .collection('student')
+          .doc(_student.getStudentDocRef())
+          .collection('career_student')
+          .doc(_student.getCareerDocRefs()[0])
+          .collection('subject_student');
+
+      await coll.add({
+        'duration': subject.getDuration(),
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'aplazos': [],
+        'nf': -1,
+        'state': 'Cursando',
+        'type': subject.getType(),
+        'year': 1,
+        'name': subject.getName(),
+        'icon': subject.getIcon(),
+        'passed': false
+      }).then((value) {
+        isDone = true;
+        print('============ Subject added succesfully ============');
+      }).catchError(
+          (error) => print('============ Error adding subject ============'));
     } catch (e) {
       print('============ Error finding doc ============');
       return null;
     }
+
+    return isDone;
   }
- */
+
   Future<bool> addGrade(
       Student _student, int nota, Subject subject, String type) async {
     List<int> _grades = List<int>();
+    List<int> _aplazos = List<int>();
     var _docRef;
     var _myType;
     bool _isDone = false;
@@ -383,12 +415,25 @@ class SubjectDao {
           }
         });
       } else {
-        await docs.then((value) {
-          _docRef = value.docs[0].reference;
-        });
+        if (nota > 5) {
+          await docs.then((value) {
+            _docRef = value.docs[0].reference;
+          });
+        } else {
+          await docs.then((value) {
+            int size = value.docs[0].data()['aplazos'].length;
+            _docRef = value.docs[0].reference;
+
+            if (size != 0)
+              for (int i = 0; i < size; i++) {
+                _aplazos.add(value.docs[0].data()['aplazos']);
+              }
+          });
+        }
       }
 
       _grades.add(nota);
+      _aplazos.add(nota);
 
       _materia = _docRef;
     } catch (e) {
@@ -406,11 +451,19 @@ class SubjectDao {
       }).catchError((error) =>
           print('============ Error during grade adding ============'));
     } else {
-      await _materia.update({'nf': nota}).then((value) {
-        _isDone = true;
-        print('============ New grade: $nota added ============');
-      }).catchError((error) =>
-          print('============ Error during grade adding ============'));
+      if (nota > 5) {
+        await _materia.update({'nf': nota}).then((value) {
+          _isDone = true;
+          print('============ New grade: $nota added ============');
+        }).catchError((error) =>
+            print('============ Error during grade adding ============'));
+      } else {
+        await _materia.update({'aplazos': _aplazos}).then((value) {
+          _isDone = true;
+          print('============ New grade: $nota added ============');
+        }).catchError((error) =>
+            print('============ Error during grade adding ============'));
+      }
     }
 
     return _isDone;

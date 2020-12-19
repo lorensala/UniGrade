@@ -8,20 +8,21 @@ import 'package:mis_notas/entities/subject.dart';
 
 import 'package:mis_notas/data/subject_dao.dart';
 
-class DialogNuevaNota extends StatefulWidget {
+class DialogModificarNota extends StatefulWidget {
   final Student _student;
 
-  DialogNuevaNota(this._student);
+  DialogModificarNota(this._student);
 
   @override
-  _DialogNuevaNotaState createState() => _DialogNuevaNotaState();
+  _DialogModificarNotaState createState() => _DialogModificarNotaState();
 }
 
-class _DialogNuevaNotaState extends State<DialogNuevaNota> {
+class _DialogModificarNotaState extends State<DialogModificarNota> {
   var _selectedSubject;
   var _selectedType;
   var _subjects;
   bool _hasSelectedData = true;
+  List<Subject> _auxSubjects = new List<Subject>();
 
   TextEditingController _nota = new TextEditingController();
 
@@ -43,14 +44,14 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(26.0)),
         child: Container(
           width: 338.0,
-          height: 280.0,
+          height: 300.0,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 40, 20, 40),
+            padding: const EdgeInsets.fromLTRB(20, 40, 20, 5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Nueva Nota',
+                  'Modificar Nota',
                   style: TextStyle(
                     fontFamily: 'Avenir LT Std',
                     fontSize: 22,
@@ -82,6 +83,7 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
                               if (snapshot.hasError)
                                 return Text('Unable to grab data');
                               else
+                                //_auxSubjects = snapshot.data;
                                 return DropdownButtonHideUnderline(
                                   child: DropdownButton(
                                     isExpanded: true,
@@ -135,6 +137,37 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
                     ),
                   ),
                 ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                    width: 288.0,
+                    height: 37.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(26.0),
+                      color: const Color(0xfff7f7f7),
+                    ),
+                    child: Padding(
+                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                          isExpanded: true,
+                          value: _selectedSubject,
+                          hint: new Text('Nota'),
+                          onChanged: (newValue) {
+                            setState(() {
+                              _selectedSubject = newValue;
+                            });
+                          },
+
+                          // Añadir todas las notas
+                          items: _auxSubjects
+                              .map<DropdownMenuItem<int>>((Subject sub) {
+                            return DropdownMenuItem<int>(
+                                value: sub.getGradesP()[0],
+                                child: Text(sub.getGradesP()[0].toString()));
+                          }).toList(),
+                        )))),
                 SizedBox(
                   height: 10,
                 ),

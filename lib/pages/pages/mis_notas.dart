@@ -25,34 +25,19 @@ class _MisNotasState extends State<MisNotas> {
   bool isPressedPP = false;
   bool isPressedPT = false;
   bool isPressedAD = false;
+  bool isPressedAb = false;
 
   Future<List<Subject>> getData(Student _student, String condition) async {
     var _subjectDao = new SubjectDao();
 
-    switch (condition) {
-      case 'All':
-        return await _subjectDao.getAllSubjectsByUser(_student);
-      case 'Cursando':
-        return await _subjectDao.getAllSubjectsByUserCondition(
-            _student, condition);
-      case 'Aprobadas':
-        return await _subjectDao.getAllSubjectsByUserCondition(
-            _student, condition);
-      case 'Libre':
-        return await _subjectDao.getAllSubjectsByUserCondition(
-            _student, condition);
-      case 'Promoción Práctica':
-        return await _subjectDao.getAllSubjectsByUserCondition(
-            _student, condition);
-      case 'Promoción Teórica':
-        return await _subjectDao.getAllSubjectsByUserCondition(
-            _student, condition);
-      case 'Aprobación Directa':
-        return await _subjectDao.getAllSubjectsByUserCondition(
-            _student, condition);
-      default:
-        return null;
-    }
+    if (condition == 'All')
+      return await _subjectDao.getAllSubjectsByUserOrderByYear(_student);
+    else if (condition == 'Electiva')
+      return await _subjectDao.getAllSubjectsByUserCondition(
+          _student, condition);
+    else
+      return await _subjectDao.getAllSubjectsByUserCondition(
+          _student, condition);
   }
 
   @override
@@ -134,6 +119,7 @@ class _MisNotasState extends State<MisNotas> {
                                   isPressedPP = false;
                                   isPressedPT = false;
                                   isPressedAD = false;
+                                  isPressedAb = false;
                                   condition = 'All';
                                 });
                               },
@@ -151,13 +137,14 @@ class _MisNotasState extends State<MisNotas> {
                                     isPressedPP = false;
                                     isPressedPT = false;
                                     isPressedAD = false;
+                                    isPressedAb = false;
                                     condition = 'Cursando';
                                   });
                                 }),
                             InkWell(
                                 borderRadius: BorderRadius.circular(26),
                                 child: OptionButton(
-                                    'Aprobadas', isPressedAprobadas),
+                                    'Regulares', isPressedAprobadas),
                                 onTap: () {
                                   setState(() {
                                     isPressedAll = false;
@@ -167,22 +154,8 @@ class _MisNotasState extends State<MisNotas> {
                                     isPressedPP = false;
                                     isPressedPT = false;
                                     isPressedAD = false;
-                                    condition = 'Aprobadas';
-                                  });
-                                }),
-                            InkWell(
-                                borderRadius: BorderRadius.circular(26),
-                                child: OptionButton('Libre', isPressedLibre),
-                                onTap: () {
-                                  setState(() {
-                                    isPressedAll = false;
-                                    isPressedCursando = false;
-                                    isPressedAprobadas = false;
-                                    isPressedLibre = true;
-                                    isPressedPP = false;
-                                    isPressedPT = false;
-                                    isPressedAD = false;
-                                    condition = 'Aprobadas';
+                                    isPressedAb = false;
+                                    condition = 'Regular';
                                   });
                                 }),
                             InkWell(
@@ -197,6 +170,7 @@ class _MisNotasState extends State<MisNotas> {
                                     isPressedPP = true;
                                     isPressedPT = false;
                                     isPressedAD = false;
+                                    isPressedAb = false;
                                     condition = 'Promoción Práctica';
                                   });
                                 }),
@@ -212,6 +186,7 @@ class _MisNotasState extends State<MisNotas> {
                                     isPressedPP = false;
                                     isPressedPT = true;
                                     isPressedAD = false;
+                                    isPressedAb = false;
                                     condition = 'Promoción Teórica';
                                   });
                                 }),
@@ -227,7 +202,40 @@ class _MisNotasState extends State<MisNotas> {
                                     isPressedPP = false;
                                     isPressedPT = false;
                                     isPressedAD = true;
+                                    isPressedAb = false;
                                     condition = 'Aprobación Directa';
+                                  });
+                                }),
+                            InkWell(
+                                borderRadius: BorderRadius.circular(26),
+                                child: OptionButton('Libre', isPressedLibre),
+                                onTap: () {
+                                  setState(() {
+                                    isPressedAll = false;
+                                    isPressedCursando = false;
+                                    isPressedAprobadas = false;
+                                    isPressedLibre = true;
+                                    isPressedPP = false;
+                                    isPressedPT = false;
+                                    isPressedAD = false;
+                                    isPressedAb = false;
+                                    condition = 'Libre';
+                                  });
+                                }),
+                            InkWell(
+                                borderRadius: BorderRadius.circular(26),
+                                child: OptionButton('Aban.', isPressedAb),
+                                onTap: () {
+                                  setState(() {
+                                    isPressedAll = false;
+                                    isPressedCursando = false;
+                                    isPressedAprobadas = false;
+                                    isPressedLibre = false;
+                                    isPressedPP = false;
+                                    isPressedPT = false;
+                                    isPressedAD = false;
+                                    isPressedAb = true;
+                                    condition = 'Abandonada';
                                   });
                                 }),
                           ],

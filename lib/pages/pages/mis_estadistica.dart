@@ -310,9 +310,12 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                           );
                         default:
                           if (snapshot.data.isNotEmpty && snapshot.hasData) {
-                            int percentageYear =
-                                ((snapshot.data[1] * 100 / snapshot.data[7]))
-                                    .round();
+                            int percentageYear = 0;
+
+                            if (snapshot.data[7] != 0)
+                              percentageYear =
+                                  ((snapshot.data[1] * 100 / snapshot.data[7]))
+                                      .round();
 
                             return Padding(
                               padding: const EdgeInsets.fromLTRB(0, 10, 0, 18),

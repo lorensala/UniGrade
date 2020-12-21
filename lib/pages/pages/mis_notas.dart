@@ -90,7 +90,7 @@ class _MisNotasState extends State<MisNotas> {
                   ),
                   // Filtros
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+                    padding: const EdgeInsets.fromLTRB(24, 20, 24, 10),
                     child: Container(
                       //width: 200,
                       height: 37.0,

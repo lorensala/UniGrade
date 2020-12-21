@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,25 +22,50 @@ class DialogModificarNota extends StatefulWidget {
 class _DialogModificarNotaState extends State<DialogModificarNota> {
   var _selectedSubject;
   var _selectedType;
+  var _selectedNota;
   var _subjects;
+
   bool _hasSelectedData = true;
-  List<Subject> _auxSubjects = new List<Subject>();
+  bool _hasSelectedNota = false;
+  List<int> _notas = new List<int>();
 
   TextEditingController _nota = new TextEditingController();
 
   SubjectDao _subjectDao = new SubjectDao();
+  List<Subject> _auxNotas = new List<Subject>();
 
   var _types = ['Práctico', 'Teórico', 'TP', 'Final'];
 
   @override
   void initState() {
-    _subjects = _subjectDao.getAllSubjectsByUser(widget._student);
+    _subjects = _subjectDao.getAllSubjectsWithCondition(widget._student);
 
     super.initState();
   }
 
+  List<int> getGrades(Subject sub, String selectedType) {
+    switch (selectedType) {
+      case 'Práctico':
+        return sub.getGradesP();
+      case 'Teórico':
+        return sub.getGradesT();
+      case 'TP':
+        return sub.getGradesTP();
+      case 'Final':
+        {
+          List<int> aux = sub.getAplazos();
+          print(aux);
+          aux.add(sub.getNf());
+
+          return aux;
+        }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(_selectedSubject);
+
     return Dialog(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(26.0)),
@@ -80,30 +107,38 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                               return Center(child: CircularProgressIndicator());
 
                             default:
+                              List<Subject> _aux = new List<Subject>();
                               if (snapshot.hasError)
                                 return Text('Unable to grab data');
                               else
-                                //_auxSubjects = snapshot.data;
-                                return DropdownButtonHideUnderline(
-                                  child: DropdownButton(
-                                    isExpanded: true,
-                                    value: _selectedSubject,
-                                    hint: new Text('Materia'),
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        _selectedSubject = newValue;
-                                      });
-                                    },
-                                    items: snapshot.data
-                                        .map<DropdownMenuItem<Subject>>(
-                                            (Subject sub) {
-                                      return DropdownMenuItem<Subject>(
-                                        value: sub,
-                                        child: Text(sub.getName()),
-                                      );
-                                    }).toList(),
-                                  ),
-                                );
+                                snapshot.data.forEach((Subject sub) {
+                                  if (sub.getGradesP().isNotEmpty ||
+                                      sub.getGradesT().isNotEmpty ||
+                                      sub.getGradesTP().isNotEmpty)
+                                    _aux.add(sub);
+                                });
+
+                              _auxNotas = _aux;
+
+                              return DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                  isExpanded: true,
+                                  value: _selectedSubject,
+                                  hint: new Text('Materia'),
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      _selectedSubject = newValue;
+                                    });
+                                  },
+                                  items: _aux.map<DropdownMenuItem<Subject>>(
+                                      (Subject sub) {
+                                    return DropdownMenuItem<Subject>(
+                                      value: sub,
+                                      child: Text(sub.getName()),
+                                    );
+                                  }).toList(),
+                                ),
+                              );
                           }
                         }),
                   ),
@@ -128,6 +163,7 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                             setState(() {
                               _selectedType = newValue;
                               _hasSelectedData = true;
+                              _hasSelectedNota = true;
                             });
                           },
                           items: _types
@@ -151,23 +187,23 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                         child: DropdownButtonHideUnderline(
                             child: DropdownButton(
-                          isExpanded: true,
-                          value: _selectedSubject,
-                          hint: new Text('Nota'),
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectedSubject = newValue;
-                            });
-                          },
-
-                          // Añadir todas las notas
-                          items: _auxSubjects
-                              .map<DropdownMenuItem<int>>((Subject sub) {
-                            return DropdownMenuItem<int>(
-                                value: sub.getGradesP()[0],
-                                child: Text(sub.getGradesP()[0].toString()));
-                          }).toList(),
-                        )))),
+                                //isExpanded: true,
+                                value: _selectedNota,
+                                hint: new Text('Nota'),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _selectedNota = newValue;
+                                  });
+                                },
+                                items: (_hasSelectedNota)
+                                    ? getGrades(_selectedSubject, _selectedType)
+                                        .map(
+                                            (int nota) => DropdownMenuItem<int>(
+                                                  value: nota,
+                                                  child: Text(nota.toString()),
+                                                ))
+                                        .toList()
+                                    : null)))),
                 SizedBox(
                   height: 10,
                 ),
@@ -213,11 +249,12 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                             _hasSelectedData = true;
                           });
 
-                          bool isDone = await _subjectDao.addGrade(
+                          bool isDone = await _subjectDao.updateGrade(
                               widget._student,
-                              int.parse(_nota.text),
+                              _selectedNota,
                               _selectedSubject,
-                              _selectedType);
+                              _selectedType,
+                              int.parse(_nota.text));
 
                           isDone
                               ? CoolAlert.show(
@@ -284,4 +321,10 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
           ),
         ));
   }
+}
+
+class Nota {
+  int nota;
+
+  Nota(this.nota);
 }

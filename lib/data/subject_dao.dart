@@ -308,7 +308,7 @@ class SubjectDao {
         : gradesTp = [];
 
     sub['aplazos'] != null
-        ? aplazos = new List<int>.from(sub['gradesTP'])
+        ? aplazos = new List<int>.from(sub['aplazos'])
         : aplazos = [];
 
     sub['elect'] != null ? elect = sub['elect'] : elect = false;
@@ -465,6 +465,128 @@ class SubjectDao {
           print('============ New grade: $nota added ============');
         }).catchError((error) =>
             print('============ Error during grade adding ============'));
+      }
+    }
+
+    return _isDone;
+  }
+
+  Future<bool> updateGrade(Student _student, int oldNota, Subject subject,
+      String type, int newNota) async {
+    List<int> _grades = List<int>();
+    List<int> _aplazos = List<int>();
+    var _docRef;
+    var _myType;
+    bool _isDone = false;
+    DocumentReference _materia;
+
+    switch (type) {
+      case 'Práctico':
+        {
+          _myType = 'gradesP';
+        }
+        break;
+      case 'Teórico':
+        {
+          _myType = 'gradesT';
+        }
+        break;
+      case 'TP':
+        {
+          _myType = 'gradesTP';
+        }
+        break;
+      case 'Final':
+        {
+          _myType = 'nf';
+        }
+        break;
+    }
+
+    try {
+      Future<QuerySnapshot> docs = FirebaseFirestore.instance
+          .collection('student')
+          .doc(_student.getStudentDocRef())
+          .collection('career_student')
+          .doc(_student.getCareerDocRefs()[0])
+          .collection('subject_student')
+          .where('name', isEqualTo: subject.getName())
+          .get();
+
+      if (_myType != 'nf') {
+        await docs.then((value) {
+          int size = value.docs[0].data()[_myType].length;
+          _docRef = value.docs[0].reference;
+
+          for (int i = 0; i < size; i++) {
+            if (value.docs[0].data()[_myType][i] == oldNota)
+              _grades.add(newNota);
+            else
+              _grades.add(value.docs[0].data()[_myType][i]);
+          }
+        });
+      } else {
+        if (newNota > 5) {
+          await docs.then((value) {
+            _docRef = value.docs[0].reference;
+          });
+        } else {
+          await docs.then((value) {
+            int size = value.docs[0].data()['aplazos'].length;
+            _docRef = value.docs[0].reference;
+
+            if (size != 0)
+              for (int i = 0; i < size; i++) {
+                _aplazos.add(value.docs[0].data()['aplazos']);
+              }
+          });
+        }
+      }
+
+      // _grades.add(newNota);
+      _aplazos.add(newNota);
+
+      _materia = _docRef;
+    } catch (e) {
+      print(e);
+      print('============ Error finding doc ============');
+      return null;
+    }
+
+    if (_materia != null && _myType != 'nf') {
+      await _materia.update({
+        _myType: _grades,
+      }).then((value) {
+        _isDone = true;
+        print('============ New grade: $newNota updated ============');
+      }).catchError((error) =>
+          print('============ Error during grade updated ============'));
+    } else {
+      if (newNota > 5) {
+        if (oldNota > 5) {
+          await _materia.update({'nf': newNota}).then((value) {
+            _isDone = true;
+            print('============ New grade: $newNota updated ============');
+          }).catchError((error) =>
+              print('============ Error during grade updated ============'));
+        } else {
+          await _materia.update({'nf': newNota}).then((value) {
+            _isDone = true;
+            print('============ New grade: $newNota updated ============');
+          }).catchError((error) =>
+              print('============ Error during grade updated ============'));
+
+          await _materia.update({
+            'aplazos': FieldValue.arrayRemove([oldNota])
+          });
+        }
+      } else {
+        await _materia.update({'nf': -1});
+        await _materia.update({'aplazos': _aplazos}).then((value) {
+          _isDone = true;
+          print('============ New grade: $newNota updated ============');
+        }).catchError((error) =>
+            print('============ Error during grade updated ============'));
       }
     }
 

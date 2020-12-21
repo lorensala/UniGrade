@@ -91,16 +91,9 @@ class _MisMateriasState extends State<MisMaterias> {
                 allowDrawingOutsideViewBox: true,
               ),
             ),
-
-            /* Padding(
-              //TODO: Implementar la busqueda si es posible.
-              padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
-              child: SearchBar(null),
-            ),
- */
             // Filtreos
             Padding(
-              padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
+              padding: const EdgeInsets.fromLTRB(24, 20, 24, 10),
               child: Container(
                 //width: 200,
                 height: 37.0,

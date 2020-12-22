@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,12 +20,11 @@ class DialogModificarNota extends StatefulWidget {
 class _DialogModificarNotaState extends State<DialogModificarNota> {
   var _selectedSubject;
   var _selectedType;
-  var _selectedNota;
+  int _selectedNota;
   var _subjects;
 
   bool _hasSelectedData = true;
   bool _hasSelectedNota = false;
-  List<int> _notas = new List<int>();
 
   TextEditingController _nota = new TextEditingController();
 
@@ -44,27 +41,60 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
   }
 
   List<int> getGrades(Subject sub, String selectedType) {
+    List<int> notas = new List<int>();
+
     switch (selectedType) {
       case 'Práctico':
-        return sub.getGradesP();
+        {
+          sub.getGradesP().forEach((nota) {
+            if (nota != null && notas.contains(nota))
+              notas.add(nota + 10);
+            else
+              notas.add(nota);
+          });
+          return notas;
+        }
+
       case 'Teórico':
-        return sub.getGradesT();
+        {
+          sub.getGradesT().forEach((nota) {
+            if (nota != null && notas.contains(nota))
+              notas.add(nota + 10);
+            else
+              notas.add(nota);
+          });
+          return notas;
+        }
       case 'TP':
-        return sub.getGradesTP();
+        {
+          sub.getGradesTP().forEach((nota) {
+            if (nota != null && notas.contains(nota))
+              notas.add(nota + 10);
+            else
+              notas.add(nota);
+          });
+          return notas;
+        }
       case 'Final':
         {
-          List<int> aux = sub.getAplazos();
-          print(aux);
-          aux.add(sub.getNf());
+          if (sub.getAplazos().isNotEmpty)
+            sub.getAplazos().forEach((nota) {
+              if (nota != null && notas.contains(nota))
+                notas.add(nota + 10);
+              else
+                notas.add(nota);
+            });
 
-          return aux;
+          if (sub.getNf() != -1) notas.add(sub.getNf());
+
+          return notas;
         }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    print(_selectedSubject);
+    print(getGrades(_selectedSubject, _selectedType));
 
     return Dialog(
         shape:
@@ -187,6 +217,7 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                         child: DropdownButtonHideUnderline(
                             child: DropdownButton(
+
                                 //isExpanded: true,
                                 value: _selectedNota,
                                 hint: new Text('Nota'),
@@ -200,7 +231,9 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                                         .map(
                                             (int nota) => DropdownMenuItem<int>(
                                                   value: nota,
-                                                  child: Text(nota.toString()),
+                                                  child: Text(nota > 10
+                                                      ? (nota - 10).toString()
+                                                      : nota.toString()),
                                                 ))
                                         .toList()
                                     : null)))),
@@ -256,21 +289,25 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                               _selectedType,
                               int.parse(_nota.text));
 
-                          isDone
-                              ? CoolAlert.show(
-                                  borderRadius: 26,
-                                  title: 'Éxito',
-                                  backgroundColor: Colors.white,
-                                  context: context,
-                                  type: CoolAlertType.success,
-                                  text: 'Nota añadida con exito!')
-                              : CoolAlert.show(
-                                  borderRadius: 26,
-                                  title: 'Error',
-                                  backgroundColor: Colors.white,
-                                  context: context,
-                                  type: CoolAlertType.error,
-                                  text: 'Error al añadir la nota');
+                          if (isDone) {
+                            await CoolAlert.show(
+                                borderRadius: 26,
+                                title: 'Éxito',
+                                backgroundColor: Colors.white,
+                                context: context,
+                                type: CoolAlertType.success,
+                                text: 'Nota añadida con exito!');
+
+                            Navigator.pop(context);
+                          } else {
+                            CoolAlert.show(
+                                borderRadius: 26,
+                                title: 'Error',
+                                backgroundColor: Colors.white,
+                                context: context,
+                                type: CoolAlertType.error,
+                                text: 'Error al añadir la nota');
+                          }
                         } else {
                           setState(() {
                             _hasSelectedData = false;
@@ -321,10 +358,4 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
           ),
         ));
   }
-}
-
-class Nota {
-  int nota;
-
-  Nota(this.nota);
 }

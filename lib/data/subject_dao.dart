@@ -4,6 +4,7 @@ import 'package:mis_notas/entities/state_record.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
 import 'package:mis_notas/data/datamanager.dart';
+import 'package:mis_notas/pages/dialogs/dialog_modificar_nota.dart';
 
 class SubjectDao {
   final db = DataManager();
@@ -428,7 +429,7 @@ class SubjectDao {
 
             if (size != 0)
               for (int i = 0; i < size; i++) {
-                _aplazos.add(value.docs[0].data()['aplazos']);
+                _aplazos.add(value.docs[0].data()['aplazos'][i]);
               }
           });
         }
@@ -441,7 +442,7 @@ class SubjectDao {
     } catch (e) {
       print(e);
       print('============ Error finding doc ============');
-      return null;
+      return _isDone;
     }
 
     if (_materia != null && _myType != 'nf') {
@@ -471,7 +472,7 @@ class SubjectDao {
     return _isDone;
   }
 
-  Future<bool> updateGrade(Student _student, int oldNota, Subject subject,
+  Future<bool> updateGrade(Student _student, int oldNotaCheck, Subject subject,
       String type, int newNota) async {
     List<int> _grades = List<int>();
     List<int> _aplazos = List<int>();
@@ -479,6 +480,10 @@ class SubjectDao {
     var _myType;
     bool _isDone = false;
     DocumentReference _materia;
+
+    int oldNota;
+
+    oldNotaCheck > 10 ? oldNota = oldNotaCheck - 10 : oldNota = oldNotaCheck;
 
     switch (type) {
       case 'Práctico':
@@ -537,14 +542,14 @@ class SubjectDao {
 
             if (size != 0)
               for (int i = 0; i < size; i++) {
-                _aplazos.add(value.docs[0].data()['aplazos']);
+                _aplazos.add(value.docs[0].data()['aplazos'][i]);
               }
           });
         }
       }
 
       // _grades.add(newNota);
-      _aplazos.add(newNota);
+      if (oldNota > 5) _aplazos.add(newNota);
 
       _materia = _docRef;
     } catch (e) {
@@ -570,7 +575,7 @@ class SubjectDao {
           }).catchError((error) =>
               print('============ Error during grade updated ============'));
         } else {
-          await _materia.update({'nf': newNota}).then((value) {
+          await _materia.update({'nf': newNota, 'passed': true}).then((value) {
             _isDone = true;
             print('============ New grade: $newNota updated ============');
           }).catchError((error) =>
@@ -581,7 +586,15 @@ class SubjectDao {
           });
         }
       } else {
-        await _materia.update({'nf': -1});
+        if (_aplazos.contains(oldNota)) {
+          _aplazos.remove(oldNota);
+          _aplazos.add(newNota);
+        }
+
+        await _materia.update(
+          {'nf': -1, 'passed': false},
+        );
+
         await _materia.update({'aplazos': _aplazos}).then((value) {
           _isDone = true;
           print('============ New grade: $newNota updated ============');

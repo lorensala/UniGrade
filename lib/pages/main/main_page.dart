@@ -44,6 +44,8 @@ class _MainPageState extends State<MainPage> {
         _student, _list, -1, 'Aprobación Directa'));
     _dataList.add(await _statisticsService.getSubjectsCondition(
         _student, _list, -1, 'Regular'));
+    _dataList.add(
+        await _statisticsService.getAvgNfWithBadGrades(_student, _list, -1));
 
     return _dataList;
   }
@@ -70,6 +72,7 @@ class _MainPageState extends State<MainPage> {
               _statistics.pt = snapshot.data[4];
               _statistics.ap = snapshot.data[5];
               _statistics.reg = snapshot.data[6];
+              _statistics.realAvg = snapshot.data[7];
 
               return Padding(
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),

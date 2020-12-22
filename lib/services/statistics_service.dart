@@ -3,8 +3,6 @@ import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
 
 class StatisticsService extends ChangeNotifier {
-  //TODO: El promedio debe calcularse en base a las que tienen nota final.
-
   Future<double> getAvgNf(
       Student _student, List<Subject> _list, int _year) async {
     //Promedio de notas finales
@@ -38,20 +36,33 @@ class StatisticsService extends ChangeNotifier {
     //Promedio de notas finales
 
     int _total = 0;
-    int _count = _list.length;
+    int _count = 0;
 
     if (_year == -1) {
       _list.forEach((element) {
-        if (element.getNf() != -1) _total += element.getNf();
+        if (element.getNf() != -1) {
+          _total += element.getNf();
+          element.getAplazos().forEach((aplazo) {
+            _total += aplazo;
+            _count += 1;
+          });
+          _count += 1;
+        }
       });
     } else {
       _list.forEach((element) {
-        if (element.getNf() != -1 && element.getYear() == _year)
+        if (element.getNf() != -1 && element.getYear() == _year) {
           _total += element.getNf();
+          element.getAplazos().forEach((aplazo) {
+            _total += aplazo;
+            _count += 1;
+          });
+          _count += 1;
+        }
       });
     }
-
-    return _total / _count;
+    if (_count == 0) return 0;
+    return double.parse(((_total / _count)).toStringAsFixed(2));
   }
 
   Future<int> getSubjectsCount(

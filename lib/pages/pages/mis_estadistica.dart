@@ -43,10 +43,11 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
     _statisticsList.add(await _statisticsService.getSubjectsCondition(
         _student, _list, _year, 'Aprobación Directa'));
     _statisticsList.add(await _statisticsService.getSubjectsCondition(
-        _student, _list, _year, 'Aprobación Directa'));
+        _student, _list, _year, 'Regular'));
     _statisticsList
         .add(await _statisticsService.getSubjectsCount(_student, _list, _year));
-
+    _statisticsList.add(
+        await _statisticsService.getAvgNfWithBadGrades(_student, _list, _year));
     return _statisticsList;
   }
 
@@ -144,6 +145,7 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                                 sizeUnit: GaugeSizeUnit.factor,
                                 enableAnimation: true,
                                 animationDuration: 600,
+                                //TODO: Fijarse esta animacion
                                 animationType: AnimationType.linear),
                             MarkerPointer(
                                 value: double.parse(percentage.toString()),
@@ -209,12 +211,13 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                           StatisticsContainer(_statistics.getAvg().toString(),
                               'Promedio\nsin aplazos'),
                           StatisticsContainer(
+                              _statistics.getRealAvg().toString(),
+                              'Promedio\ncon aplazos'),
+                          StatisticsContainer(
                               _statistics.getPassed().toString(),
                               'Materias\nAprobadas'),
                           StatisticsContainer(_statistics.getLeft().toString(),
                               'Materias\nRestantes'),
-
-                          //TODO: StatisticsContainer('8.45', 'Promedio\con aplazos'),
                           StatisticsContainer(
                               _statistics.getReg().toString(), 'Regulares\n'),
                           StatisticsContainer(_statistics.getPP().toString(),
@@ -330,7 +333,10 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                                           'Año\ncompletado'),
                                       StatisticsContainer(
                                           snapshot.data[0].toString(),
-                                          'Promedio\nanual'),
+                                          'Promedio \nsin aplazos'),
+                                      StatisticsContainer(
+                                          snapshot.data[8].toString(),
+                                          'Promedio\ncon aplazos'),
                                       StatisticsContainer(
                                           snapshot.data[1].toString(),
                                           'Materias\nAprobadas'),

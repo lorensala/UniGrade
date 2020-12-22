@@ -26,6 +26,8 @@ class _MisMateriasState extends State<MisMaterias> {
     else if (condition == 'Electiva')
       return await _subjectDao
           .getAllElectiveSubjectsByUserOrderByYear(_student);
+    else if (condition == 'Aprobada')
+      return await _subjectDao.getAllSubjectsByPassed(_student);
     else
       return await _subjectDao.getAllSubjectsByUserCondition(
           _student, condition);

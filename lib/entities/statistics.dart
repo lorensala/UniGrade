@@ -14,7 +14,7 @@ class Statistics extends ChangeNotifier {
   int _reg;
 
   set avg(avg) => _avg = avg;
-  set realAvg(avg) => _realAvg;
+  set realAvg(avg) => _realAvg = avg;
   set passed(passed) => _passed = passed;
   set left(left) => _left = left;
   set pp(pp) => _pp = pp;
@@ -23,7 +23,7 @@ class Statistics extends ChangeNotifier {
   set reg(reg) => _reg = reg;
 
   double getAvg() => _avg;
-  double getRealAvg() => _avg;
+  double getRealAvg() => _realAvg;
   int getPassed() => _passed;
   int getLeft() => _left;
   int getPP() => _pp;

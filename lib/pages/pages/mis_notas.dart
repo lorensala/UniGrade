@@ -25,6 +25,8 @@ class _MisNotasState extends State<MisNotas> {
     else if (condition == 'Electiva')
       return await _subjectDao.getAllSubjectsByUserCondition(
           _student, condition);
+    else if (condition == 'Aprobada')
+      return await _subjectDao.getAllSubjectsByPassed(_student);
     else
       return await _subjectDao.getAllSubjectsByUserCondition(
           _student, condition);

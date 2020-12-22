@@ -592,7 +592,10 @@ class SubjectDao {
         }
 
         await _materia.update(
-          {'nf': -1, 'passed': false},
+          {
+            'nf': -1,
+            'passed': false,
+          },
         );
 
         await _materia.update({'aplazos': _aplazos}).then((value) {
@@ -604,5 +607,44 @@ class SubjectDao {
     }
 
     return _isDone;
+  }
+
+  Future<List<Subject>> getAllSubjectsByPassed(Student student) async {
+    List<Subject> list = List<Subject>();
+    CollectionReference collReference;
+
+    try {
+      collReference = FirebaseFirestore.instance
+          .collection('student')
+          .doc(student.getStudentDocRef())
+          .collection('career_student')
+          .doc(student.getCareerDocRefs()[0])
+          .collection('subject_student');
+
+      Future<QuerySnapshot> docs = FirebaseFirestore.instance
+          .collection(collReference.path)
+          .where('passed', isEqualTo: true)
+          .orderBy('name')
+          .get();
+
+      await docs.then((value) {
+        value.docs.forEach((element) {
+          Map<String, dynamic> sub = element.data();
+
+          if (sub != null) {
+            var subject = mapper(sub);
+            print(subject);
+            list.add(subject);
+          }
+
+          print('=====succed====');
+        });
+      });
+    } catch (e) {
+      print(e);
+      print('=======error======');
+    }
+
+    return list;
   }
 }

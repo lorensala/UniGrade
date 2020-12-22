@@ -1,8 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:mis_notas/entities/subject.dart';
 import 'package:mis_notas/entities/university.dart';
-import 'package:mis_notas/entities/career.dart';
-import 'package:mis_notas/services/statistics_service.dart';
 
 class Student extends ChangeNotifier {
   String _fullname;

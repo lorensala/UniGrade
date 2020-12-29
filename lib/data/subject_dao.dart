@@ -632,7 +632,7 @@ class SubjectDao {
 
           if (sub != null) {
             var subject = mapper(sub);
-            print(subject);
+
             list.add(subject);
           }
 
@@ -645,5 +645,76 @@ class SubjectDao {
     }
 
     return list;
+  }
+
+  Future<bool> deleteGrade(
+      Student _student, int _nota, Subject subject, String type) async {
+    List<int> _newListGrades = List<int>();
+
+    var _docRef;
+    var _myType;
+    bool _isDone = false;
+    DocumentReference _materia;
+
+    switch (type) {
+      case 'Práctico':
+        {
+          _myType = 'gradesP';
+        }
+        break;
+      case 'Teórico':
+        {
+          _myType = 'gradesT';
+        }
+        break;
+      case 'TP':
+        {
+          _myType = 'gradesTP';
+        }
+        break;
+      case 'Final':
+        {
+          _myType = 'nf';
+        }
+        break;
+    }
+
+    try {
+      Future<QuerySnapshot> docs = FirebaseFirestore.instance
+          .collection('student')
+          .doc(_student.getStudentDocRef())
+          .collection('career_student')
+          .doc(_student.getCareerDocRefs()[0])
+          .collection('subject_student')
+          .where('name', isEqualTo: subject.getName())
+          .get();
+
+      await docs.then((value) {
+        int size = value.docs[0].data()[_myType].length;
+        _docRef = value.docs[0].reference;
+
+        for (int i = 0; i < size; i++) {
+          _newListGrades.remove(_nota);
+        }
+      });
+
+      _materia = _docRef;
+    } catch (e) {
+      print(e);
+      print('============ Error finding doc ============');
+      return null;
+    }
+
+    if (_materia != null) {
+      await _materia.update({
+        _myType: _newListGrades,
+      }).then((value) {
+        _isDone = true;
+        print('============ Grade: $_nota removed ============');
+      }).catchError((error) =>
+          print('============ Error during grade removal ============'));
+    }
+
+    return _isDone;
   }
 }

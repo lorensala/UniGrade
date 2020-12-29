@@ -101,7 +101,7 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(26.0)),
         child: Container(
           width: 338.0,
-          height: 300.0,
+          height: 320.0,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 40, 20, 5),
             child: Column(
@@ -184,7 +184,7 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                   height: 37.0,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(26.0),
-                    color: const Color(0xfff7f7f7),
+                    color: Color(0xfff7f7f7),
                   ),
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -243,6 +243,73 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                 SizedBox(
                   height: 10,
                 ),
+                InkWell(
+                  borderRadius: BorderRadius.circular(26),
+                  onTap: () async {
+                    if (_selectedSubject != null &&
+                        _selectedType != null &&
+                        _selectedNota != null) {
+                      setState(() {
+                        _hasSelectedData = true;
+                      });
+
+                      bool isDone = await _subjectDao.deleteGrade(
+                        widget._student,
+                        _selectedNota,
+                        _selectedSubject,
+                        _selectedType,
+                      );
+
+                      if (isDone) {
+                        await CoolAlert.show(
+                            borderRadius: 26,
+                            title: 'Éxito',
+                            backgroundColor: Colors.white,
+                            context: context,
+                            type: CoolAlertType.success,
+                            text: 'Nota eliminada con exito!');
+
+                        Navigator.pop(context);
+                      } else {
+                        CoolAlert.show(
+                            borderRadius: 26,
+                            title: 'Error',
+                            backgroundColor: Colors.white,
+                            context: context,
+                            type: CoolAlertType.error,
+                            text: 'Error al eliminar la nota');
+                      }
+                    } else {
+                      setState(() {
+                        _hasSelectedData = false;
+                      });
+                    }
+                  },
+                  child: Expanded(
+                    child: Container(
+                      //width: 129.0,
+                      height: 37.0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(26.0),
+                        color: Color(0xffFF9A9A),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Eliminar Nota',
+                          style: TextStyle(
+                            fontFamily: 'Avenir LT Std',
+                            fontSize: 16,
+                            color: const Color(0xff000000),
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -280,7 +347,8 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                       onTap: () async {
                         if (_selectedSubject != null &&
                             _selectedType != null &&
-                            _nota.text != '') {
+                            _nota.text != '' &&
+                            _selectedNota != null) {
                           setState(() {
                             _hasSelectedData = true;
                           });
@@ -299,7 +367,7 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                                 backgroundColor: Colors.white,
                                 context: context,
                                 type: CoolAlertType.success,
-                                text: 'Nota añadida con exito!');
+                                text: 'Nota modificada con exito!');
 
                             Navigator.pop(context);
                           } else {
@@ -309,7 +377,7 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                                 backgroundColor: Colors.white,
                                 context: context,
                                 type: CoolAlertType.error,
-                                text: 'Error al añadir la nota');
+                                text: 'Error al modificar la nota');
                           }
                         } else {
                           setState(() {
@@ -326,7 +394,7 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                         ),
                         child: Center(
                           child: Text(
-                            'Confirmar',
+                            'Modificar',
                             style: TextStyle(
                               fontFamily: 'Avenir LT Std',
                               fontSize: 16,

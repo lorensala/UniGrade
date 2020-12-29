@@ -20,6 +20,8 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Colors.white,
         body: Stack(
           children: <Widget>[
+            //TODO: Por alguna razon, al hacer para atras muestra
+            // lo que no tiene que mostrar
             Align(
                 alignment: Alignment.topRight,
                 child: Lottie.asset('assets/lottie/top.json')),

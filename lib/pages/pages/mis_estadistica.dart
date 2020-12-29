@@ -130,7 +130,7 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                           radiusFactor: 0.8,
                           axisLineStyle: AxisLineStyle(
                             thickness: 0.14,
-                            cornerStyle: CornerStyle.bothCurve,
+                            cornerStyle: CornerStyle.bothFlat,
                             //color: Colors.amber,
                             thicknessUnit: GaugeSizeUnit.factor,
                           ),
@@ -140,12 +140,11 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                                     colors: [Colors.blue, Colors.blue[200]],
                                     stops: <double>[0.25, 0.60]),
                                 value: double.parse(percentage.toString()),
-                                cornerStyle: CornerStyle.bothCurve,
+                                cornerStyle: CornerStyle.bothFlat,
                                 width: 0.14,
                                 sizeUnit: GaugeSizeUnit.factor,
                                 enableAnimation: true,
                                 animationDuration: 600,
-                                //TODO: Fijarse esta animacion
                                 animationType: AnimationType.linear),
                             MarkerPointer(
                                 value: double.parse(percentage.toString()),

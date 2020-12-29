@@ -23,9 +23,6 @@ class Student extends ChangeNotifier {
     notifyListeners();
   }
 
-  /* TODO: Aplica a todas las clases. Modificar las funciones por properties.
-  get fullname => _fullname;  
-  */
   List<String> getCareerDocRefs() => _carrerDocRefs;
 
   String getStudentDocRef() => _studentDocRef;
@@ -39,8 +36,6 @@ class Student extends ChangeNotifier {
   String getUniversityName() => _university.getName();
 
   String getUniversityShortName() => _university.getShortName();
-
-  //TODO: devuelve solo una carrera.
 
   String getCarrerName() => _university.getCareers()[0].getName();
 

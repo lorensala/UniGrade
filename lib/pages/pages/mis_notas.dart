@@ -269,20 +269,31 @@ class _MisNotasState extends State<MisNotas> {
                                 ),
                               );
                             } else {
-                              //TODO: Return something nice.
-                              return Padding(
-                                padding: EdgeInsets.all(20),
-                                child: Center(
-                                  child: Text(
-                                    'No existen materias en esta categoría :(',
-                                    style: TextStyle(
-                                      fontFamily: 'Avenir LT Std',
-                                      fontSize: 18,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w800,
+                              return Column(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 20),
+                                    child: Image.asset(
+                                      'assets/images/not_found.png',
+                                      scale: 4,
                                     ),
                                   ),
-                                ),
+                                  Padding(
+                                    padding: EdgeInsets.all(24),
+                                    child: Center(
+                                      child: Text(
+                                        'No se encontraron materias en esta categoría.',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontFamily: 'Avenir LT Std',
+                                          fontSize: 18,
+                                          color: Colors.black45,
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               );
                             }
                         }

@@ -61,7 +61,7 @@ class Subject extends ChangeNotifier {
         _type.toString();
   }
 
-  // TODO: Ver theme.of(context) como funciona y ver de hacer la carpeta con los Colores.
+  // TODO: Hacer la carpeta con los Colores.
 
   Color getColor() {
     switch (_year.toString()) {

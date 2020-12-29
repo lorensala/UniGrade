@@ -48,9 +48,6 @@ class StudentDao {
         .collection('student')
         .doc(_studentDocref)
         .collection('career_student')
-
-        // TODO: Este solo devuelve para sistemas.
-
         .where('name', isEqualTo: 'Ingeniería en Sistemas de Informacion')
         .get();
 
@@ -939,18 +936,3 @@ class StudentDao {
     });
   }
 }
-
-//TODO: Considerar hacer esto en todas las clases.
-
-/* 
-class Human {
-  String name;
-  int age;
-
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'age': age,
-    };
-  }
-} */

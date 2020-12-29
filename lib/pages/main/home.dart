@@ -1,5 +1,8 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mis_notas/data/student_dao.dart';
 import 'package:mis_notas/entities/career.dart';
@@ -7,6 +10,7 @@ import 'package:mis_notas/entities/career.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
 import 'package:mis_notas/entities/university.dart';
+import 'package:mis_notas/pages/dialogs/new_user_dialog.dart';
 import 'package:mis_notas/pages/main/profile_page.dart';
 
 import 'package:provider/provider.dart';
@@ -54,12 +58,27 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Student _student = Provider.of<Student>(context, listen: false);
+    ValueNotifier<bool> _isNew = Provider.of<ValueNotifier<bool>>(context);
+    if (_isNew.value) {
+      SchedulerBinding.instance
+          .addPostFrameCallback((_) => showNewUserDialog(context));
+    }
 
-    // ValueNotifier<bool> _isNew = Provider.of<ValueNotifier<bool>>(context);
-    //TODO: Si el usuario es nuevo, mostrar un mensaje de bienvenida!!
     return WillPopScope(
-        //TODO: Mostrar mensaje, seguro que quieres salir?
-        onWillPop: () async => false,
+        // ignore: missing_return
+        onWillPop: () async {
+          CoolAlert.show(
+              onConfirmBtnTap: () {
+                SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+              },
+              backgroundColor: Colors.white,
+              context: context,
+              type: CoolAlertType.confirm,
+              title: "¿Estas seguro que quieres salir?",
+              confirmBtnText: "Si",
+              cancelBtnText: "No",
+              confirmBtnColor: Colors.green);
+        },
         child: Scaffold(
           backgroundColor: Colors.white,
           body: SafeArea(
@@ -140,7 +159,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       IconButton(
                         icon: Image.asset(buttons['info'][0]),
-                        onPressed: () => {},
+                        onPressed: () => {showNewUserDialog(context)},
                       ),
                     ],
                   ),
@@ -199,5 +218,14 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ));
+  }
+
+  showNewUserDialog(BuildContext context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return NewUserDialog();
+        });
   }
 }

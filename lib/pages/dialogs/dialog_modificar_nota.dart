@@ -96,8 +96,6 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
 
   @override
   Widget build(BuildContext context) {
-    print(getGrades(_selectedSubject, _selectedType));
-
     return Dialog(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(26.0)),
@@ -160,6 +158,9 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                                   onChanged: (newValue) {
                                     setState(() {
                                       _selectedSubject = newValue;
+                                      _selectedNota = null;
+                                      //_selectedType = null;
+                                      _nota.text = '';
                                     });
                                   },
                                   items: _aux.map<DropdownMenuItem<Subject>>(

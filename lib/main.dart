@@ -53,7 +53,6 @@ void main() async {
     child: MaterialApp(
         initialRoute: _isLoggedIn ? '/homepage' : '/login',
         routes: {
-          //TODO: Creo que no hace falta el new user login, probar.
           '/': (context) => NewUserLogin(),
           '/login': (context) => LoginPage(),
           '/homepage': (context) => HomePage(),

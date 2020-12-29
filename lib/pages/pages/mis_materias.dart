@@ -13,8 +13,6 @@ class MisMaterias extends StatefulWidget {
   _MisMateriasState createState() => _MisMateriasState();
 }
 
-// TODO: Mostrar cantidad de materias en cada categoria.
-
 class _MisMateriasState extends State<MisMaterias> {
   String _condition = 'Todas';
 
@@ -271,14 +269,15 @@ class _MisMateriasState extends State<MisMaterias> {
                         ));
                       } else {
                         return Padding(
-                          padding: EdgeInsets.all(20),
+                          padding: EdgeInsets.all(24),
                           child: Center(
                             child: Text(
-                              'No existen materias en esta categoría :(',
+                              'No se encontraron materias en esta categoría.',
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontFamily: 'Avenir LT Std',
                                 fontSize: 18,
-                                color: Colors.black,
+                                color: Colors.black45,
                                 fontWeight: FontWeight.w800,
                               ),
                             ),

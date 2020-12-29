@@ -78,12 +78,9 @@ class StatisticsService extends ChangeNotifier {
 
   Future<int> getSubjectsLeft(
       Student _student, List<Subject> _list, int _year) async {
-    // TODO: Hardcodeado el 40.
-
     int _countTotal = 0;
     int _countPassed = await getSubjectsPassed(_student, _list, _year);
 
-    // TODO: Revisar condiciones de estado.
     if (_year == -1) {
       _countTotal = _list.length;
     } else {

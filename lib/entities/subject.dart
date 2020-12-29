@@ -61,8 +61,6 @@ class Subject extends ChangeNotifier {
         _type.toString();
   }
 
-  // TODO: Hacer la carpeta con los Colores.
-
   Color getColor() {
     switch (_year.toString()) {
       case '1':

@@ -4,7 +4,6 @@ import 'package:mis_notas/entities/state_record.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
 import 'package:mis_notas/data/datamanager.dart';
-import 'package:mis_notas/pages/dialogs/dialog_modificar_nota.dart';
 
 class SubjectDao {
   final db = DataManager();
@@ -455,7 +454,7 @@ class SubjectDao {
           print('============ Error during grade adding ============'));
     } else {
       if (nota > 5) {
-        await _materia.update({'nf': nota}).then((value) {
+        await _materia.update({'nf': nota, 'passed': true}).then((value) {
           _isDone = true;
           print('============ New grade: $nota added ============');
         }).catchError((error) =>

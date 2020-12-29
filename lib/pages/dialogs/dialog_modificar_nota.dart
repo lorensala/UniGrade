@@ -40,8 +40,6 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
     super.initState();
   }
 
-  //TODO: Falta eliminar nota.
-
   List<int> getGrades(Subject sub, String selectedType) {
     List<int> notas = new List<int>();
 

@@ -167,4 +167,33 @@ class StatisticsService extends ChangeNotifier {
 
     return avg / _countSubjects;
   }
+
+  Future<Subject> getBestAvg(Student student, List<Subject> list) async {
+    Subject _best = list[0];
+
+    list.forEach((subject) {
+      if (subject.getNf() != -1 && subject.getNf() > _best.getNf())
+        _best = subject;
+    });
+
+    return _best;
+  }
+
+  getWorstAvg(Student student, List<Subject> list) {
+    Subject _worst;
+
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].getNf() != -1) {
+        _worst = list[i];
+        break;
+      }
+    }
+
+    list.forEach((subject) {
+      if (subject.getNf() != -1 && subject.getNf() < _worst.getNf())
+        _worst = subject;
+    });
+
+    return _worst;
+  }
 }

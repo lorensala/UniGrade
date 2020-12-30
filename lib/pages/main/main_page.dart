@@ -11,7 +11,6 @@ import 'package:mis_notas/pages/dialogs/dialog_nueva_materia.dart';
 import 'package:mis_notas/pages/dialogs/dialog_nueva_nota.dart';
 
 import 'package:mis_notas/services/statistics_service.dart';
-import 'package:mis_notas/support/text_formatter.dart';
 
 import 'package:mis_notas/widgets/buttons/main_button.dart';
 import 'package:mis_notas/widgets/buttons/quick_buttons.dart';
@@ -306,5 +305,11 @@ class _MainPageState extends State<MainPage> {
         return DialogModificarNota(_student);
       },
     );
+  }
+
+  String formatText(String fullname) {
+    List<String> _aux = fullname.split(' ');
+
+    return _aux[0] + '\n' + _aux[1];
   }
 }

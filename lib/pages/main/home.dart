@@ -87,6 +87,7 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.white,
           body: SmartRefresher(
             header: WaterDropHeader(
+              complete: Text(''),
               waterDropColor: Color(0xFF66AAFF),
             ),
             controller: _refreshController,

@@ -75,8 +75,6 @@ class StudentDao {
   }
 
   Future<void> addNewStudent(Student _student) async {
-    //TODO: Crear el data manager.
-
     Student _newStudent = _student;
 
     List<Map<String, dynamic>> _map = [

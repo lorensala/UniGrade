@@ -3,6 +3,8 @@ String formatText(String text) {
   String _aux = '';
   int count = 0;
 
+  //TODO: No anda para nombres como PAV
+
   if (_listText.length == 1) return text;
 
   if (_listText.length == 2 && (_listText[1] != 'I' && _listText[1] != 'II'))

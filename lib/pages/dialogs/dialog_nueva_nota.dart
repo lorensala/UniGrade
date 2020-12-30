@@ -43,9 +43,9 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(26.0)),
         child: Container(
           width: 338.0,
-          height: 280.0,
+          height: 250.0,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 40, 20, 40),
+            padding: const EdgeInsets.fromLTRB(20, 40, 20, 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

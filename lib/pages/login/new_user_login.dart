@@ -151,7 +151,7 @@ class _NewUserLoginState extends State<NewUserLogin> {
                               [''],
                               '');
 
-                          _student = await _studentDao.addNewStudent(_student);
+                          await _studentDao.addNewStudent(_student);
 
                           Navigator.of(context).pushNamed('/homepage');
                         },

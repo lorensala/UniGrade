@@ -27,8 +27,6 @@ class StatisticsContainer extends StatelessWidget {
     }
   }
 
-  //TODO: Tiene que devolver el color correspondiente de la materia
-
   @override
   Widget build(BuildContext context) {
     return Padding(

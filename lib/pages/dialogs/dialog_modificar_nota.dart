@@ -99,7 +99,7 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(26.0)),
         child: Container(
           width: 338.0,
-          height: 320.0,
+          height: 340.0,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 40, 20, 5),
             child: Column(
@@ -190,13 +190,17 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                       child: DropdownButton(
                           value: _selectedType,
                           hint: new Text('Tipo de Nota'),
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectedType = newValue;
-                              _hasSelectedData = true;
-                              _hasSelectedNota = true;
-                            });
-                          },
+                          onChanged: (_selectedSubject != null)
+                              ? (newValue) {
+                                  setState(() {
+                                    {
+                                      _selectedType = newValue;
+                                      _hasSelectedData = true;
+                                      _hasSelectedNota = true;
+                                    }
+                                  });
+                                }
+                              : null,
                           items: _types
                               .map((type) => DropdownMenuItem(
                                   child: Text(type), value: type))

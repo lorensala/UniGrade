@@ -74,7 +74,7 @@ class StudentDao {
     return _userId;
   }
 
-  Future<Student> addNewStudent(Student _student) async {
+  Future<void> addNewStudent(Student _student) async {
     //TODO: Crear el data manager.
 
     Student _newStudent = _student;

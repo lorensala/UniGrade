@@ -648,13 +648,17 @@ class SubjectDao {
   }
 
   Future<bool> deleteGrade(
-      Student _student, int _nota, Subject subject, String type) async {
-    List<int> _newListGrades = List<int>();
-
+      Student _student, int oldNotaCheck, Subject subject, String type) async {
+    List<int> _grades = List<int>();
+    List<int> _aplazos = List<int>();
     var _docRef;
     var _myType;
     bool _isDone = false;
     DocumentReference _materia;
+
+    int oldNota;
+
+    oldNotaCheck > 10 ? oldNota = oldNotaCheck - 10 : oldNota = oldNotaCheck;
 
     switch (type) {
       case 'Práctico':
@@ -689,14 +693,30 @@ class SubjectDao {
           .where('name', isEqualTo: subject.getName())
           .get();
 
-      await docs.then((value) {
-        int size = value.docs[0].data()[_myType].length;
-        _docRef = value.docs[0].reference;
+      if (_myType != 'nf') {
+        await docs.then((value) {
+          int size = value.docs[0].data()[_myType].length;
+          _docRef = value.docs[0].reference;
 
-        for (int i = 0; i < size; i++) {
-          _newListGrades.remove(_nota);
+          for (int i = 0; i < size; i++) {
+            if (value.docs[0].data()[_myType][i] == oldNota)
+              _grades.remove(oldNota);
+          }
+        });
+      } else {
+        if (oldNota > 5) {
+          await docs.then((value) {
+            _docRef = value.docs[0].reference;
+          });
+        } else {
+          await docs.then((value) {
+            int size = value.docs[0].data()['aplazos'].length;
+            _docRef = value.docs[0].reference;
+
+            if (size != 0) _aplazos.remove(oldNota);
+          });
         }
-      });
+      }
 
       _materia = _docRef;
     } catch (e) {
@@ -705,14 +725,30 @@ class SubjectDao {
       return null;
     }
 
-    if (_materia != null) {
+    if (_materia != null && _myType != 'nf') {
       await _materia.update({
-        _myType: _newListGrades,
+        _myType: _grades,
       }).then((value) {
         _isDone = true;
-        print('============ Grade: $_nota removed ============');
+        print('============ Grade: $oldNota removed ============');
       }).catchError((error) =>
           print('============ Error during grade removal ============'));
+    } else {
+      if (oldNota > 5) {
+        await _materia.update({'nf': -1, 'passed': false}).then((value) {
+          _isDone = true;
+          print('============ Grade: $oldNota removed ============');
+        }).catchError((error) =>
+            print('============ Error during grade updated ============'));
+      } else {
+        await _materia.update({
+          'aplazos': FieldValue.arrayRemove([oldNota])
+        }).then((value) {
+          _isDone = true;
+          print('============ Grade: $oldNota removed ============');
+        }).catchError((error) =>
+            print('============ Error during grade removal ============'));
+      }
     }
 
     return _isDone;

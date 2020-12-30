@@ -42,7 +42,7 @@ void main() async {
     providers: [
       ChangeNotifierProvider<Student>(create: (context) => _activeStudent),
       ChangeNotifierProvider<Statistics>(
-          create: (context) => Statistics(0, 0, 0, 0, 0, 0, 0, 0)),
+          create: (context) => Statistics(0, 0, 0, 0, 0, 0, 0, 0, [])),
       ChangeNotifierProvider<ValueNotifier<bool>>(
         create: (context) => ValueNotifier<bool>(false),
       ),

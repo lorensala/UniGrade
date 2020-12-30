@@ -29,6 +29,8 @@ class _MainPageState extends State<MainPage> {
     StatisticsService _statisticsService = new StatisticsService();
     SubjectDao _subjectDao = SubjectDao();
     List<Subject> _list = await _subjectDao.getAllSubjectsByUser(_student);
+    List<Subject> _listCon =
+        await _subjectDao.getAllSubjectsWithCondition(_student);
 
     _dataList.add(await _statisticsService.getAvgNf(_student, _list, -1));
     _dataList
@@ -45,6 +47,7 @@ class _MainPageState extends State<MainPage> {
         _student, _list, -1, 'Regular'));
     _dataList.add(
         await _statisticsService.getAvgNfWithBadGrades(_student, _list, -1));
+    _dataList.add(_statisticsService.getProfileStats(_student, _listCon));
 
     return _dataList;
   }
@@ -72,6 +75,7 @@ class _MainPageState extends State<MainPage> {
               _statistics.ap = snapshot.data[5];
               _statistics.reg = snapshot.data[6];
               _statistics.realAvg = snapshot.data[7];
+              _statistics.prof = snapshot.data[8];
 
               return Padding(
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),

@@ -196,4 +196,44 @@ class StatisticsService extends ChangeNotifier {
 
     return _worst;
   }
+
+  List<int> getProfileStats(Student _student, List<Subject> _list) {
+    List<int> _res = new List<int>();
+    int prog = 0;
+    int cal = 0;
+    int an = 0;
+    int programmer = 0;
+    int calculador = 0;
+    int analista = 0;
+
+    _list.forEach((sub) {
+      if (sub.getNf() != -1 &&
+          (sub.getType() == 'software' ||
+              sub.getType() == 'hardware' ||
+              sub.getType() == 'logica')) {
+        prog++;
+        programmer += sub.getNf();
+      } else if (sub.getNf() != -1 && sub.getType() == 'calculo') {
+        cal++;
+        calculador += sub.getNf();
+      } else if (sub.getNf() != -1 && sub.getType() == 'analista') {
+        an++;
+        analista += sub.getNf();
+      }
+    });
+
+    if (prog != 0)
+      _res.add(programmer ~/ prog);
+    else
+      _res.add(0);
+    if (cal != 0)
+      _res.add(calculador ~/ cal);
+    else
+      _res.add(0);
+    if (an != 0)
+      _res.add(analista ~/ an);
+    else
+      _res.add(0);
+    return _res;
+  }
 }

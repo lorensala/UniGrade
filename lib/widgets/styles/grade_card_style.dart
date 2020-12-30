@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mis_notas/entities/subject.dart';
+import 'package:mis_notas/pages/dialogs/dialog_subject_info.dart';
 
 class GradeCard extends StatelessWidget {
   final Subject _subject;
@@ -52,9 +53,7 @@ class GradeCard extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
         child: Container(
-          //width: 327.0,
           decoration: BoxDecoration(
-            //border: Border.all(color: _subject.getColor(), width: 5),
             borderRadius: BorderRadius.circular(26.0),
             color: const Color(0xfff7f7f7),
           ),

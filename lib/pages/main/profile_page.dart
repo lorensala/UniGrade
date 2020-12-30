@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mis_notas/entities/statistics.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/widgets/components/profile_stats.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +9,8 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Student _student = Provider.of<Student>(context);
+    Statistics _statistics = Provider.of<Statistics>(context, listen: false);
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Column(
@@ -82,18 +85,20 @@ class ProfilePage extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 0, 24, 0),
-                child: ProfileStat(
-                    'Programador', 'assets/images/software.png', 80),
+                child: ProfileStat('Programador', 'assets/images/software.png',
+                    (_statistics.getProf()[0] * 10).toDouble()),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 0, 24, 0),
                 child: ProfileStat(
-                    'Calculador y Lógico', 'assets/images/matematica.png', 80),
+                    'Calculador y Lógico',
+                    'assets/images/matematica.png',
+                    (_statistics.getProf()[1] * 10).toDouble()),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 0, 24, 0),
-                child:
-                    ProfileStat('Analista', 'assets/images/analista.png', 80),
+                child: ProfileStat('Analista', 'assets/images/analista.png',
+                    (_statistics.getProf()[2] * 10).toDouble()),
               ),
             ],
           )

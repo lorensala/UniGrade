@@ -13,6 +13,8 @@ class MisMaterias extends StatefulWidget {
   _MisMateriasState createState() => _MisMateriasState();
 }
 
+//TODO: Falta la imagen cuando no encuentra materias!!
+
 class _MisMateriasState extends State<MisMaterias> {
   String _condition = 'Todas';
 

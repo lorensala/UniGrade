@@ -8,6 +8,7 @@ import 'package:mis_notas/services/statistics_service.dart';
 import 'package:mis_notas/widgets/styles/statistics_container.dart';
 
 import 'package:mis_notas/entities/student.dart';
+import 'package:mis_notas/widgets/styles/statistics_container_blank.dart';
 
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -57,19 +58,28 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
 
   Future<List<Subject>> getSubjectsData(Student _student) async {
     List<Subject> _statisticsList = new List<Subject>();
+    List<Subject> _filteredList = new List<Subject>();
     var _subjectDao = SubjectDao();
     var _statisticsService = StatisticsService();
 
     List<Subject> _list =
         await _subjectDao.getAllSubjectsWithCondition(_student);
 
-    _statisticsList.add(await _statisticsService.getBestAvg(
-      _student,
-      _list,
-    ));
+    if (_list.length != 0) {
+      _list.forEach((Subject sub) {
+        if (sub.getState().getState().getName() != 'Libre' &&
+            sub.getState().getState().getName() != 'Abandonada')
+          _filteredList.add(sub);
+      });
 
-    _statisticsList.add(await _statisticsService.getWorstAvg(_student, _list));
+      _statisticsList.add(await _statisticsService.getBestAvg(
+        _student,
+        _filteredList,
+      ));
 
+      _statisticsList
+          .add(await _statisticsService.getWorstAvg(_student, _filteredList));
+    }
     return _statisticsList;
   }
 
@@ -450,7 +460,9 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                                       child: CircularProgressIndicator())),
                             );
                           default:
-                            if (snapshot.data.isNotEmpty && snapshot.hasData)
+                            if (snapshot.data.isNotEmpty &&
+                                snapshot.hasData &&
+                                snapshot.data != null)
                               return Padding(
                                 padding:
                                     const EdgeInsets.fromLTRB(0, 10, 0, 18),
@@ -468,7 +480,22 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                                 ),
                               );
                             else
-                              return Text('No data');
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(0, 10, 0, 18),
+                                child: Container(
+                                  height: 130,
+                                  child: ListView(
+                                      physics: BouncingScrollPhysics(),
+                                      scrollDirection: Axis.horizontal,
+                                      children: <Widget>[
+                                        StatisticsContainerBlank(
+                                            'Mejor\nPromedio'),
+                                        StatisticsContainerBlank(
+                                            'Peor\nPromedio'),
+                                      ]),
+                                ),
+                              );
                         }
                       }),
                 ],

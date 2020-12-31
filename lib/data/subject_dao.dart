@@ -753,4 +753,24 @@ class SubjectDao {
 
     return _isDone;
   }
+
+  Future<Map<String, dynamic>> getCorrelativas(Subject subject) async {
+    Map<String, dynamic> _map = new Map<String, dynamic>();
+
+    try {
+      Future<QuerySnapshot> _doc = FirebaseFirestore.instance
+          .collection('/career/isi/correlativas/')
+          .where('name', isEqualTo: subject.getName())
+          .get();
+
+      await _doc.then((docs) {
+        _map = docs.docs[0].data();
+      });
+    } catch (e) {
+      print(e);
+      print('==== error ====');
+    }
+
+    return _map;
+  }
 }

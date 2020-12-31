@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mis_notas/data/subject_dao.dart';
 
 import 'package:mis_notas/entities/subject.dart';
 import 'package:mis_notas/pages/dialogs/dialog_subject_info.dart';
@@ -13,6 +14,7 @@ class SubjectCard extends StatelessWidget {
    */
 
   final Subject _subject;
+  final SubjectDao _subjectDao = new SubjectDao();
 
   SubjectCard(this._subject);
 
@@ -22,7 +24,7 @@ class SubjectCard extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
       child: InkWell(
         onTap: () {
-          showSubjectInfo(context);
+          showSubjectInfo(context, _subject);
         },
         child: Stack(
           children: <Widget>[
@@ -79,13 +81,26 @@ class SubjectCard extends StatelessWidget {
     );
   }
 
-  void showSubjectInfo(BuildContext context) {
+  void showSubjectInfo(BuildContext context, Subject subject) {
     print('tocuh');
     showDialog(
       barrierDismissible: true,
       context: context,
       builder: (BuildContext context) {
-        return DialogSubjectInfo();
+        return FutureBuilder(
+            future: _subjectDao.getCorrelativas(subject),
+            builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return Center(child: CircularProgressIndicator());
+
+                default:
+                  if (snapshot.hasData && snapshot.data != null)
+                    return DialogSubjectInfo(snapshot.data);
+                  else
+                    return Text('No data');
+              }
+            });
       },
     );
   }

@@ -20,6 +20,7 @@ class _NewUserLoginState extends State<NewUserLogin> {
     // Student _newStudent = Provider.of<Student>(context, listen: false);
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: Align(
         alignment: Alignment.center,
         child: Padding(
@@ -150,7 +151,7 @@ class _NewUserLoginState extends State<NewUserLogin> {
                               [''],
                               '');
 
-                          _student = await _studentDao.addNewStudent(_student);
+                          await _studentDao.addNewStudent(_student);
 
                           Navigator.of(context).pushNamed('/homepage');
                         },

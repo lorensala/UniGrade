@@ -48,9 +48,6 @@ class StudentDao {
         .collection('student')
         .doc(_studentDocref)
         .collection('career_student')
-
-        // TODO: Este solo devuelve para sistemas.
-
         .where('name', isEqualTo: 'Ingeniería en Sistemas de Informacion')
         .get();
 
@@ -77,9 +74,7 @@ class StudentDao {
     return _userId;
   }
 
-  Future<Student> addNewStudent(Student _student) async {
-    //TODO: Crear el data manager.
-
+  Future<void> addNewStudent(Student _student) async {
     Student _newStudent = _student;
 
     List<Map<String, dynamic>> _map = [
@@ -141,7 +136,7 @@ class StudentDao {
         'passed': false
       },
       {
-        'duration': 'semestral',
+        'duration': 'cuatrimestral',
         'gradesP': [],
         'gradesT': [],
         'gradesTP': [],
@@ -169,7 +164,7 @@ class StudentDao {
         'passed': false
       },
       {
-        'duration': 'semestral',
+        'duration': 'cuatrimestral',
         'gradesP': [],
         'gradesT': [],
         'gradesTP': [],
@@ -184,7 +179,7 @@ class StudentDao {
       },
 
       {
-        'duration': 'semestral',
+        'duration': 'cuatrimestral',
         'gradesP': [],
         'gradesT': [],
         'gradesTP': [],
@@ -198,7 +193,7 @@ class StudentDao {
         'passed': false
       },
       {
-        'duration': 'semestral',
+        'duration': 'cuatrimestral',
         'gradesP': [],
         'gradesT': [],
         'gradesTP': [],
@@ -287,7 +282,7 @@ class StudentDao {
       },
 
       {
-        'duration': 'semestral',
+        'duration': 'cuatrimestral',
         'gradesP': [],
         'gradesT': [],
         'gradesTP': [],
@@ -302,7 +297,7 @@ class StudentDao {
       },
 
       {
-        'duration': 'semestral',
+        'duration': 'cuatrimestral',
         'gradesP': [],
         'gradesT': [],
         'gradesTP': [],
@@ -316,7 +311,7 @@ class StudentDao {
         'passed': false
       },
       {
-        'duration': 'semestral',
+        'duration': 'cuatrimestral',
         'gradesP': [],
         'gradesT': [],
         'gradesTP': [],
@@ -330,7 +325,7 @@ class StudentDao {
         'passed': false
       },
       {
-        'duration': 'semestral',
+        'duration': 'cuatrimestral',
         'gradesP': [],
         'gradesT': [],
         'gradesTP': [],
@@ -345,6 +340,54 @@ class StudentDao {
       },
 
       // Tercer Año
+      {
+        'duration': 'cuatrimestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'otros',
+        'year': 3,
+        'name': 'Tecnología Educativa',
+        'icon': 'assets/images/software.png',
+        'passed': false,
+        'elect': true,
+        'points': 2
+      },
+      {
+        'duration': 'cuatrimestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'otros',
+        'year': 3,
+        'name': 'Gestión de la Mejora de Procesos',
+        'icon': 'assets/images/default.png',
+        'passed': false,
+        'elect': true,
+        'points': 2
+      },
+      {
+        'duration': 'cuatrimestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'otros',
+        'year': 3,
+        'name': 'Gestión Industrial de la Producción',
+        'icon': 'assets/images/default.png',
+        'passed': false,
+        'elect': true,
+        'points': 2
+      },
 
       {
         'duration': 'anual',
@@ -389,7 +432,7 @@ class StudentDao {
         'passed': false
       },
       {
-        'duration': 'semestral',
+        'duration': 'cuatrimestral',
         'gradesP': [],
         'gradesT': [],
         'gradesTP': [],
@@ -403,7 +446,7 @@ class StudentDao {
         'passed': false
       },
       {
-        'duration': 'semestral',
+        'duration': 'cuatrimestral',
         'gradesP': [],
         'gradesT': [],
         'gradesTP': [],
@@ -419,7 +462,7 @@ class StudentDao {
         'points': 2
       },
       {
-        'duration': 'semestral',
+        'duration': 'cuatrimestral',
         'gradesP': [],
         'gradesT': [],
         'gradesTP': [],
@@ -435,7 +478,7 @@ class StudentDao {
         'points': 2
       },
       {
-        'duration': 'semestral',
+        'duration': 'cuatrimestral',
         'gradesP': [],
         'gradesT': [],
         'gradesTP': [],
@@ -449,7 +492,7 @@ class StudentDao {
         'passed': false
       },
       {
-        'duration': 'semestral',
+        'duration': 'cuatrimestral',
         'gradesP': [],
         'gradesT': [],
         'gradesTP': [],
@@ -460,6 +503,394 @@ class StudentDao {
         'year': 3,
         'name': 'Gestion de Datos',
         'icon': 'assets/images/gda.png',
+        'passed': false
+      },
+
+      // Cuarto Año
+      {
+        'duration': 'cuatrimestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'software',
+        'year': 4,
+        'name': 'Programación de Aplicaciones Visuales II',
+        'icon': 'assets/images/software.png',
+        'passed': false,
+        'elect': true,
+        'points': 4
+      },
+      {
+        'duration': 'cuatrimestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'software',
+        'year': 4,
+        'name': 'Diseño de Lenguaje de Consultas',
+        'icon': 'assets/images/software.png',
+        'passed': false,
+        'elect': true,
+        'points': 4
+      },
+      {
+        'duration': 'cuatrimestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'software',
+        'year': 4,
+        'name': 'Diseño de Lenguaje de Consultas',
+        'icon': 'assets/images/software.png',
+        'passed': false,
+        'elect': true,
+        'points': 2
+      },
+      {
+        'duration': 'anual',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'hardware',
+        'year': 4,
+        'name': 'Redes de Información',
+        'icon': 'assets/images/redes.png',
+        'passed': false
+      },
+      {
+        'duration': 'anual',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'otros',
+        'year': 4,
+        'name': 'Administración de Recursos',
+        'icon': 'assets/images/adm.png',
+        'passed': false
+      },
+      {
+        'duration': 'anual',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'software',
+        'year': 4,
+        'name': 'Investigación Operativa',
+        'icon': 'assets/images/iop.png',
+        'passed': false
+      },
+      {
+        'duration': 'cuatrimestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'software',
+        'year': 4,
+        'name': 'Simulación',
+        'icon': 'assets/images/default.png',
+        'passed': false
+      },
+
+      {
+        'duration': 'cuatrimestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'software',
+        'year': 4,
+        'name': 'Ingeniería de Software',
+        'icon': 'assets/images/software.png',
+        'passed': false
+      },
+      {
+        'duration': 'cuatrimestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'software',
+        'year': 4,
+        'name': 'Teoría de Control',
+        'icon': 'assets/images/default.png',
+        'passed': false
+      },
+      {
+        'duration': 'cuatrimestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'software',
+        'year': 4,
+        'name': 'Legislación',
+        'icon': 'assets/images/default.png',
+        'passed': false
+      },
+      // Quinto Año
+
+      {
+        'duration': 'cuatrimestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'otros',
+        'year': 5,
+        'name': 'Auditoría de SI/TI',
+        'icon': 'assets/images/default.png',
+        'passed': false,
+        'elect': true,
+        'points': 3
+      },
+      {
+        'duration': 'cuatrimestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'otros',
+        'year': 5,
+        'name': 'Consultoría en Auditoría de SI/TI',
+        'icon': 'assets/images/default.png',
+        'passed': false,
+        'elect': true,
+        'points': 3
+      },
+      {
+        'duration': 'cuatrimestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'otros',
+        'year': 5,
+        'name': 'Consultoría en Seguridad de SI/TI',
+        'icon': 'assets/images/default.png',
+        'passed': false,
+        'elect': true,
+        'points': 3
+      },
+      {
+        'duration': 'cuatrimestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'otros',
+        'year': 5,
+        'name': 'Decisiones en Escenarios Complejos',
+        'icon': 'assets/images/default.png',
+        'passed': false,
+        'elect': true,
+        'points': 3
+      },
+
+      {
+        'duration': 'cuatrimestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'otros',
+        'year': 5,
+        'name': 'Gerenciamiento Estratégico',
+        'icon': 'assets/images/default.png',
+        'passed': false,
+        'elect': true,
+        'points': 3
+      },
+
+      {
+        'duration': 'cuatrimestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'otros',
+        'year': 5,
+        'name': 'Consultoría en Negocios SI/TI',
+        'icon': 'assets/images/default.png',
+        'passed': false,
+        'elect': true,
+        'points': 3
+      },
+
+      {
+        'duration': 'cuatrimestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'otros',
+        'year': 5,
+        'name': 'Emprendimientos Tecnológicos',
+        'icon': 'assets/images/default.png',
+        'passed': false,
+        'elect': true,
+        'points': 3
+      },
+
+      {
+        'duration': 'cuatrimestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'otros',
+        'year': 5,
+        'name': 'Inteligencia de Negocios',
+        'icon': 'assets/images/default.png',
+        'passed': false,
+        'elect': true,
+        'points': 3
+      },
+      {
+        'duration': 'cuatrimestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'otros',
+        'year': 5,
+        'name': 'Gestión de la Calidad',
+        'icon': 'assets/images/default.png',
+        'passed': false,
+        'elect': true,
+        'points': 3
+      },
+      {
+        'duration': 'cuatrimestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'otros',
+        'year': 5,
+        'name': 'Servicios del Software',
+        'icon': 'assets/images/default.png',
+        'passed': false,
+        'elect': true,
+        'points': 3
+      },
+      {
+        'duration': 'cuatrimestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'otros',
+        'year': 5,
+        'name': 'Métricas del Software',
+        'icon': 'assets/images/default.png',
+        'passed': false,
+        'elect': true,
+        'points': 3
+      },
+
+      {
+        'duration': 'anual',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'otros',
+        'year': 5,
+        'name': 'Proyecto Final',
+        'icon': 'assets/images/default.png',
+        'passed': false
+      },
+      {
+        'duration': 'anual',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'software',
+        'year': 5,
+        'name': 'Inteligencia Artificial',
+        'icon': 'assets/images/default.png',
+        'passed': false
+      },
+      {
+        'duration': 'cuatrimestral',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'otros',
+        'year': 5,
+        'name': 'Administración Gerencial',
+        'icon': 'assets/images/default.png',
+        'passed': false
+      },
+      {
+        'duration': 'anual',
+        'gradesP': [],
+        'gradesT': [],
+        'gradesTP': [],
+        'nf': -1,
+        'aplazos': [],
+        'state': '',
+        'type': 'software',
+        'year': 5,
+        'name': 'Sistemas de Gestión',
+        'icon': 'assets/images/default.png',
         'passed': false
       },
     ];
@@ -503,18 +934,3 @@ class StudentDao {
     });
   }
 }
-
-//TODO: Considerar hacer esto en todas las clases.
-
-/* 
-class Human {
-  String name;
-  int age;
-
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'age': age,
-    };
-  }
-} */

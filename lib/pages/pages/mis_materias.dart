@@ -2,14 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mis_notas/data/subject_dao.dart';
 
-import 'package:mis_notas/entities/career.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
-import 'package:mis_notas/entities/university.dart';
 
 import 'package:mis_notas/widgets/styles/subject_card_style.dart';
-import 'package:mis_notas/widgets/buttons/options_button.dart';
-import 'package:mis_notas/widgets/components/search_bar.dart';
 import 'package:provider/provider.dart';
 
 class MisMaterias extends StatefulWidget {
@@ -17,24 +13,21 @@ class MisMaterias extends StatefulWidget {
   _MisMateriasState createState() => _MisMateriasState();
 }
 
-// TODO: Mostrar cantidad de materias en cada categoria.
+//TODO: Falta la imagen cuando no encuentra materias!!
 
 class _MisMateriasState extends State<MisMaterias> {
-  String condition = 'All';
-  bool isPressedAll = true;
-  bool isPressedCursando = false;
-  bool isPressedAprobadas = false;
-  bool isPressedLibre = false;
-  bool isPressedPP = false;
-  bool isPressedPT = false;
-  bool isPressedAD = false;
-  bool isPressedAb = false;
+  String _condition = 'Todas';
 
   Future<List<Subject>> getData(Student _student, String condition) async {
     var _subjectDao = new SubjectDao();
 
-    if (condition == 'All')
+    if (condition == 'Todas')
       return await _subjectDao.getAllSubjectsByUserOrderByYear(_student);
+    else if (condition == 'Electiva')
+      return await _subjectDao
+          .getAllElectiveSubjectsByUserOrderByYear(_student);
+    else if (condition == 'Aprobada')
+      return await _subjectDao.getAllSubjectsByPassed(_student);
     else
       return await _subjectDao.getAllSubjectsByUserCondition(
           _student, condition);
@@ -100,159 +93,167 @@ class _MisMateriasState extends State<MisMaterias> {
                 allowDrawingOutsideViewBox: true,
               ),
             ),
-
-            /* Padding(
-              //TODO: Implementar la busqueda si es posible.
-              padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
-              child: SearchBar(null),
-            ),
- */
             // Filtreos
-
             Padding(
-              padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
-              child: Wrap(
-                spacing: 20,
-                runSpacing: 10,
-                crossAxisAlignment: WrapCrossAlignment.end,
-                //alignment: WrapAlignment.spaceAround,
-                children: <Widget>[
-                  InkWell(
-                    borderRadius: BorderRadius.circular(26),
-                    child: OptionButton('Todas', isPressedAll),
-                    onTap: () {
-                      setState(() {
-                        isPressedAll = true;
-                        isPressedCursando = false;
-                        isPressedAprobadas = false;
-                        isPressedLibre = false;
-                        isPressedPP = false;
-                        isPressedPT = false;
-                        isPressedAD = false;
-                        isPressedAb = false;
-                        condition = 'All';
-                      });
-                    },
+              padding: const EdgeInsets.fromLTRB(24, 20, 24, 10),
+              child: Container(
+                //width: 200,
+                height: 37.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(26.0),
+                  color: const Color(0xfff7f7f7),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                        isExpanded: true,
+                        value: _condition,
+                        onChanged: (newValue) {
+                          setState(() {
+                            _condition = newValue;
+                          });
+                        },
+                        items: [
+                          DropdownMenuItem<String>(
+                            value: 'Todas',
+                            child: Text(
+                              'Todas',
+                              style: TextStyle(
+                                fontFamily: 'Avenir LT Std',
+                                fontSize: 18,
+                                color: const Color(0xff000000),
+                                fontWeight: FontWeight.w500,
+                                height: 0.9666666666666667,
+                              ),
+                            ),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: 'Cursando',
+                            child: Text(
+                              'Cursando',
+                              style: TextStyle(
+                                fontFamily: 'Avenir LT Std',
+                                fontSize: 18,
+                                color: const Color(0xff000000),
+                                fontWeight: FontWeight.w500,
+                                height: 0.9666666666666667,
+                              ),
+                            ),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: 'Aprobada',
+                            child: Text(
+                              'Aprobadas',
+                              style: TextStyle(
+                                fontFamily: 'Avenir LT Std',
+                                fontSize: 18,
+                                color: const Color(0xff000000),
+                                fontWeight: FontWeight.w500,
+                                height: 0.9666666666666667,
+                              ),
+                            ),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: 'Regular',
+                            child: Text(
+                              'Regulares',
+                              style: TextStyle(
+                                fontFamily: 'Avenir LT Std',
+                                fontSize: 18,
+                                color: const Color(0xff000000),
+                                fontWeight: FontWeight.w500,
+                                height: 0.9666666666666667,
+                              ),
+                            ),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: 'Promoción Teórica',
+                            child: Text(
+                              'Promoción Teórica',
+                              style: TextStyle(
+                                fontFamily: 'Avenir LT Std',
+                                fontSize: 18,
+                                color: const Color(0xff000000),
+                                fontWeight: FontWeight.w500,
+                                height: 0.9666666666666667,
+                              ),
+                            ),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: 'Promoción Práctica',
+                            child: Text(
+                              'Promoción Práctica',
+                              style: TextStyle(
+                                fontFamily: 'Avenir LT Std',
+                                fontSize: 18,
+                                color: const Color(0xff000000),
+                                fontWeight: FontWeight.w500,
+                                height: 0.9666666666666667,
+                              ),
+                            ),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: 'Aprobación Directa',
+                            child: Text(
+                              'Aprobación Directa',
+                              style: TextStyle(
+                                fontFamily: 'Avenir LT Std',
+                                fontSize: 18,
+                                color: const Color(0xff000000),
+                                fontWeight: FontWeight.w500,
+                                height: 0.9666666666666667,
+                              ),
+                            ),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: 'Libre',
+                            child: Text(
+                              'Libre',
+                              style: TextStyle(
+                                fontFamily: 'Avenir LT Std',
+                                fontSize: 18,
+                                color: const Color(0xff000000),
+                                fontWeight: FontWeight.w500,
+                                height: 0.9666666666666667,
+                              ),
+                            ),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: 'Abandonada',
+                            child: Text(
+                              'Abandonada',
+                              style: TextStyle(
+                                fontFamily: 'Avenir LT Std',
+                                fontSize: 18,
+                                color: const Color(0xff000000),
+                                fontWeight: FontWeight.w500,
+                                height: 0.9666666666666667,
+                              ),
+                            ),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: 'Electiva',
+                            child: Text(
+                              'Electiva',
+                              style: TextStyle(
+                                fontFamily: 'Avenir LT Std',
+                                fontSize: 18,
+                                color: const Color(0xff000000),
+                                fontWeight: FontWeight.w500,
+                                height: 0.9666666666666667,
+                              ),
+                            ),
+                          ),
+                        ]),
                   ),
-                  InkWell(
-                      borderRadius: BorderRadius.circular(26),
-                      child: OptionButton('Cursando', isPressedCursando),
-                      onTap: () {
-                        setState(() {
-                          isPressedAll = false;
-                          isPressedCursando = true;
-                          isPressedAprobadas = false;
-                          isPressedLibre = false;
-                          isPressedPP = false;
-                          isPressedPT = false;
-                          isPressedAD = false;
-                          isPressedAb = false;
-                          condition = 'Cursando';
-                        });
-                      }),
-                  InkWell(
-                      borderRadius: BorderRadius.circular(26),
-                      child: OptionButton('Regulares', isPressedAprobadas),
-                      onTap: () {
-                        setState(() {
-                          isPressedAll = false;
-                          isPressedCursando = false;
-                          isPressedAprobadas = true;
-                          isPressedLibre = false;
-                          isPressedPP = false;
-                          isPressedPT = false;
-                          isPressedAD = false;
-                          isPressedAb = false;
-                          condition = 'Regular';
-                        });
-                      }),
-                  InkWell(
-                      borderRadius: BorderRadius.circular(26),
-                      child: OptionButton('Prom. Prác.', isPressedPP),
-                      onTap: () {
-                        setState(() {
-                          isPressedAll = false;
-                          isPressedCursando = false;
-                          isPressedAprobadas = false;
-                          isPressedLibre = false;
-                          isPressedPP = true;
-                          isPressedPT = false;
-                          isPressedAD = false;
-                          isPressedAb = false;
-                          condition = 'Promoción Práctica';
-                        });
-                      }),
-                  InkWell(
-                      borderRadius: BorderRadius.circular(26),
-                      child: OptionButton('Prom. Teó.', isPressedPT),
-                      onTap: () {
-                        setState(() {
-                          isPressedAll = false;
-                          isPressedCursando = false;
-                          isPressedAprobadas = false;
-                          isPressedLibre = false;
-                          isPressedPP = false;
-                          isPressedPT = true;
-                          isPressedAD = false;
-                          isPressedAb = false;
-                          condition = 'Promoción Teórica';
-                        });
-                      }),
-                  InkWell(
-                      borderRadius: BorderRadius.circular(26),
-                      child: OptionButton('Ap. Directa', isPressedAD),
-                      onTap: () {
-                        setState(() {
-                          isPressedAll = false;
-                          isPressedCursando = false;
-                          isPressedAprobadas = false;
-                          isPressedLibre = false;
-                          isPressedPP = false;
-                          isPressedPT = false;
-                          isPressedAD = true;
-                          isPressedAb = false;
-                          condition = 'Aprobación Directa';
-                        });
-                      }),
-                  InkWell(
-                      borderRadius: BorderRadius.circular(26),
-                      child: OptionButton('Libre', isPressedLibre),
-                      onTap: () {
-                        setState(() {
-                          isPressedAll = false;
-                          isPressedCursando = false;
-                          isPressedAprobadas = false;
-                          isPressedLibre = true;
-                          isPressedPP = false;
-                          isPressedPT = false;
-                          isPressedAD = false;
-                          isPressedAb = false;
-                          condition = 'Libre';
-                        });
-                      }),
-                  InkWell(
-                      borderRadius: BorderRadius.circular(26),
-                      child: OptionButton('Aban.', isPressedAb),
-                      onTap: () {
-                        setState(() {
-                          isPressedAll = false;
-                          isPressedCursando = false;
-                          isPressedAprobadas = false;
-                          isPressedLibre = false;
-                          isPressedPP = false;
-                          isPressedPT = false;
-                          isPressedAD = false;
-                          isPressedAb = true;
-                          condition = 'Abandonada';
-                        });
-                      }),
-                ],
+                ),
               ),
             ),
 
             // ListView builder
             FutureBuilder(
-                future: getData(_student, condition),
+                future: getData(_student, _condition),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
@@ -270,14 +271,15 @@ class _MisMateriasState extends State<MisMaterias> {
                         ));
                       } else {
                         return Padding(
-                          padding: EdgeInsets.all(20),
+                          padding: EdgeInsets.all(24),
                           child: Center(
                             child: Text(
-                              'No existen materias en esta categoría :(',
+                              'No se encontraron materias en esta categoría.',
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontFamily: 'Avenir LT Std',
                                 fontSize: 18,
-                                color: Colors.black,
+                                color: Colors.black45,
                                 fontWeight: FontWeight.w800,
                               ),
                             ),

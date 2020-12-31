@@ -42,7 +42,7 @@ void main() async {
     providers: [
       ChangeNotifierProvider<Student>(create: (context) => _activeStudent),
       ChangeNotifierProvider<Statistics>(
-          create: (context) => Statistics(0, 0, 0, 0, 0, 0, 0, 0)),
+          create: (context) => Statistics(0, 0, 0, 0, 0, 0, 0, 0, [])),
       ChangeNotifierProvider<ValueNotifier<bool>>(
         create: (context) => ValueNotifier<bool>(false),
       ),
@@ -53,7 +53,6 @@ void main() async {
     child: MaterialApp(
         initialRoute: _isLoggedIn ? '/homepage' : '/login',
         routes: {
-          //TODO: Creo que no hace falta el new user login, probar.
           '/': (context) => NewUserLogin(),
           '/login': (context) => LoginPage(),
           '/homepage': (context) => HomePage(),

@@ -3,8 +3,6 @@ import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
 
 class StatisticsService extends ChangeNotifier {
-  //TODO: El promedio debe calcularse en base a las que tienen nota final.
-
   Future<double> getAvgNf(
       Student _student, List<Subject> _list, int _year) async {
     //Promedio de notas finales
@@ -13,7 +11,7 @@ class StatisticsService extends ChangeNotifier {
     int _count = 0;
     if (_year == -1) {
       _list.forEach((element) {
-        if (element.getNf() != -1) {
+        if (element.getNf() != -1 && !element.getElect()) {
           _total += element.getNf();
           _count += 1;
         }
@@ -38,20 +36,33 @@ class StatisticsService extends ChangeNotifier {
     //Promedio de notas finales
 
     int _total = 0;
-    int _count = _list.length;
+    int _count = 0;
 
     if (_year == -1) {
       _list.forEach((element) {
-        if (element.getNf() != -1) _total += element.getNf();
+        if (element.getNf() != -1) {
+          _total += element.getNf();
+          element.getAplazos().forEach((aplazo) {
+            _total += aplazo;
+            _count += 1;
+          });
+          _count += 1;
+        }
       });
     } else {
       _list.forEach((element) {
-        if (element.getNf() != -1 && element.getYear() == _year)
+        if (element.getNf() != -1 && element.getYear() == _year) {
           _total += element.getNf();
+          element.getAplazos().forEach((aplazo) {
+            _total += aplazo;
+            _count += 1;
+          });
+          _count += 1;
+        }
       });
     }
-
-    return _total / _count;
+    if (_count == 0) return 0;
+    return double.parse(((_total / _count)).toStringAsFixed(2));
   }
 
   Future<int> getSubjectsCount(
@@ -67,12 +78,9 @@ class StatisticsService extends ChangeNotifier {
 
   Future<int> getSubjectsLeft(
       Student _student, List<Subject> _list, int _year) async {
-    // TODO: Hardcodeado el 40.
-
     int _countTotal = 0;
     int _countPassed = await getSubjectsPassed(_student, _list, _year);
 
-    // TODO: Revisar condiciones de estado.
     if (_year == -1) {
       _countTotal = _list.length;
     } else {
@@ -90,13 +98,15 @@ class StatisticsService extends ChangeNotifier {
 
     if (_year == -1) {
       _list.forEach((element) {
-        if (element.getPassed()) {
+        if (element.getPassed() && !element.getElect()) {
           _count++;
         }
       });
     } else {
       _list.forEach((element) {
-        if (element.getPassed() && element.getYear() == _year) {
+        if (element.getPassed() &&
+            !element.getElect() &&
+            element.getYear() == _year) {
           _count++;
         }
       });
@@ -156,5 +166,74 @@ class StatisticsService extends ChangeNotifier {
     });
 
     return avg / _countSubjects;
+  }
+
+  Future<Subject> getBestAvg(Student student, List<Subject> list) async {
+    Subject _best = list[0];
+
+    list.forEach((subject) {
+      if (subject.getNf() != -1 && subject.getNf() > _best.getNf())
+        _best = subject;
+    });
+
+    return _best;
+  }
+
+  getWorstAvg(Student student, List<Subject> list) {
+    Subject _worst;
+
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].getNf() != -1) {
+        _worst = list[i];
+        break;
+      }
+    }
+
+    list.forEach((subject) {
+      if (subject.getNf() != -1 && subject.getNf() < _worst.getNf())
+        _worst = subject;
+    });
+
+    return _worst;
+  }
+
+  List<int> getProfileStats(Student _student, List<Subject> _list) {
+    List<int> _res = new List<int>();
+    int prog = 0;
+    int cal = 0;
+    int an = 0;
+    int programmer = 0;
+    int calculador = 0;
+    int analista = 0;
+
+    _list.forEach((sub) {
+      if (sub.getNf() != -1 &&
+          (sub.getType() == 'software' ||
+              sub.getType() == 'hardware' ||
+              sub.getType() == 'logica')) {
+        prog++;
+        programmer += sub.getNf();
+      } else if (sub.getNf() != -1 && sub.getType() == 'calculo') {
+        cal++;
+        calculador += sub.getNf();
+      } else if (sub.getNf() != -1 && sub.getType() == 'analista') {
+        an++;
+        analista += sub.getNf();
+      }
+    });
+
+    if (prog != 0)
+      _res.add(programmer ~/ prog);
+    else
+      _res.add(0);
+    if (cal != 0)
+      _res.add(calculador ~/ cal);
+    else
+      _res.add(0);
+    if (an != 0)
+      _res.add(analista ~/ an);
+    else
+      _res.add(0);
+    return _res;
   }
 }

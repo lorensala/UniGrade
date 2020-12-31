@@ -50,22 +50,48 @@ class _MainLoginState extends State<MainLogin> {
                 visible: !isNew.value && !_isPressed,
                 child: Consumer<Student>(builder: (context, _student, child) {
                   return InkWell(
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    onTap: () async {
-                      _isPressed = true;
-                      UserCredential _userCredentials =
-                          await signInWithGoogle();
-                      _isNew.value = false;
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      onTap: () async {
+                        _isPressed = true;
+                        UserCredential _userCredentials =
+                            await signInWithGoogle();
+                        _isNew.value = false;
 
-                      if (_userCredentials.additionalUserInfo.isNewUser) {
-                        _isNew.value = true;
-                      } else {
-                        Navigator.pushNamed(context, '/homepage');
-                      }
-                    },
-                    child: Image.asset('assets/images/google.png'),
-                  );
+                        if (_userCredentials.additionalUserInfo.isNewUser) {
+                          _isNew.value = true;
+                        } else {
+                          Navigator.pushNamed(context, '/homepage');
+                        }
+                      },
+                      child: Container(
+                        width: 300.0,
+                        height: 50.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(26.0),
+                          color: const Color(0xffffffff),
+                          border: Border.all(
+                              width: 1.0, color: const Color(0xffed5a4f)),
+                        ),
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              Text(
+                                'Inicia Sesión / Registrate',
+                                style: TextStyle(
+                                  fontFamily: 'Avenir LT Std',
+                                  fontSize: 20,
+                                  color: const Color(0xffda554b),
+                                  fontWeight: FontWeight.w300,
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                              Image.asset('assets/images/google.png'),
+                            ],
+                          ),
+                        ),
+                      ));
                 }),
               ),
             ),

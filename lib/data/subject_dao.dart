@@ -8,44 +8,6 @@ import 'package:mis_notas/data/datamanager.dart';
 class SubjectDao {
   final db = DataManager();
 
-  /* Future<List<Subject>> getSubjectsBySearch(String searchParam) async {
-    List<Subject> list = List<Subject>();
-    CollectionReference collReference;
-
-    try {
-      collReference = FirebaseFirestore.instance
-          .collection('student')
-          .doc('sw98JGNJh4XL9WRVVzBN')
-          .collection('career_student')
-          .doc('Kynm7JSEA7ZyPpgyD9jp')
-          .collection('subject_student');
-
-      Future<QuerySnapshot> docs = FirebaseFirestore.instance
-          .collection(collReference.path)
-          .where('name', isLessThanOrEqualTo: searchParam)
-          .get();
-
-      await docs.then((value) {
-        value.docs.forEach((element) {
-          Map<String, dynamic> sub = element.data();
-
-          if (sub != null) {
-            var subject = mapper(sub);
-            print(subject);
-            list.add(subject);
-          }
-
-          print('=====succed====');
-        });
-      });
-    } catch (e) {
-      print(e);
-      print('=======error======');
-    }
-
-    return list;
-  } */
-
   Future<List<Subject>> getAllSubjectsWithCondition(Student student) async {
     List<Subject> list = List<Subject>();
     CollectionReference collReference;
@@ -196,6 +158,45 @@ class SubjectDao {
     return list;
   }
 
+  Future<List<Subject>> getAllElectiveSubjectsByUserOrderByYear(
+      Student student) async {
+    List<Subject> list = List<Subject>();
+    CollectionReference collReference;
+
+    try {
+      collReference = FirebaseFirestore.instance
+          .collection('student')
+          .doc(student.getStudentDocRef())
+          .collection('career_student')
+          .doc(student.getCareerDocRefs()[0])
+          .collection('subject_student');
+
+      Future<QuerySnapshot> docs = FirebaseFirestore.instance
+          .collection(collReference.path)
+          .where('elect', isEqualTo: true)
+          .orderBy('year')
+          .get();
+
+      await docs.then((value) {
+        value.docs.forEach((element) {
+          Map<String, dynamic> sub = element.data();
+          if (sub != null) {
+            var subject = mapper(sub);
+            list.add(subject);
+          }
+
+          print('=====succed====');
+        });
+      });
+    } catch (e) {
+      print(e);
+
+      print('=======error======');
+    }
+
+    return list;
+  }
+
   Future<List<Subject>> getAllSubjectsByUserCondition(
       Student student, String condition) async {
     List<Subject> list = List<Subject>();
@@ -292,7 +293,7 @@ class SubjectDao {
     var gradesT;
     var gradesTp;
     var aplazos;
-    var nf;
+    var elect;
 
     sub['gradesP'] != null
         ? gradesP = new List<int>.from(sub['gradesP'])
@@ -307,10 +308,10 @@ class SubjectDao {
         : gradesTp = [];
 
     sub['aplazos'] != null
-        ? aplazos = new List<int>.from(sub['gradesTP'])
+        ? aplazos = new List<int>.from(sub['aplazos'])
         : aplazos = [];
 
-    sub['nf'] != null ? nf = sub['nf'] : nf = -1;
+    sub['elect'] != null ? elect = sub['elect'] : elect = false;
 
     return Subject(
         sub['name'],
@@ -318,13 +319,14 @@ class SubjectDao {
         gradesP,
         gradesT,
         gradesTp,
-        nf,
+        sub['nf'],
         StateRecord(State(sub['state']), DateTime.now()),
         sub['type'],
         sub['icon'],
         sub['passed'],
         aplazos,
-        sub['duration']);
+        sub['duration'],
+        elect);
   }
 
   Future<bool> addSubject(Student _student, Subject subject) async {
@@ -426,7 +428,7 @@ class SubjectDao {
 
             if (size != 0)
               for (int i = 0; i < size; i++) {
-                _aplazos.add(value.docs[0].data()['aplazos']);
+                _aplazos.add(value.docs[0].data()['aplazos'][i]);
               }
           });
         }
@@ -439,7 +441,7 @@ class SubjectDao {
     } catch (e) {
       print(e);
       print('============ Error finding doc ============');
-      return null;
+      return _isDone;
     }
 
     if (_materia != null && _myType != 'nf') {
@@ -452,7 +454,7 @@ class SubjectDao {
           print('============ Error during grade adding ============'));
     } else {
       if (nota > 5) {
-        await _materia.update({'nf': nota}).then((value) {
+        await _materia.update({'nf': nota, 'passed': true}).then((value) {
           _isDone = true;
           print('============ New grade: $nota added ============');
         }).catchError((error) =>
@@ -467,5 +469,308 @@ class SubjectDao {
     }
 
     return _isDone;
+  }
+
+  Future<bool> updateGrade(Student _student, int oldNotaCheck, Subject subject,
+      String type, int newNota) async {
+    List<int> _grades = List<int>();
+    List<int> _aplazos = List<int>();
+    var _docRef;
+    var _myType;
+    bool _isDone = false;
+    DocumentReference _materia;
+
+    int oldNota;
+
+    oldNotaCheck > 10 ? oldNota = oldNotaCheck - 10 : oldNota = oldNotaCheck;
+
+    switch (type) {
+      case 'Práctico':
+        {
+          _myType = 'gradesP';
+        }
+        break;
+      case 'Teórico':
+        {
+          _myType = 'gradesT';
+        }
+        break;
+      case 'TP':
+        {
+          _myType = 'gradesTP';
+        }
+        break;
+      case 'Final':
+        {
+          _myType = 'nf';
+        }
+        break;
+    }
+
+    try {
+      Future<QuerySnapshot> docs = FirebaseFirestore.instance
+          .collection('student')
+          .doc(_student.getStudentDocRef())
+          .collection('career_student')
+          .doc(_student.getCareerDocRefs()[0])
+          .collection('subject_student')
+          .where('name', isEqualTo: subject.getName())
+          .get();
+
+      if (_myType != 'nf') {
+        await docs.then((value) {
+          int size = value.docs[0].data()[_myType].length;
+          _docRef = value.docs[0].reference;
+
+          for (int i = 0; i < size; i++) {
+            if (value.docs[0].data()[_myType][i] == oldNota)
+              _grades.add(newNota);
+            else
+              _grades.add(value.docs[0].data()[_myType][i]);
+          }
+        });
+      } else {
+        if (newNota > 5) {
+          await docs.then((value) {
+            _docRef = value.docs[0].reference;
+          });
+        } else {
+          await docs.then((value) {
+            int size = value.docs[0].data()['aplazos'].length;
+            _docRef = value.docs[0].reference;
+
+            if (size != 0)
+              for (int i = 0; i < size; i++) {
+                _aplazos.add(value.docs[0].data()['aplazos'][i]);
+              }
+          });
+        }
+      }
+
+      // _grades.add(newNota);
+      if (oldNota > 5) _aplazos.add(newNota);
+
+      _materia = _docRef;
+    } catch (e) {
+      print(e);
+      print('============ Error finding doc ============');
+      return null;
+    }
+
+    if (_materia != null && _myType != 'nf') {
+      await _materia.update({
+        _myType: _grades,
+      }).then((value) {
+        _isDone = true;
+        print('============ New grade: $newNota updated ============');
+      }).catchError((error) =>
+          print('============ Error during grade updated ============'));
+    } else {
+      if (newNota > 5) {
+        if (oldNota > 5) {
+          await _materia.update({'nf': newNota}).then((value) {
+            _isDone = true;
+            print('============ New grade: $newNota updated ============');
+          }).catchError((error) =>
+              print('============ Error during grade updated ============'));
+        } else {
+          await _materia.update({'nf': newNota, 'passed': true}).then((value) {
+            _isDone = true;
+            print('============ New grade: $newNota updated ============');
+          }).catchError((error) =>
+              print('============ Error during grade updated ============'));
+
+          await _materia.update({
+            'aplazos': FieldValue.arrayRemove([oldNota])
+          });
+        }
+      } else {
+        if (_aplazos.contains(oldNota)) {
+          _aplazos.remove(oldNota);
+          _aplazos.add(newNota);
+        }
+
+        await _materia.update(
+          {
+            'nf': -1,
+            'passed': false,
+          },
+        );
+
+        await _materia.update({'aplazos': _aplazos}).then((value) {
+          _isDone = true;
+          print('============ New grade: $newNota updated ============');
+        }).catchError((error) =>
+            print('============ Error during grade updated ============'));
+      }
+    }
+
+    return _isDone;
+  }
+
+  Future<List<Subject>> getAllSubjectsByPassed(Student student) async {
+    List<Subject> list = List<Subject>();
+    CollectionReference collReference;
+
+    try {
+      collReference = FirebaseFirestore.instance
+          .collection('student')
+          .doc(student.getStudentDocRef())
+          .collection('career_student')
+          .doc(student.getCareerDocRefs()[0])
+          .collection('subject_student');
+
+      Future<QuerySnapshot> docs = FirebaseFirestore.instance
+          .collection(collReference.path)
+          .where('passed', isEqualTo: true)
+          .orderBy('name')
+          .get();
+
+      await docs.then((value) {
+        value.docs.forEach((element) {
+          Map<String, dynamic> sub = element.data();
+
+          if (sub != null) {
+            var subject = mapper(sub);
+
+            list.add(subject);
+          }
+
+          print('=====succed====');
+        });
+      });
+    } catch (e) {
+      print(e);
+      print('=======error======');
+    }
+
+    return list;
+  }
+
+  Future<bool> deleteGrade(
+      Student _student, int oldNotaCheck, Subject subject, String type) async {
+    List<int> _grades = List<int>();
+    List<int> _aplazos = List<int>();
+    var _docRef;
+    var _myType;
+    bool _isDone = false;
+    DocumentReference _materia;
+
+    int oldNota;
+
+    oldNotaCheck > 10 ? oldNota = oldNotaCheck - 10 : oldNota = oldNotaCheck;
+
+    switch (type) {
+      case 'Práctico':
+        {
+          _myType = 'gradesP';
+        }
+        break;
+      case 'Teórico':
+        {
+          _myType = 'gradesT';
+        }
+        break;
+      case 'TP':
+        {
+          _myType = 'gradesTP';
+        }
+        break;
+      case 'Final':
+        {
+          _myType = 'nf';
+        }
+        break;
+    }
+
+    try {
+      Future<QuerySnapshot> docs = FirebaseFirestore.instance
+          .collection('student')
+          .doc(_student.getStudentDocRef())
+          .collection('career_student')
+          .doc(_student.getCareerDocRefs()[0])
+          .collection('subject_student')
+          .where('name', isEqualTo: subject.getName())
+          .get();
+
+      if (_myType != 'nf') {
+        await docs.then((value) {
+          int size = value.docs[0].data()[_myType].length;
+          _docRef = value.docs[0].reference;
+
+          for (int i = 0; i < size; i++) {
+            if (value.docs[0].data()[_myType][i] == oldNota)
+              _grades.remove(oldNota);
+          }
+        });
+      } else {
+        if (oldNota > 5) {
+          await docs.then((value) {
+            _docRef = value.docs[0].reference;
+          });
+        } else {
+          await docs.then((value) {
+            int size = value.docs[0].data()['aplazos'].length;
+            _docRef = value.docs[0].reference;
+
+            if (size != 0) _aplazos.remove(oldNota);
+          });
+        }
+      }
+
+      _materia = _docRef;
+    } catch (e) {
+      print(e);
+      print('============ Error finding doc ============');
+      return null;
+    }
+
+    if (_materia != null && _myType != 'nf') {
+      await _materia.update({
+        _myType: _grades,
+      }).then((value) {
+        _isDone = true;
+        print('============ Grade: $oldNota removed ============');
+      }).catchError((error) =>
+          print('============ Error during grade removal ============'));
+    } else {
+      if (oldNota > 5) {
+        await _materia.update({'nf': -1, 'passed': false}).then((value) {
+          _isDone = true;
+          print('============ Grade: $oldNota removed ============');
+        }).catchError((error) =>
+            print('============ Error during grade updated ============'));
+      } else {
+        await _materia.update({
+          'aplazos': FieldValue.arrayRemove([oldNota])
+        }).then((value) {
+          _isDone = true;
+          print('============ Grade: $oldNota removed ============');
+        }).catchError((error) =>
+            print('============ Error during grade removal ============'));
+      }
+    }
+
+    return _isDone;
+  }
+
+  Future<Map<String, dynamic>> getCorrelativas(Subject subject) async {
+    Map<String, dynamic> _map = new Map<String, dynamic>();
+
+    try {
+      Future<QuerySnapshot> _doc = FirebaseFirestore.instance
+          .collection('/career/isi/correlativas/')
+          .where('name', isEqualTo: subject.getName())
+          .get();
+
+      await _doc.then((docs) {
+        _map = docs.docs[0].data();
+      });
+    } catch (e) {
+      print(e);
+      print('==== error ====');
+    }
+
+    return _map;
   }
 }

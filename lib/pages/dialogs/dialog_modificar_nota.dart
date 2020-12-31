@@ -20,21 +20,76 @@ class DialogModificarNota extends StatefulWidget {
 class _DialogModificarNotaState extends State<DialogModificarNota> {
   var _selectedSubject;
   var _selectedType;
+  int _selectedNota;
   var _subjects;
+
   bool _hasSelectedData = true;
-  List<Subject> _auxSubjects = new List<Subject>();
+  bool _hasSelectedNota = false;
 
   TextEditingController _nota = new TextEditingController();
 
   SubjectDao _subjectDao = new SubjectDao();
+  List<Subject> _auxNotas = new List<Subject>();
 
   var _types = ['Práctico', 'Teórico', 'TP', 'Final'];
 
   @override
   void initState() {
-    _subjects = _subjectDao.getAllSubjectsByUser(widget._student);
+    _subjects = _subjectDao.getAllSubjectsWithCondition(widget._student);
 
     super.initState();
+  }
+
+  List<int> getGrades(Subject sub, String selectedType) {
+    List<int> notas = new List<int>();
+
+    switch (selectedType) {
+      case 'Práctico':
+        {
+          sub.getGradesP().forEach((nota) {
+            if (nota != null && notas.contains(nota))
+              notas.add(nota + 10);
+            else
+              notas.add(nota);
+          });
+          return notas;
+        }
+
+      case 'Teórico':
+        {
+          sub.getGradesT().forEach((nota) {
+            if (nota != null && notas.contains(nota))
+              notas.add(nota + 10);
+            else
+              notas.add(nota);
+          });
+          return notas;
+        }
+      case 'TP':
+        {
+          sub.getGradesTP().forEach((nota) {
+            if (nota != null && notas.contains(nota))
+              notas.add(nota + 10);
+            else
+              notas.add(nota);
+          });
+          return notas;
+        }
+      case 'Final':
+        {
+          if (sub.getAplazos().isNotEmpty)
+            sub.getAplazos().forEach((nota) {
+              if (nota != null && notas.contains(nota))
+                notas.add(nota + 10);
+              else
+                notas.add(nota);
+            });
+
+          if (sub.getNf() != -1) notas.add(sub.getNf());
+
+          return notas;
+        }
+    }
   }
 
   @override
@@ -44,7 +99,7 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(26.0)),
         child: Container(
           width: 338.0,
-          height: 300.0,
+          height: 340.0,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 40, 20, 5),
             child: Column(
@@ -80,30 +135,41 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                               return Center(child: CircularProgressIndicator());
 
                             default:
+                              List<Subject> _aux = new List<Subject>();
                               if (snapshot.hasError)
                                 return Text('Unable to grab data');
                               else
-                                //_auxSubjects = snapshot.data;
-                                return DropdownButtonHideUnderline(
-                                  child: DropdownButton(
-                                    isExpanded: true,
-                                    value: _selectedSubject,
-                                    hint: new Text('Materia'),
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        _selectedSubject = newValue;
-                                      });
-                                    },
-                                    items: snapshot.data
-                                        .map<DropdownMenuItem<Subject>>(
-                                            (Subject sub) {
-                                      return DropdownMenuItem<Subject>(
-                                        value: sub,
-                                        child: Text(sub.getName()),
-                                      );
-                                    }).toList(),
-                                  ),
-                                );
+                                snapshot.data.forEach((Subject sub) {
+                                  if (sub.getGradesP().isNotEmpty ||
+                                      sub.getGradesT().isNotEmpty ||
+                                      sub.getGradesTP().isNotEmpty)
+                                    _aux.add(sub);
+                                });
+
+                              _auxNotas = _aux;
+
+                              return DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                  isExpanded: true,
+                                  value: _selectedSubject,
+                                  hint: new Text('Materia'),
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      _selectedSubject = newValue;
+                                      _selectedNota = null;
+                                      //_selectedType = null;
+                                      _nota.text = '';
+                                    });
+                                  },
+                                  items: _aux.map<DropdownMenuItem<Subject>>(
+                                      (Subject sub) {
+                                    return DropdownMenuItem<Subject>(
+                                      value: sub,
+                                      child: Text(sub.getName()),
+                                    );
+                                  }).toList(),
+                                ),
+                              );
                           }
                         }),
                   ),
@@ -116,7 +182,7 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                   height: 37.0,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(26.0),
-                    color: const Color(0xfff7f7f7),
+                    color: Color(0xfff7f7f7),
                   ),
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -124,12 +190,17 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                       child: DropdownButton(
                           value: _selectedType,
                           hint: new Text('Tipo de Nota'),
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectedType = newValue;
-                              _hasSelectedData = true;
-                            });
-                          },
+                          onChanged: (_selectedSubject != null)
+                              ? (newValue) {
+                                  setState(() {
+                                    {
+                                      _selectedType = newValue;
+                                      _hasSelectedData = true;
+                                      _hasSelectedNota = true;
+                                    }
+                                  });
+                                }
+                              : null,
                           items: _types
                               .map((type) => DropdownMenuItem(
                                   child: Text(type), value: type))
@@ -151,23 +222,93 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                         child: DropdownButtonHideUnderline(
                             child: DropdownButton(
-                          isExpanded: true,
-                          value: _selectedSubject,
-                          hint: new Text('Nota'),
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectedSubject = newValue;
-                            });
-                          },
 
-                          // Añadir todas las notas
-                          items: _auxSubjects
-                              .map<DropdownMenuItem<int>>((Subject sub) {
-                            return DropdownMenuItem<int>(
-                                value: sub.getGradesP()[0],
-                                child: Text(sub.getGradesP()[0].toString()));
-                          }).toList(),
-                        )))),
+                                //isExpanded: true,
+                                value: _selectedNota,
+                                hint: new Text('Nota'),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _selectedNota = newValue;
+                                  });
+                                },
+                                items: (_hasSelectedNota)
+                                    ? getGrades(_selectedSubject, _selectedType)
+                                        .map(
+                                            (int nota) => DropdownMenuItem<int>(
+                                                  value: nota,
+                                                  child: Text(nota > 10
+                                                      ? (nota - 10).toString()
+                                                      : nota.toString()),
+                                                ))
+                                        .toList()
+                                    : null)))),
+                SizedBox(
+                  height: 10,
+                ),
+                InkWell(
+                  borderRadius: BorderRadius.circular(26),
+                  onTap: () async {
+                    if (_selectedSubject != null &&
+                        _selectedType != null &&
+                        _selectedNota != null) {
+                      setState(() {
+                        _hasSelectedData = true;
+                      });
+
+                      bool isDone = await _subjectDao.deleteGrade(
+                        widget._student,
+                        _selectedNota,
+                        _selectedSubject,
+                        _selectedType,
+                      );
+
+                      if (isDone) {
+                        await CoolAlert.show(
+                            borderRadius: 26,
+                            title: 'Éxito',
+                            backgroundColor: Colors.white,
+                            context: context,
+                            type: CoolAlertType.success,
+                            text: 'Nota eliminada con exito!');
+
+                        Navigator.pop(context);
+                      } else {
+                        CoolAlert.show(
+                            borderRadius: 26,
+                            title: 'Error',
+                            backgroundColor: Colors.white,
+                            context: context,
+                            type: CoolAlertType.error,
+                            text: 'Error al eliminar la nota');
+                      }
+                    } else {
+                      setState(() {
+                        _hasSelectedData = false;
+                      });
+                    }
+                  },
+                  child: Expanded(
+                    child: Container(
+                      //width: 129.0,
+                      height: 37.0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(26.0),
+                        color: Color(0xffFF9A9A),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Eliminar Nota',
+                          style: TextStyle(
+                            fontFamily: 'Avenir LT Std',
+                            fontSize: 16,
+                            color: const Color(0xff000000),
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
                 SizedBox(
                   height: 10,
                 ),
@@ -208,32 +349,38 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                       onTap: () async {
                         if (_selectedSubject != null &&
                             _selectedType != null &&
-                            _nota.text != '') {
+                            _nota.text != '' &&
+                            _selectedNota != null) {
                           setState(() {
                             _hasSelectedData = true;
                           });
 
-                          bool isDone = await _subjectDao.addGrade(
+                          bool isDone = await _subjectDao.updateGrade(
                               widget._student,
-                              int.parse(_nota.text),
+                              _selectedNota,
                               _selectedSubject,
-                              _selectedType);
+                              _selectedType,
+                              int.parse(_nota.text));
 
-                          isDone
-                              ? CoolAlert.show(
-                                  borderRadius: 26,
-                                  title: 'Éxito',
-                                  backgroundColor: Colors.white,
-                                  context: context,
-                                  type: CoolAlertType.success,
-                                  text: 'Nota añadida con exito!')
-                              : CoolAlert.show(
-                                  borderRadius: 26,
-                                  title: 'Error',
-                                  backgroundColor: Colors.white,
-                                  context: context,
-                                  type: CoolAlertType.error,
-                                  text: 'Error al añadir la nota');
+                          if (isDone) {
+                            await CoolAlert.show(
+                                borderRadius: 26,
+                                title: 'Éxito',
+                                backgroundColor: Colors.white,
+                                context: context,
+                                type: CoolAlertType.success,
+                                text: 'Nota modificada con exito!');
+
+                            Navigator.pop(context);
+                          } else {
+                            CoolAlert.show(
+                                borderRadius: 26,
+                                title: 'Error',
+                                backgroundColor: Colors.white,
+                                context: context,
+                                type: CoolAlertType.error,
+                                text: 'Error al modificar la nota');
+                          }
                         } else {
                           setState(() {
                             _hasSelectedData = false;
@@ -249,7 +396,7 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                         ),
                         child: Center(
                           child: Text(
-                            'Confirmar',
+                            'Modificar',
                             style: TextStyle(
                               fontFamily: 'Avenir LT Std',
                               fontSize: 16,

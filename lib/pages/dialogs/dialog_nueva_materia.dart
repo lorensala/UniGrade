@@ -55,7 +55,7 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(26.0)),
         child: Container(
           width: 338.0,
-          height: 250.0,
+          height: 270.0,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 40, 20, 10),
             child: Column(

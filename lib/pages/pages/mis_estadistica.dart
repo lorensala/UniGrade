@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:mis_notas/data/subject_dao.dart';
@@ -82,6 +83,11 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
     }
     return _statisticsList;
   }
+
+  //TODO: Lo unico que falta es ver los puntajes de las electivas.
+  // Despues, ver como calcular el porcentaje de la carrera hecha!
+  // Revisar el porcentaje de materias hechas por anio, y que no tenga
+  // en cuenta las electivas.
 
   @override
   Widget build(BuildContext context) {
@@ -402,7 +408,7 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                                             0,
                                             _selectedYear),
                                         StatisticsContainer(
-                                            snapshot.data[2].toString(),
+                                            snapshot.data[7].toString(),
                                             'Materias\nRestantes',
                                             0,
                                             _selectedYear),
@@ -462,7 +468,9 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                           default:
                             if (snapshot.data.isNotEmpty &&
                                 snapshot.hasData &&
-                                snapshot.data != null)
+                                snapshot.data != null &&
+                                snapshot.data[1] != null &&
+                                snapshot.data[0] != null)
                               return Padding(
                                 padding:
                                     const EdgeInsets.fromLTRB(0, 10, 0, 18),

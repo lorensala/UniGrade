@@ -291,7 +291,7 @@ class StudentDao {
         'state': '',
         'type': 'otros',
         'year': 2,
-        'name': 'Quimica',
+        'name': 'Química',
         'icon': 'assets/images/quimica.png',
         'passed': false
       },
@@ -320,7 +320,7 @@ class StudentDao {
         'state': '',
         'type': 'calculo',
         'year': 2,
-        'name': 'Probabilidades y Estadísticas',
+        'name': 'Probabilidad y Estadísticas',
         'icon': 'assets/images/pye.png',
         'passed': false
       },
@@ -413,7 +413,7 @@ class StudentDao {
         'state': '',
         'type': 'otros',
         'year': 3,
-        'name': 'Sistemas de Representacion',
+        'name': 'Sistemas de Representación',
         'icon': 'assets/images/srp.png',
         'passed': false
       },
@@ -501,7 +501,7 @@ class StudentDao {
         'state': '',
         'type': 'software',
         'year': 3,
-        'name': 'Gestion de Datos',
+        'name': 'Gestión de Datos',
         'icon': 'assets/images/gda.png',
         'passed': false
       },

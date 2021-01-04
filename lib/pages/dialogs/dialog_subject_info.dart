@@ -15,7 +15,7 @@ class DialogSubjectInfo extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
         child: Container(
           //width: 700,
-          height: 510,
+          height: 530,
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(26)),
           child: Column(
             children: <Widget>[
@@ -29,7 +29,7 @@ class DialogSubjectInfo extends StatelessWidget {
                     color: const Color(0xff000000),
                     fontWeight: FontWeight.w800,
                   ),
-                  textAlign: TextAlign.left,
+                  textAlign: TextAlign.center,
                 ),
               ),
               SizedBox(
@@ -84,7 +84,7 @@ class DialogSubjectInfo extends StatelessWidget {
               ),
               SizedBox(
                 width: 305.0,
-                height: 90,
+                height: 100,
                 child: Text(
                   _map.isNotEmpty
                       ? textFormatter(_map['cursada'].toString())
@@ -97,6 +97,9 @@ class DialogSubjectInfo extends StatelessWidget {
                   ),
                   textAlign: TextAlign.left,
                 ),
+              ),
+              SizedBox(
+                height: 10,
               ),
               Align(
                 alignment: Alignment.centerLeft,
@@ -117,7 +120,7 @@ class DialogSubjectInfo extends StatelessWidget {
               ),
               SizedBox(
                 width: 310.0,
-                height: 90,
+                height: 100,
                 child: Text(
                   _map.isNotEmpty
                       ? textFormatter(_map['aprobada'].toString())
@@ -131,6 +134,9 @@ class DialogSubjectInfo extends StatelessWidget {
                   textAlign: TextAlign.left,
                 ),
               ),
+              SizedBox(
+                height: 10,
+              ),
               Text(
                 'Para rendir',
                 style: TextStyle(
@@ -143,7 +149,7 @@ class DialogSubjectInfo extends StatelessWidget {
               ),
               SizedBox(
                 width: 305.0,
-                height: 90,
+                height: 70,
                 child: Text(
                   _map.isNotEmpty
                       ? textFormatter(_map['rendir'].toString())
@@ -157,12 +163,12 @@ class DialogSubjectInfo extends StatelessWidget {
                   textAlign: TextAlign.left,
                 ),
               ),
-              InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Align(
-                  alignment: Alignment.centerRight,
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                   child: Container(
                       width: 131.0,
                       height: 37.0,
@@ -196,6 +202,7 @@ class DialogSubjectInfo extends StatelessWidget {
     String res = '';
 
     if (_list[0] == '[]') return 'No posee';
+    if (_list[0] == '[TODAS]') return 'TODAS';
 
     _list.forEach((element) {
       if (element.startsWith('['))

@@ -287,24 +287,22 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                       });
                     }
                   },
-                  child: Expanded(
-                    child: Container(
-                      //width: 129.0,
-                      height: 37.0,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(26.0),
-                        color: Color(0xffFF9A9A),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Eliminar Nota',
-                          style: TextStyle(
-                            fontFamily: 'Avenir LT Std',
-                            fontSize: 16,
-                            color: const Color(0xff000000),
-                          ),
-                          textAlign: TextAlign.left,
+                  child: Container(
+                    //width: 129.0,
+                    height: 37.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(26.0),
+                      color: Color(0xffFF9A9A),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Eliminar Nota',
+                        style: TextStyle(
+                          fontFamily: 'Avenir LT Std',
+                          fontSize: 16,
+                          color: const Color(0xff000000),
                         ),
+                        textAlign: TextAlign.left,
                       ),
                     ),
                   ),

@@ -1,0 +1,313 @@
+List<Map<String, dynamic>> _data = [
+    {
+      'aprobada': [],
+      'cursada': [],
+      'rendir': [],
+      'name': 'Análisis Matemático I'
+    },
+    {
+      'aprobada': [],
+      'cursada': [],
+      'rendir': [],
+      'name': 'Álgebra y Geometría Analítica'
+    },
+    {
+      'aprobada': [],
+      'cursada': [],
+      'rendir': [],
+      'name': 'Algoritmos y Estructuras de Datos'
+    },
+    {
+      'aprobada': [],
+      'cursada': [],
+      'rendir': [],
+      'name': 'Arquitectura de Computadoras'
+    },
+    {'aprobada': [], 'cursada': [], 'rendir': [], 'name': 'Física I'},
+    {'aprobada': [], 'cursada': [], 'rendir': [], 'name': 'Inglés I'},
+    {
+      'aprobada': [],
+      'cursada': [],
+      'rendir': [],
+      'name': 'Matemática Discreta'
+    },
+    {
+      'aprobada': [],
+      'cursada': [],
+      'rendir': [],
+      'name': 'Sistemas y Organizaciones'
+    },
+    {
+      'aprobada': [],
+      'cursada': ['Análisis Matemático I', 'Álgebra y Geometría Analítica'],
+      'rendir': ['Análisis Matemático I', 'Álgebra y Geometría Analítica'],
+      'name': 'Análisis Matemático II'
+    },
+    {'aprobada': [], 'cursada': [], 'rendir': [], 'name': 'Química'},
+    {
+      'aprobada': [],
+      'cursada': ['Análisis Matemático I', 'Física I'],
+      'rendir': ['Análisis Matemático I', 'Física I'],
+      'name': 'Física II'
+    },
+    {
+      'aprobada': [],
+      'cursada': [
+        'Sistemas y Organizaciones',
+        'Algoritmos y Estructuras de Datos'
+      ],
+      'rendir': [
+        'Sistemas y Organizaciones',
+        'Algoritmos y Estructuras de Datos'
+      ],
+      'name': 'Análisis de Sistemas'
+    },
+    {
+      'aprobada': [],
+      'cursada': ['Matemática Discreta', 'Algoritmos y Estructuras de Datos'],
+      'rendir': ['Matemática Discreta', 'Algoritmos y Estructuras de Datos'],
+      'name': 'Sintaxis y Semántica de los Lenguajes'
+    },
+    {
+      'aprobada': [],
+      'cursada': ['Matemática Discreta', 'Algoritmos y Estructuras de Datos'],
+      'rendir': ['Matemática Discreta', 'Algoritmos y Estructuras de Datos'],
+      'name': 'Paradigmas de Programación'
+    },
+    {
+      'aprobada': [],
+      'cursada': [
+        'Matemática Discreta',
+        'Algoritmos y Estructuras de Datos',
+        'Arquitectura de Computadoras'
+      ],
+      'rendir': [
+        'Matemática Discreta',
+        'Algoritmos y Estructuras de Datos',
+        'Arquitectura de Computadoras'
+      ],
+      'name': 'Sistemas Operativos'
+    },
+    {
+      'aprobada': [],
+      'cursada': [],
+      'rendir': [],
+      'name': 'Sistemas de Representación'
+    },
+    {
+      'aprobada': [],
+      'cursada': ['Análisis Matemático I', 'Álgebra y Geometría Analítica'],
+      'rendir': ['Análisis Matemático I', 'Álgebra y Geometría Analítica'],
+      'name': 'Probabilidad y Estadísticas'
+    },
+    {
+      'aprobada': [
+        'Matemática Discreta',
+        'Sistemas y Organizaciones',
+        'Algoritmos y Estructuras de Datos'
+      ],
+      'cursada': ['Análisis de Sistemas', 'Paradigmas de Programación'],
+      'rendir': ['Análisis de Sistemas', 'Paradigmas de Programación'],
+      'name': 'Diseño de Sistemas'
+    },
+    {
+      'aprobada': [
+        'Análisis Matemático I',
+        'Álgebra y Geometría Analítica',
+        'Física I'
+      ],
+      'cursada': [
+        'Arquitectura de Computadoras',
+        'Análisis Matemático II',
+        'Física II'
+      ],
+      'rendir': [
+        'Arquitectura de Computadoras',
+        'Análisis Matemático II',
+        'Física II'
+      ],
+      'name': 'Comunicaciones'
+    },
+    {
+      'aprobada': ['Análisis Matemático I', 'Álgebra y Geometría Analítica'],
+      'cursada': ['Análisis Matemático II'],
+      'rendir': ['Análisis Matemático II'],
+      'name': 'Matemática Superior'
+    },
+    {
+      'aprobada': [
+        'Matemática Discreta',
+        'Sistemas y Organizaciones',
+        'Algoritmos y Estructuras de Datos'
+      ],
+      'cursada': [
+        'Análisis de Sistemas',
+        'Sintaxis y Semántica de los Lenguajes',
+        'Paradigmas de Programación'
+      ],
+      'rendir': [
+        'Análisis de Sistemas',
+        'Sintaxis y Semántica de los Lenguajes',
+        'Paradigmas de Programación'
+      ],
+      'name': 'Gestión de Datos'
+    },
+    {
+      'aprobada': [
+        'Sistemas y Organizaciones',
+        'Algoritmos y Estructuras de Datos'
+      ],
+      'cursada': [
+        'Análisis de Sistemas',
+      ],
+      'rendir': [
+        'Análisis de Sistemas',
+      ],
+      'name': 'Economía'
+    },
+    {
+      'aprobada': ['Inglés I'],
+      'cursada': [],
+      'rendir': [],
+      'name': 'Inglés II'
+    },
+    {
+      'rendir': ['Sisteamas Operativos', 'Comunicaciones'],
+      'cursada': ['Sisteamas Operativos', 'Comunicaciones'],
+      'aprobada': [
+        'Matemática Discreta',
+        'Algoritmos y Estructuras de Datos',
+        'Arquitectura de Computadoras',
+        'Análisis Matemático II',
+        'Física II'
+      ],
+      'name': 'Redes de Información'
+    },
+    {
+      'cursada': [
+        'Arquitectura de Computadoras',
+        'Inglés I',
+        'Análisis de Sistemas',
+        'Paradigmas de Programación'
+      ],
+      'aprobada': ['Sisteamas Operativos', 'Diseño de Sistemas', 'Economía'],
+      'rendir': [
+        'Arquitectura de Computadoras',
+        'Inglés I',
+        'Análisis de Sistemas',
+        'Paradigmas de Programación'
+      ],
+      'name': 'Administración de Recursos'
+    },
+    {
+      'cursada': ['Probabilidad y Estadísticas', 'Matemática Superior'],
+      'aprobada': ['Análisis Matemático II'],
+      'rendir': ['Probabilidad y Estadísticas', 'Matemática Superior'],
+      'name': 'Investigación Operativa'
+    },
+    {
+      'cursada': ['Probabilidad y Estadísticas', 'Matemática Superior'],
+      'aprobada': ['Análisis Matemático II'],
+      'rendir': ['Probabilidad y Estadísticas', 'Matemática Superior'],
+      'name': 'Simulación'
+    },
+    {
+      'cursada': [
+        'Probabilidad y Estadísticas',
+        'Diseño de Sistemas',
+        'Gestión de Datos'
+      ],
+      'aprobada': [
+        'Análisis de Sistemas',
+        'Sintaxis y Semántica de los Lenguajes',
+        'Paradigmas de Programación'
+      ],
+      'rendir': [
+        'Probabilidad y Estadísticas',
+        'Diseño de Sistemas',
+        'Gestión de Datos'
+      ],
+      'name': 'Ingeniería de Software'
+    },
+    {
+      'cursada': ['Química', 'Matemática Superior'],
+      'aprobada': [
+        'Sistemas y Organizaciones',
+        'Algoritmos y Estructuras de Datos'
+      ],
+      'rendir': ['Química', 'Matemática Superior'],
+      'name': 'Teoría de Control'
+    },
+    {
+      'aprobada': [
+        'Sistemas y Organizaciones',
+        'Algoritmos y Estructuras de Datos'
+      ],
+      'cursada': ['Análisis de Sistemas', 'Ingeniería y Sociedad'],
+      'rendir': ['Análisis de Sistemas', 'Ingeniería y Sociedad'],
+      'name': 'Legislación'
+    },
+    {
+      'aprobada': [
+        'Sistemas Operativos',
+        'Sistemas de Representación',
+        'Probabilidad y Estadísticas',
+        'Diseño de Sistemas',
+        'Comunicaciones',
+        'Gestion de Datos',
+        'Ingeniería y Sociedad',
+        'Economía',
+        'Ingles II'
+      ],
+      'cursada': [
+        'Redes de Información',
+        'Administración de Recursos',
+        'Ingeniería en Software',
+        'Legislación'
+      ],
+      'rendir': ['TODAS'],
+      'name': 'Proyecto Final'
+    },
+    {
+      'aprobada': [
+        'Probabilidad y Estadísticas',
+        'Diseño de Sistemas',
+        'Matemática Superior',
+      ],
+      'cursada': ['Investigación Operativa', 'Simulación'],
+      'rendir': ['Investigación Operativa', 'Simulación'],
+      'name': 'Inteligencia Artificial'
+    },
+    {
+      'aprobada': [
+        'Sistemas Operativos',
+        'Economía'
+            'Probabilidad y Estadísticas',
+        'Diseño de Sistemas',
+        'Matemática Superior',
+      ],
+      'cursada': ['Investigación Operativa', 'Administración de Recursos'],
+      'rendir': ['Investigación Operativa', 'Administración de Recursos'],
+      'name': 'Administración Gerencial'
+    },
+    {
+      'aprobada': [
+        'Sistemas Operativos',
+        'Economía'
+            'Probabilidad y Estadísticas',
+        'Diseño de Sistemas',
+        'Matemática Superior',
+      ],
+      'cursada': [
+        'Investigación Operativa',
+        'Administración de Recursos',
+        'Simulación'
+      ],
+      'rendir': [
+        'Investigación Operativa',
+        'Administración de Recursos',
+        'Simulación'
+      ],
+      'name': 'Sistemas de Gestión'
+    }
+  ];

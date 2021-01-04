@@ -118,10 +118,10 @@ class _NewUserDialogState extends State<NewUserDialog> {
                   child: ArgonTimerButton(
                     onTap: (startTimer, btnState) async {
                       if (btnState == ButtonState.Idle) {
-                        startTimer(10);
+                        startTimer(3);
                       }
 
-                      await new Future.delayed(Duration(seconds: 10))
+                      await new Future.delayed(Duration(seconds: 3))
                           .then((value) => Navigator.pop(context));
                     },
                     loader: (time) {

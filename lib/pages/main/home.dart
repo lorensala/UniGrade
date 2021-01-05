@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
+import 'package:mis_notas/animation/FadeAnimation.dart';
 
 import 'package:mis_notas/data/student_dao.dart';
 import 'package:mis_notas/entities/career.dart';
@@ -94,21 +96,21 @@ class _HomePageState extends State<HomePage> {
         },
         child: Scaffold(
           backgroundColor: Colors.white,
-          body: SmartRefresher(
-            header: WaterDropHeader(
-              complete: Text(''),
-              waterDropColor: Color(0xFF66AAFF),
-            ),
-            controller: _refreshController,
-            onRefresh: () {
-              setState(() {});
-              _refreshController.refreshCompleted();
-            },
-            onLoading: () {
-              setState(() {});
-              _refreshController.loadComplete();
-            },
-            child: SafeArea(
+          body: SafeArea(
+            child: SmartRefresher(
+              header: WaterDropHeader(
+                complete: Text(''),
+                waterDropColor: Color(0xFF66AAFF),
+              ),
+              controller: _refreshController,
+              onRefresh: () {
+                setState(() {});
+                _refreshController.refreshCompleted();
+              },
+              onLoading: () {
+                setState(() {});
+                _refreshController.loadComplete();
+              },
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 20),
@@ -139,7 +141,9 @@ class _HomePageState extends State<HomePage> {
                                           MediaQuery.of(context).size.height /
                                               2,
                                       child: Center(
-                                          child: CircularProgressIndicator())),
+                                          child: Lottie.asset(
+                                              'assets/lottie/clock.json',
+                                              width: 300))),
                                 );
                               default:
                                 if (snapshot.hasError) return Text('error');

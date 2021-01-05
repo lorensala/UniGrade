@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mis_notas/animation/FadeAnimation.dart';
 
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
@@ -259,13 +260,16 @@ class _MisNotasState extends State<MisNotas> {
                             if (snapshot.hasError) return Text('error');
                             if (!snapshot.data.isEmpty) {
                               return Expanded(
-                                child: ListView.builder(
-                                  physics: BouncingScrollPhysics(),
-                                  itemCount: snapshot.data.length,
-                                  itemBuilder: (context, index) {
-                                    Subject sub = snapshot.data[index];
-                                    return GradeCard(sub);
-                                  },
+                                child: FadeAnimation(
+                                  delay: 0.1,
+                                  child: ListView.builder(
+                                    physics: BouncingScrollPhysics(),
+                                    itemCount: snapshot.data.length,
+                                    itemBuilder: (context, index) {
+                                      Subject sub = snapshot.data[index];
+                                      return GradeCard(sub);
+                                    },
+                                  ),
                                 ),
                               );
                             } else {

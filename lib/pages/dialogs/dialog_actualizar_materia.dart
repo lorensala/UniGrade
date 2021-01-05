@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
@@ -48,7 +49,6 @@ class _DialogActualizarMateriaState extends State<DialogActualizarMateria> {
 
   @override
   Widget build(BuildContext context) {
-    print('rebuild');
     return Dialog(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(26.0)),
@@ -87,7 +87,9 @@ class _DialogActualizarMateriaState extends State<DialogActualizarMateria> {
                         builder: (context, snapshot) {
                           switch (snapshot.connectionState) {
                             case ConnectionState.waiting:
-                              return Center(child: CircularProgressIndicator());
+                              return Center(
+                                  child: Lottie.asset(
+                                      'assets/lottie/loading.json'));
 
                             default:
                               return DropdownButtonHideUnderline(

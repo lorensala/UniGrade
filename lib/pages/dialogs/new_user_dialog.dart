@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class NewUserDialog extends StatefulWidget {
   @override
@@ -13,6 +14,7 @@ class _NewUserDialogState extends State<NewUserDialog> {
 
   @override
   Widget build(BuildContext context) {
+    ValueNotifier<bool> _isNew = Provider.of<ValueNotifier<bool>>(context);
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26.0)),
       child: Padding(
@@ -117,12 +119,19 @@ class _NewUserDialogState extends State<NewUserDialog> {
                   alignment: Alignment.centerRight,
                   child: ArgonTimerButton(
                     onTap: (startTimer, btnState) async {
-                      if (btnState == ButtonState.Idle) {
-                        startTimer(3);
+                      int seconds = 0;
+
+                      if (_isNew.value) seconds = 3;
+
+                      if (btnState == ButtonState.Idle && seconds != 0) {
+                        startTimer(seconds);
                       }
 
-                      await new Future.delayed(Duration(seconds: 3))
-                          .then((value) => Navigator.pop(context));
+                      await new Future.delayed(Duration(seconds: seconds))
+                          .then((value) {
+                        _isNew.value = false;
+                        Navigator.pop(context);
+                      });
                     },
                     loader: (time) {
                       return Text(time.toString());
@@ -148,7 +157,7 @@ class _NewUserDialogState extends State<NewUserDialog> {
                 height: 10,
               ),
               Text(
-                ' Copyright © 2020 Lorenzo Sala. Todos los derechos reservados. ',
+                ' Copyright © 2021 Lorenzo Sala. Todos los derechos reservados. ',
                 style: TextStyle(
                   fontFamily: 'Avenir LT Std',
                   fontSize: 11,

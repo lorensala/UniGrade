@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mis_notas/pages/pages/mis_materias.dart';
 
 class MainButton extends StatelessWidget {
   final String _text;
@@ -16,30 +17,24 @@ class MainButton extends StatelessWidget {
           padding: EdgeInsets.only(top: 30),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(24, 0, 0, 0),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(26),
-              onTap: () {
-                Navigator.pushNamed(context, _route);
-              },
-              child: Container(
-                width: 129.0,
-                height: 92.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(26.0),
-                  color: _color,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(17, 40, 0, 0),
-                  child: Text(
-                    _text,
-                    style: TextStyle(
-                      fontFamily: 'Avenir LT Std',
-                      fontSize: 18,
-                      color: const Color(0xff484848),
-                      fontWeight: FontWeight.w800,
-                    ),
-                    textAlign: TextAlign.left,
+            child: Container(
+              width: 129.0,
+              height: 92.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(26.0),
+                color: _color,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(17, 40, 0, 0),
+                child: Text(
+                  _text,
+                  style: TextStyle(
+                    fontFamily: 'Avenir LT Std',
+                    fontSize: 18,
+                    color: const Color(0xff484848),
+                    fontWeight: FontWeight.w800,
                   ),
+                  textAlign: TextAlign.left,
                 ),
               ),
             ),

@@ -103,7 +103,7 @@ class StudentDao {
         'state': '',
         'type': 'idioma',
         'year': 1,
-        'name': 'Ingles I',
+        'name': 'Inglés I',
         'icon': 'assets/images/ingles.png',
         'passed': false
       },
@@ -261,7 +261,7 @@ class StudentDao {
         'state': '',
         'type': 'idioma',
         'year': 2,
-        'name': 'Ingles II',
+        'name': 'Inglés II',
         'icon': 'assets/images/ingles.png',
         'passed': false
       },

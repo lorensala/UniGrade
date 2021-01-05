@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
+import 'package:mis_notas/animation/FadeAnimation.dart';
 import 'package:mis_notas/data/subject_dao.dart';
 import 'package:mis_notas/entities/statistics.dart';
 import 'package:mis_notas/entities/subject.dart';

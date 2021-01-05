@@ -69,7 +69,6 @@ class SubjectDao {
 
           if (sub != null) {
             var subject = mapper(sub);
-            print(subject);
             list.add(subject);
           }
 

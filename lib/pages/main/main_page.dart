@@ -10,6 +10,9 @@ import 'package:mis_notas/pages/dialogs/dialog_actualizar_materia.dart';
 import 'package:mis_notas/pages/dialogs/dialog_modificar_nota.dart';
 import 'package:mis_notas/pages/dialogs/dialog_nueva_materia.dart';
 import 'package:mis_notas/pages/dialogs/dialog_nueva_nota.dart';
+import 'package:mis_notas/pages/pages/mis_estadistica.dart';
+import 'package:mis_notas/pages/pages/mis_materias.dart';
+import 'package:mis_notas/pages/pages/mis_notas.dart';
 
 import 'package:mis_notas/services/statistics_service.dart';
 
@@ -200,21 +203,108 @@ class _MainPageState extends State<MainPage> {
                               physics: BouncingScrollPhysics(),
                               scrollDirection: Axis.horizontal,
                               children: <Widget>[
-                                MainButton(
-                                    'Mis\nMaterias',
-                                    'assets/images/materias.png',
-                                    Color(0xFFF7F7F7),
-                                    '/mismaterias'),
-                                MainButton(
-                                    'Mis\nNotas',
-                                    'assets/images/notas.png',
-                                    Color(0xFFFFDCDC),
-                                    '/misnotas'),
-                                MainButton(
-                                    'Mis\nEstadísticas',
-                                    'assets/images/estadisticas.png',
-                                    Color(0xFFF5DCFF),
-                                    '/estadisticas')
+                                InkWell(
+                                  borderRadius: BorderRadius.circular(26),
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        PageRouteBuilder(
+                                            transitionDuration:
+                                                Duration(milliseconds: 100),
+                                            transitionsBuilder: (context,
+                                                animation,
+                                                secondaryAnimation,
+                                                child) {
+                                              animation = CurvedAnimation(
+                                                  parent: animation,
+                                                  curve: Curves.easeInOut);
+                                              return SlideTransition(
+                                                position: Tween(
+                                                        begin: Offset(0.0, 1.0),
+                                                        end: Offset(0.0, 0.0))
+                                                    .animate(animation),
+                                                child: child,
+                                              );
+                                            },
+                                            pageBuilder: (context, animation,
+                                                animationTime) {
+                                              return MisMaterias();
+                                            }));
+                                  },
+                                  child: MainButton(
+                                      'Mis\nMaterias',
+                                      'assets/images/materias.png',
+                                      Color(0xFFF7F7F7),
+                                      '/mismaterias'),
+                                ),
+                                InkWell(
+                                  borderRadius: BorderRadius.circular(26),
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        PageRouteBuilder(
+                                            transitionDuration:
+                                                Duration(milliseconds: 100),
+                                            transitionsBuilder: (context,
+                                                animation,
+                                                secondaryAnimation,
+                                                child) {
+                                              animation = CurvedAnimation(
+                                                  parent: animation,
+                                                  curve: Curves.easeInOut);
+                                              return SlideTransition(
+                                                position: Tween(
+                                                        begin: Offset(0.0, 1.0),
+                                                        end: Offset(0.0, 0.0))
+                                                    .animate(animation),
+                                                child: child,
+                                              );
+                                            },
+                                            pageBuilder: (context, animation,
+                                                animationTime) {
+                                              return MisNotas();
+                                            }));
+                                  },
+                                  child: MainButton(
+                                      'Mis\nNotas',
+                                      'assets/images/notas.png',
+                                      Color(0xFFFFDCDC),
+                                      '/misnotas'),
+                                ),
+                                InkWell(
+                                  borderRadius: BorderRadius.circular(26),
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        PageRouteBuilder(
+                                            transitionDuration:
+                                                Duration(milliseconds: 300),
+                                            transitionsBuilder: (context,
+                                                animation,
+                                                secondaryAnimation,
+                                                child) {
+                                              animation = CurvedAnimation(
+                                                  parent: animation,
+                                                  curve: Curves.easeInOut);
+                                              return SlideTransition(
+                                                position: Tween(
+                                                        begin: Offset(0.0, 1.0),
+                                                        end: Offset(0.0, 0.0))
+                                                    .animate(animation),
+                                                child: child,
+                                              );
+                                            },
+                                            pageBuilder: (context, animation,
+                                                animationTime) {
+                                              return MisEstadisticas();
+                                            }));
+                                  },
+                                  child: MainButton(
+                                      'Mis\nEstadísticas',
+                                      'assets/images/estadisticas.png',
+                                      Color(0xFFF5DCFF),
+                                      '/estadisticas'),
+                                )
                               ],
                             ),
                           ),

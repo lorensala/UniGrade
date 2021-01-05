@@ -1,6 +1,7 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lottie/lottie.dart';
 
 import 'package:mis_notas/entities/student.dart';
 
@@ -84,7 +85,9 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
                     }), builder: (context, snapshot) {
                       switch (snapshot.connectionState) {
                         case ConnectionState.waiting:
-                          return Center(child: CircularProgressIndicator());
+                          return Center(
+                              child:
+                                  Lottie.asset('assets/lottie/loading.json'));
 
                         default:
                           if (snapshot.hasError)

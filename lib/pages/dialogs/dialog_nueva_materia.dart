@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
@@ -118,7 +119,9 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
                         builder: (context, snapshot) {
                           switch (snapshot.connectionState) {
                             case ConnectionState.waiting:
-                              return Center(child: CircularProgressIndicator());
+                              return Center(
+                                  child: Lottie.asset(
+                                      'assets/lottie/loading.json'));
 
                             default:
                               return DropdownButtonHideUnderline(

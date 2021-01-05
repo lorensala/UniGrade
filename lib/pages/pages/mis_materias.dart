@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mis_notas/animation/FadeAnimation.dart';
 import 'package:mis_notas/data/subject_dao.dart';
 
 import 'package:mis_notas/entities/student.dart';
@@ -262,28 +263,42 @@ class _MisMateriasState extends State<MisMaterias> {
                       if (snapshot.hasError) return Text('error');
                       if (!snapshot.data.isEmpty) {
                         return Expanded(
-                            child: ListView.builder(
-                          itemCount: snapshot.data.length,
-                          itemBuilder: (context, index) {
-                            return SubjectCard(snapshot.data[index]);
-                          },
-                          physics: BouncingScrollPhysics(),
+                            child: FadeAnimation(
+                          delay: 0.1,
+                          child: ListView.builder(
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (context, index) {
+                              return SubjectCard(snapshot.data[index]);
+                            },
+                            physics: BouncingScrollPhysics(),
+                          ),
                         ));
                       } else {
-                        return Padding(
-                          padding: EdgeInsets.all(24),
-                          child: Center(
-                            child: Text(
-                              'No se encontraron materias en esta categoría.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: 'Avenir LT Std',
-                                fontSize: 18,
-                                color: Colors.black45,
-                                fontWeight: FontWeight.w800,
+                        return Column(
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(top: 20),
+                              child: Image.asset(
+                                'assets/images/not_found.png',
+                                scale: 4,
                               ),
                             ),
-                          ),
+                            Padding(
+                              padding: EdgeInsets.all(24),
+                              child: Center(
+                                child: Text(
+                                  'No se encontraron materias en esta categoría.',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontFamily: 'Avenir LT Std',
+                                    fontSize: 18,
+                                    color: Colors.black45,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         );
                       }
                   }

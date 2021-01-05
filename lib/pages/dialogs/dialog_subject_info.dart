@@ -203,6 +203,7 @@ class DialogSubjectInfo extends StatelessWidget {
 
     if (_list[0] == '[]') return 'No posee';
     if (_list[0] == '[TODAS]') return 'TODAS';
+    if (_list.length == 1) return _list[0].substring(1, _list[0].length - 1);
 
     _list.forEach((element) {
       if (element.startsWith('['))

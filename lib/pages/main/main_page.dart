@@ -210,7 +210,7 @@ class _MainPageState extends State<MainPage> {
                                         context,
                                         PageRouteBuilder(
                                             transitionDuration:
-                                                Duration(milliseconds: 100),
+                                                Duration(milliseconds: 250),
                                             transitionsBuilder: (context,
                                                 animation,
                                                 secondaryAnimation,
@@ -244,7 +244,7 @@ class _MainPageState extends State<MainPage> {
                                         context,
                                         PageRouteBuilder(
                                             transitionDuration:
-                                                Duration(milliseconds: 100),
+                                                Duration(milliseconds: 250),
                                             transitionsBuilder: (context,
                                                 animation,
                                                 secondaryAnimation,
@@ -278,7 +278,7 @@ class _MainPageState extends State<MainPage> {
                                         context,
                                         PageRouteBuilder(
                                             transitionDuration:
-                                                Duration(milliseconds: 300),
+                                                Duration(milliseconds: 250),
                                             transitionsBuilder: (context,
                                                 animation,
                                                 secondaryAnimation,

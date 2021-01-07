@@ -26,18 +26,19 @@ dependencies:
   argon_buttons_flutter: ^1.0.6
   cloud_firestore: ^0.14.4
   cool_alert: ^1.0.3
+  device_preview: ^0.4.0
   firebase_auth: ^0.18.4+1
   firebase_core: ^0.5.3
   flutter_launcher_icons: ^0.8.0
-  flutter_svg: ^0.17.4
+  flutter_svg: ^0.18.0
   google_sign_in: ^4.5.6
   http: ^0.12.2
   lottie: ^0.7.0+1
   provider: ^4.3.2
   pull_to_refresh: ^1.6.3
   simple_animations: ^2.2.3
-  syncfusion_flutter_charts: ^18.3.53
-  syncfusion_flutter_gauges: ^18.3.53
+  sizer: ^1.1.8
+  syncfusion_flutter_gauges: ^18.4.33
 
 dev_dependencies:
   flutter_test:

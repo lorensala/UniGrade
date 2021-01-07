@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:mis_notas/data/subject_dao.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
 
@@ -79,7 +80,13 @@ class StatisticsService extends ChangeNotifier {
   Future<int> getSubjectsLeft(
       Student _student, List<Subject> _list, int _year) async {
     int _countTotal = 0;
-    int _countPassed = await getSubjectsPassed(_student, _list, _year);
+    int _countPassed = 0;
+
+    if (_year != -1) {
+      SubjectDao _subjectDao = new SubjectDao();
+      List<Subject> _listAll = await _subjectDao.getAllSubjectsByUser(_student);
+      _countPassed = await getSubjectsCount(_student, _listAll, _year);
+    }
 
     if (_year == -1) {
       _countTotal = _list.length;
@@ -89,7 +96,10 @@ class StatisticsService extends ChangeNotifier {
       });
     }
 
-    return _countTotal - _countPassed;
+    if (_year != -1)
+      return -(_countTotal - _countPassed);
+    else
+      return (_countTotal - _countPassed);
   }
 
   Future<int> getSubjectsPassed(

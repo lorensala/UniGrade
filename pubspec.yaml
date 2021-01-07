@@ -31,6 +31,7 @@ dependencies:
   flutter_launcher_icons: ^0.8.0
   flutter_svg: ^0.17.4
   google_sign_in: ^4.5.6
+  http: ^0.12.2
   lottie: ^0.7.0+1
   provider: ^4.3.2
   pull_to_refresh: ^1.6.3
@@ -46,9 +47,6 @@ flutter_icons:
   image_path: 'assets\icons\uni_grade.png'
   android: true
   ios: true
-
-  
-  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

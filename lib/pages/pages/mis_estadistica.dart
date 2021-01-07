@@ -409,7 +409,7 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                                             0,
                                             _selectedYear),
                                         StatisticsContainer(
-                                            snapshot.data[7].toString(),
+                                            snapshot.data[2].toString(),
                                             'Materias\nRestantes',
                                             0,
                                             _selectedYear),

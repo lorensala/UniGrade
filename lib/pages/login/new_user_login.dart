@@ -14,6 +14,7 @@ class NewUserLogin extends StatefulWidget {
 
 class _NewUserLoginState extends State<NewUserLogin> {
   var _studentDao = StudentDao();
+  bool isPressed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -137,24 +138,31 @@ class _NewUserLoginState extends State<NewUserLogin> {
                     Consumer<Student>(
                       builder: (context, _student, child) => InkWell(
                         borderRadius: BorderRadius.circular(26),
-                        onTap: () async {
-                          User _user = FirebaseAuth.instance.currentUser;
-                          String _userId = _user.uid;
+                        onTap: isPressed
+                            ? null
+                            : () async {
+                                setState(() {
+                                  isPressed = true;
+                                });
+                                User _user = FirebaseAuth.instance.currentUser;
+                                String _userId = _user.uid;
 
-                          Student _student = Student(
-                              _user.displayName,
-                              _user.photoURL,
-                              [],
-                              _userId,
-                              University([Career('Ingeniería en Sistemas')],
-                                  'UTN', 'UTN-FRC'),
-                              [''],
-                              '');
+                                Student _student = Student(
+                                    _user.displayName,
+                                    _user.photoURL,
+                                    [],
+                                    _userId,
+                                    University(
+                                        [Career('Ingeniería en Sistemas')],
+                                        'UTN',
+                                        'UTN-FRC'),
+                                    [''],
+                                    '');
 
-                          await _studentDao.addNewStudent(_student);
+                                await _studentDao.addNewStudent(_student);
 
-                          Navigator.of(context).pushNamed('/homepage');
-                        },
+                                Navigator.of(context).pushNamed('/homepage');
+                              },
                         child: Container(
                           width: 129.0,
                           height: 37.0,

@@ -186,7 +186,9 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
                       onTap: () async {
                         if (_selectedSubject != null &&
                             _selectedType != null &&
-                            _nota.text != '') {
+                            _nota.text != '' &&
+                            1 < int.parse(_nota.text) &&
+                            int.parse(_nota.text) < 11) {
                           setState(() {
                             _hasSelectedData = true;
                           });

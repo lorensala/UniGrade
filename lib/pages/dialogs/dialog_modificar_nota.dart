@@ -349,7 +349,9 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
                         if (_selectedSubject != null &&
                             _selectedType != null &&
                             _nota.text != '' &&
-                            _selectedNota != null) {
+                            _selectedNota != null &&
+                            1 < int.parse(_nota.text) &&
+                            int.parse(_nota.text) < 11) {
                           setState(() {
                             _hasSelectedData = true;
                           });

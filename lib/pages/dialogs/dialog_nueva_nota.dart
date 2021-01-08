@@ -26,7 +26,7 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
 
   TextEditingController _nota = new TextEditingController();
 
-  SubjectDao _subjectDao = new SubjectDao();
+  SubjectsDao _subjectDao = new SubjectsDao();
 
   var _types = ['Práctico', 'Teórico', 'TP', 'Final'];
 

@@ -42,19 +42,50 @@ class Sesion {
     nuevaSesion();
   }
 
-  void nuevaSesion() async {
-    cookieSesion = "pag=2; rec=0; usr=#{@legajo}%40#{@dominio}.frc.utn.edu.ar";
+  void getCookie() async {
+    var _url = 'https://www.frc.utn.edu.ar/funciones/sesion/iniciarSesion.frc';
 
-    var url = 'https://www.frc.utn.edu.ar/logon.frc';
+    var _request = http.Request('POST', Uri.parse(_url))
+      ..followRedirects = false;
 
-    var response = await http.post(
-      url,
-      body: {
-        'txtUsuario': legajo,
-        'txtDominios': dominio,
-        'pwdClave': password
-      },
-    );
-    print({response.statusCode});
+    var _data = {
+      'page': 'login',
+      'pwdClave': password,
+      'redir': '/logon.frc',
+      't': '79845687',
+      'txtDominios': dominio,
+      'txtUsuario': legajo,
+      'userid': 'userid'
+    };
+
+    _request.bodyFields = _data;
+
+    await _request.send().then((http.StreamedResponse res) {
+      cookieSesion = res.headers['set-cookie'];
+    });
+
+    print(cookieSesion);
+  }
+
+  void getAcademico() async {
+    var academico3 = await http
+        .get('https://a4.frc.utn.edu.ar/', headers: {'Cookie': cookieSesion});
+
+    print({academico3.statusCode});
+    print({academico3.body});
+
+    this.academico3 = academico3.body;
+  }
+
+  bool nuevaSesion() {
+    try {
+      getCookie();
+      getAcademico();
+
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
   }
 }

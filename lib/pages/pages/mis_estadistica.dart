@@ -29,7 +29,7 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
   Future<List> getYearStatisticsData(Student _student, int _year) async {
     List _statisticsList = new List();
 
-    var _subjectDao = SubjectDao();
+    var _subjectDao = SubjectsDao();
     var _statisticsService = StatisticsService();
 
     List<Subject> _list =
@@ -61,7 +61,7 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
   Future<List<Subject>> getSubjectsData(Student _student) async {
     List<Subject> _statisticsList = new List<Subject>();
     List<Subject> _filteredList = new List<Subject>();
-    var _subjectDao = SubjectDao();
+    var _subjectDao = SubjectsDao();
     var _statisticsService = StatisticsService();
 
     List<Subject> _list =
@@ -93,30 +93,17 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
   @override
   Widget build(BuildContext context) {
     Student _student = Provider.of<Student>(context);
-    Statistics _statistics = Provider.of<Statistics>(context, listen: false);
 
     //TODO: Fijarse que la cantidad de materias es dinamica. Hardcoded
 
-    int percentage = ((_statistics.getPassed() * 100 / 35)).round();
+    int percentage =
+        ((_student.getStatistics().getPassed() * 100 / 35)).round();
 
     return Scaffold(
         backgroundColor: Colors.white,
-        body: SmartRefresher(
-          header: WaterDropHeader(
-            waterDropColor: Color(0xFF66AAFF),
-          ),
-          controller: _refreshController,
-          onRefresh: () {
-            setState(() {});
-            _refreshController.refreshCompleted();
-          },
-          onLoading: () {
-            setState(() {});
-            _refreshController.loadComplete();
-          },
+        body: SafeArea(
           child: SingleChildScrollView(
-            child: SafeArea(
-                child: Padding(
+            child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,9 +175,7 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                             ),
                             pointers: <GaugePointer>[
                               RangePointer(
-                                  gradient: SweepGradient(
-                                      colors: [Colors.blue, Colors.blue[200]],
-                                      stops: <double>[0.25, 0.60]),
+                                  color: Colors.blue[200],
                                   value: double.parse(percentage.toString()),
                                   cornerStyle: CornerStyle.bothFlat,
                                   width: 0.14,
@@ -259,31 +244,49 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                           children: <Widget>[
                             StatisticsContainer(percentage.toString() + '%',
                                 'Carrera Completada', 0, 0),
-                            StatisticsContainer(_statistics.getAvg().toString(),
-                                'Promedio\nsin aplazos', 0, 0),
                             StatisticsContainer(
-                                _statistics.getRealAvg().toString(),
+                                _student.getStatistics().getAvg().toString(),
+                                'Promedio\nsin aplazos',
+                                0,
+                                0),
+                            StatisticsContainer(
+                                _student
+                                    .getStatistics()
+                                    .getRealAvg()
+                                    .toString(),
                                 'Promedio\ncon aplazos',
                                 0,
                                 0),
                             StatisticsContainer(
-                                _statistics.getPassed().toString(),
+                                _student.getStatistics().getPassed().toString(),
                                 'Materias\nAprobadas',
                                 0,
                                 0),
                             StatisticsContainer(
-                                _statistics.getLeft().toString(),
+                                _student.getStatistics().getLeft().toString(),
                                 'Materias\nRestantes',
                                 0,
                                 0),
-                            StatisticsContainer(_statistics.getReg().toString(),
-                                'Regulares\n', 0, 0),
-                            StatisticsContainer(_statistics.getPP().toString(),
-                                'Promoción\nPráctica', 0, 0),
-                            StatisticsContainer(_statistics.getPT().toString(),
-                                'Promoción\nTeórica', 0, 0),
-                            StatisticsContainer(_statistics.getAP().toString(),
-                                'Aprobación\nDirecta', 0, 0),
+                            StatisticsContainer(
+                                _student.getStatistics().getReg().toString(),
+                                'Regulares\n',
+                                0,
+                                0),
+                            StatisticsContainer(
+                                _student.getStatistics().getPP().toString(),
+                                'Promoción\nPráctica',
+                                0,
+                                0),
+                            StatisticsContainer(
+                                _student.getStatistics().getPT().toString(),
+                                'Promoción\nTeórica',
+                                0,
+                                0),
+                            StatisticsContainer(
+                                _student.getStatistics().getAP().toString(),
+                                'Aprobación\nDirecta',
+                                0,
+                                0),
                             //
                           ]),
                     ),
@@ -509,7 +512,7 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                       }),
                 ],
               ),
-            )),
+            ),
           ),
         ));
   }

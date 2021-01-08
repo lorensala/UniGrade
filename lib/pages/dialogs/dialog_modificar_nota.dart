@@ -29,7 +29,7 @@ class _DialogModificarNotaState extends State<DialogModificarNota> {
 
   TextEditingController _nota = new TextEditingController();
 
-  SubjectDao _subjectDao = new SubjectDao();
+  SubjectsDao _subjectDao = new SubjectsDao();
   List<Subject> _auxNotas = new List<Subject>();
 
   var _types = ['Práctico', 'Teórico', 'TP', 'Final'];

@@ -5,7 +5,7 @@ import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
 import 'package:mis_notas/data/datamanager.dart';
 
-class SubjectDao {
+class SubjectsDao {
   final db = DataManager();
 
   Future<List<Subject>> getAllSubjectsWithCondition(Student student) async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
+import 'package:sizer/sizer.dart';
 
 class ProfileStat extends StatelessWidget {
   final double _percentage;
@@ -14,8 +15,8 @@ class ProfileStat extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         SizedBox(
-          height: 170,
-          width: 170,
+          height: MediaQuery.of(context).size.width / 3,
+          width: MediaQuery.of(context).size.width / 3,
           child: Container(
             child: SfRadialGauge(
               axes: <RadialAxis>[
@@ -60,8 +61,8 @@ class ProfileStat extends StatelessWidget {
                         positionFactor: 0.08,
                         angle: 90,
                         widget: Container(
-                          width: 96.0,
-                          height: 96.0,
+                          width: 85.0,
+                          height: 85.0,
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               image: AssetImage(_image),
@@ -80,33 +81,36 @@ class ProfileStat extends StatelessWidget {
             ),
           ),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              width: 200,
-              child: Text(
-                _name,
-                style: TextStyle(
-                  fontFamily: 'Avenir LT Std',
-                  fontSize: 25,
-                  color: const Color(0xff7c7979),
-                  fontWeight: FontWeight.w800,
+        Flexible(
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  child: Text(
+                    _name,
+                    style: TextStyle(
+                      fontFamily: 'Avenir LT Std',
+                      fontSize: 25,
+                      color: const Color(0xff7c7979),
+                      fontWeight: FontWeight.w800,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
                 ),
-                textAlign: TextAlign.left,
-              ),
+                Text(
+                  int.parse(_percentage.round().toString()).toString() + '%',
+                  style: TextStyle(
+                    fontFamily: 'Avenir LT Std',
+                    fontSize: 45,
+                    color: const Color(0xff7c7979),
+                    fontWeight: FontWeight.w800,
+                  ),
+                  textAlign: TextAlign.left,
+                )
+              ],
             ),
-            Text(
-              int.parse(_percentage.round().toString()).toString() + '%',
-              style: TextStyle(
-                fontFamily: 'Avenir LT Std',
-                fontSize: 45,
-                color: const Color(0xff7c7979),
-                fontWeight: FontWeight.w800,
-              ),
-              textAlign: TextAlign.left,
-            )
-          ],
+          ),
         )
       ],
     );

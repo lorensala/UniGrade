@@ -5,6 +5,7 @@ import 'package:mis_notas/entities/statistics.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/widgets/components/profile_stats.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 class ProfilePage extends StatelessWidget {
   @override
@@ -18,6 +19,7 @@ class ProfilePage extends StatelessWidget {
         children: <Widget>[
           SizedBox(
             height: 20,
+            width: MediaQuery.of(context).size.width,
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,

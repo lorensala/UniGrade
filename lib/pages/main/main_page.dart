@@ -204,6 +204,8 @@ class _MainPageState extends State<MainPage> {
                               scrollDirection: Axis.horizontal,
                               children: <Widget>[
                                 InkWell(
+                                  highlightColor: Colors.transparent,
+                                  splashColor: Colors.transparent,
                                   borderRadius: BorderRadius.circular(26),
                                   onTap: () {
                                     Navigator.push(
@@ -238,6 +240,8 @@ class _MainPageState extends State<MainPage> {
                                       '/mismaterias'),
                                 ),
                                 InkWell(
+                                  highlightColor: Colors.transparent,
+                                  splashColor: Colors.transparent,
                                   borderRadius: BorderRadius.circular(26),
                                   onTap: () {
                                     Navigator.push(
@@ -272,6 +276,8 @@ class _MainPageState extends State<MainPage> {
                                       '/misnotas'),
                                 ),
                                 InkWell(
+                                  highlightColor: Colors.transparent,
+                                  splashColor: Colors.transparent,
                                   borderRadius: BorderRadius.circular(26),
                                   onTap: () {
                                     Navigator.push(

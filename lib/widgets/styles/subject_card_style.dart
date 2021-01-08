@@ -14,7 +14,7 @@ class SubjectCard extends StatelessWidget {
    */
 
   final Subject _subject;
-  final SubjectDao _subjectDao = new SubjectDao();
+  final SubjectsDao _subjectDao = new SubjectsDao();
 
   SubjectCard(this._subject);
 

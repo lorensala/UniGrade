@@ -22,7 +22,7 @@ class _DialogNuevaMateriaState extends State<DialogNuevaMateria> {
   bool _hasSelectedData = true;
   bool _habilitarRecursado = false;
 
-  SubjectDao _subjectDao = SubjectDao();
+  SubjectsDao _subjectDao = SubjectsDao();
 
   Subject _selectedSubject;
 

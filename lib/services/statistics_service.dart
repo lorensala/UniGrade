@@ -83,7 +83,7 @@ class StatisticsService extends ChangeNotifier {
     int _countPassed = 0;
 
     if (_year != -1) {
-      SubjectDao _subjectDao = new SubjectDao();
+      SubjectsDao _subjectDao = new SubjectsDao();
       List<Subject> _listAll = await _subjectDao.getAllSubjectsByUser(_student);
       _countPassed = await getSubjectsCount(_student, _listAll, _year);
     }

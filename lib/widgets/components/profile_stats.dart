@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
-import 'package:sizer/sizer.dart';
 
 class ProfileStat extends StatelessWidget {
   final double _percentage;

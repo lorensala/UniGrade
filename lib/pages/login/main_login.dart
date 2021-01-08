@@ -54,6 +54,8 @@ class _MainLoginState extends State<MainLogin> {
                       highlightColor: Colors.transparent,
                       splashColor: Colors.transparent,
                       onTap: () async {
+                        /* Sesion sesion =
+                            new Sesion('80215', 'sistemas', 'Lorenzo90'); */
                         _isPressed = true;
                         UserCredential _userCredentials =
                             await signInWithGoogle();

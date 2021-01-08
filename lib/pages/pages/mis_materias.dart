@@ -20,7 +20,7 @@ class _MisMateriasState extends State<MisMaterias> {
   String _condition = 'Todas';
 
   Future<List<Subject>> getData(Student _student, String condition) async {
-    var _subjectDao = new SubjectDao();
+    var _subjectDao = new SubjectsDao();
 
     if (condition == 'Todas')
       return await _subjectDao.getAllSubjectsByUserOrderByYear(_student);

@@ -37,7 +37,6 @@ dependencies:
   provider: ^4.3.2
   pull_to_refresh: ^1.6.3
   simple_animations: ^2.2.3
-  sizer: ^1.1.8
   syncfusion_flutter_gauges: ^18.4.33
 
 dev_dependencies:

@@ -1,15 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mis_notas/animation/FadeAnimation.dart';
 
 import 'package:mis_notas/data/student_dao.dart';
+import 'package:mis_notas/data/subject_dao.dart';
 import 'package:mis_notas/entities/career.dart';
+import 'package:mis_notas/entities/statistics.dart';
 
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
@@ -17,6 +15,7 @@ import 'package:mis_notas/entities/university.dart';
 import 'package:mis_notas/pages/dialogs/new_user_dialog.dart';
 import 'package:mis_notas/pages/main/options_page.dart';
 import 'package:mis_notas/pages/main/profile_page.dart';
+import 'package:mis_notas/services/statistics_service.dart';
 
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -35,6 +34,7 @@ class _HomePageState extends State<HomePage> {
   bool isLoading = true;
   var _studentDao = new StudentDao();
   int page = 0;
+  final controller = PageController(initialPage: 0);
   List<Subject> _listSubj = [];
   var isPressedHome = true;
   var isPressedProfile = false;
@@ -49,29 +49,77 @@ class _HomePageState extends State<HomePage> {
     'info': ['assets/images/info.png']
   };
 
-  Future<List> getDataStudent() async {
+  Future<Student> getDataStudent() async {
     User _user = FirebaseAuth.instance.currentUser;
     String _userId = _user.uid;
+    var _studentDocRef;
+    var _careerDocRef;
 
-    var _studentDocRef = await _studentDao.getStudentsDocRef(_userId);
-    var _careerDocRef = await _studentDao.getCarrerDocRefs(_studentDocRef);
+    Student _student = new Student(
+        _user.displayName,
+        _user.photoURL,
+        [],
+        _userId,
+        University([Career('Ingeniería en Sistemas')], 'UTN', 'UTN-FRC'),
+        [''],
+        '',
+        null);
 
-    List _list = [
-      _user.displayName,
-      _user.photoURL,
-      [],
-      _userId,
-      University([Career('Ingeniería en Sistemas')], 'UTN', 'UTN-FRC'),
-      [_careerDocRef],
-      _studentDocRef
-    ];
+    await _studentDao.getStudentsDocRef(_userId).then((_docRef) {
+      _student.studentDocRef = _docRef;
+      _studentDocRef = _docRef;
+    });
 
-    return _list;
+    await _studentDao.getCarrerDocRefs(_studentDocRef).then((_docRef) {
+      _student.carrerDocRefs = [_docRef];
+      _careerDocRef = _docRef;
+    });
+
+    return _student;
+  }
+
+  Future<List> getDataStatistics(Student _student) async {
+    List _dataList = new List();
+
+    StatisticsService _statisticsService = new StatisticsService();
+    SubjectsDao _subjectDao = SubjectsDao();
+
+    List<Subject> _list = await _subjectDao.getAllSubjectsByUser(_student);
+    List<Subject> _listCon =
+        await _subjectDao.getAllSubjectsWithCondition(_student);
+
+    _dataList.add(await _statisticsService.getAvgNf(_student, _list, -1));
+    _dataList
+        .add(await _statisticsService.getSubjectsLeft(_student, _list, -1));
+    _dataList
+        .add(await _statisticsService.getSubjectsPassed(_student, _list, -1));
+    _dataList.add(await _statisticsService.getSubjectsCondition(
+        _student, _list, -1, 'Promoción Práctica'));
+    _dataList.add(await _statisticsService.getSubjectsCondition(
+        _student, _list, -1, 'Promoción Teórica'));
+    _dataList.add(await _statisticsService.getSubjectsCondition(
+        _student, _list, -1, 'Aprobación Directa'));
+    _dataList.add(await _statisticsService.getSubjectsCondition(
+        _student, _list, -1, 'Regular'));
+    _dataList.add(
+        await _statisticsService.getAvgNfWithBadGrades(_student, _list, -1));
+    _dataList.add(_statisticsService.getProfileStats(_student, _listCon));
+
+    return _dataList;
+  }
+
+  Future<List> getData() async {
+    Student _student = await getDataStudent();
+
+    List _secondList = await getDataStatistics(_student);
+
+    return [_student, _secondList];
   }
 
   @override
   Widget build(BuildContext context) {
     Student _student = Provider.of<Student>(context, listen: false);
+
     ValueNotifier<bool> _isNew = Provider.of<ValueNotifier<bool>>(context);
     if (_isNew.value) {
       SchedulerBinding.instance
@@ -81,92 +129,58 @@ class _HomePageState extends State<HomePage> {
     return WillPopScope(
         // ignore: missing_return
         onWillPop: () async {
-          CoolAlert.show(
-            onConfirmBtnTap: () {
-              SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-            },
-            confirmBtnColor: Color(0xFF66AAFF),
-            backgroundColor: Colors.white,
-            context: context,
-            type: CoolAlertType.confirm,
-            title: "¿Estas seguro que quieres salir?",
-            confirmBtnText: "Si",
-            cancelBtnText: "No",
-          );
+          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
         },
         child: Scaffold(
           backgroundColor: Colors.white,
           body: SafeArea(
-            child: SmartRefresher(
-              header: WaterDropHeader(
-                complete: Text(''),
-                waterDropColor: Color(0xFF66AAFF),
-              ),
-              controller: _refreshController,
-              onRefresh: () {
-                setState(() {});
-                _refreshController.refreshCompleted();
-              },
-              onLoading: () {
-                setState(() {});
-                _refreshController.loadComplete();
-              },
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            //Image.asset('assets/images/hamburger.png'),
-                            InkWell(
-                                onTap: () {
-                                  showNewUserDialog(context);
-                                },
-                                child: Image.asset('assets/images/info.png')),
-                          ],
-                        ),
-                      ),
-                      FutureBuilder(
-                          future: getDataStudent(),
-                          builder: (context, snapshot) {
-                            switch (snapshot.connectionState) {
-                              case (ConnectionState.waiting):
-                                return Center(
-                                  child: Container(
-                                      height:
-                                          MediaQuery.of(context).size.height /
-                                              2,
-                                      child: Center(
-                                          child: Lottie.asset(
-                                              'assets/lottie/clock.json',
-                                              width: 300))),
-                                );
-                              default:
-                                if (snapshot.hasError) return Text('error');
+            child: FutureBuilder(
+                future: getData(),
+                builder: (context, AsyncSnapshot<List> snapshot) {
+                  switch (snapshot.connectionState) {
+                    case (ConnectionState.waiting):
+                      return Center(
+                        child: Container(
+                            height: MediaQuery.of(context).size.height / 2,
+                            child: Center(
+                                child: Lottie.asset('assets/lottie/clock.json',
+                                    width: 300))),
+                      );
+                    default:
+                      //TODO: Que devuelva un mensaje mas lindo.
+                      if (snapshot.hasError) return Text('Error fetching data');
 
-                                _student.fullname = snapshot.data[0];
-                                _student.profilePic = snapshot.data[1];
-                                _student.subjects = _listSubj;
-                                _student.uid = snapshot.data[3];
-                                _student.university = snapshot.data[4];
-                                _student.carrerDocRefs = snapshot.data[5];
-                                _student.studentDocRef = snapshot.data[6];
+                      _student.fullname = snapshot.data[0].getFullname();
+                      _student.profilePic = snapshot.data[0].getProfilePic();
+                      _student.subjects = _listSubj;
+                      _student.uid = snapshot.data[0].getId();
+                      _student.university = snapshot.data[0].getUniversity();
+                      _student.carrerDocRefs =
+                          snapshot.data[0].getCareerDocRefs();
+                      _student.studentDocRef =
+                          snapshot.data[0].getStudentDocRef();
 
-                                _studentDao.updateStudent(_student);
+                      _studentDao.updateStudent(_student);
 
-                                if (page == 0) return MainPage();
-                                return ProfilePage();
-                            }
-                          }),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+                      Statistics _statistics = new Statistics(
+                          snapshot.data[1][0],
+                          snapshot.data[1][7],
+                          snapshot.data[1][1],
+                          snapshot.data[1][2],
+                          snapshot.data[1][3],
+                          snapshot.data[1][4],
+                          snapshot.data[1][5],
+                          snapshot.data[1][6],
+                          snapshot.data[1][8]);
+
+                      _student.statistics = _statistics;
+
+                      return PageView(controller: controller, children: [
+                        MainPage(),
+                        ProfilePage(),
+                      ]);
+                  }
+                }),
           ),
           bottomNavigationBar: BottomAppBar(
             elevation: 0,
@@ -256,21 +270,21 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
-  showNewUserDialog(BuildContext context) {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (BuildContext context) {
-          return NewUserDialog();
-        });
-  }
-
   showSettings(BuildContext context) {
     showDialog(
         barrierDismissible: true,
         context: context,
         builder: (BuildContext context) {
           return OptionsDialog();
+        });
+  }
+
+  showNewUserDialog(BuildContext context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return NewUserDialog();
         });
   }
 }

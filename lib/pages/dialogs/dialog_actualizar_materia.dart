@@ -23,7 +23,7 @@ class _DialogActualizarMateriaState extends State<DialogActualizarMateria> {
   bool _hasSelectedData = true;
   bool _isEmpty = false;
 
-  SubjectDao _subjectDao = SubjectDao();
+  SubjectsDao _subjectDao = SubjectsDao();
 
   List<String> _conditions = [
     'Regular',

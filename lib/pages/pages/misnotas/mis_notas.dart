@@ -6,6 +6,7 @@ import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
 
 import 'package:mis_notas/data/subject_dao.dart';
+import 'package:mis_notas/pages/pages/misnotas/notas_info.dart';
 
 import 'package:mis_notas/widgets/styles/grade_card_style.dart';
 import 'package:provider/provider.dart';
@@ -24,10 +25,13 @@ class _MisNotasState extends State<MisNotas> {
     if (condition == 'Todas')
       return await _subjectDao.getAllSubjectsByUserOrderByYear(_student);
     else if (condition == 'Electiva')
-      return await _subjectDao.getAllSubjectsByUserCondition(
-          _student, condition);
+      return await _subjectDao
+          .getAllElectiveSubjectsByUserOrderByYear(_student);
     else if (condition == 'Aprobada')
       return await _subjectDao.getAllSubjectsByPassed(_student);
+    else if (int.tryParse(condition) != null)
+      return await _subjectDao.getAllSubjectsYear(
+          _student, int.parse(condition));
     else
       return await _subjectDao.getAllSubjectsByUserCondition(
           _student, condition);
@@ -59,8 +63,6 @@ class _MisNotasState extends State<MisNotas> {
                       ],
                     ),
                   ),
-
-                  // Mis Notas y boton ayuda
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
                     child: Row(
@@ -91,7 +93,6 @@ class _MisNotasState extends State<MisNotas> {
                       allowDrawingOutsideViewBox: true,
                     ),
                   ),
-                  // Filtros
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24, 20, 24, 10),
                     child: Container(
@@ -243,6 +244,71 @@ class _MisNotasState extends State<MisNotas> {
                                     ),
                                   ),
                                 ),
+                                DropdownMenuItem<String>(
+                                  value: '1',
+                                  child: Text(
+                                    '1er Año',
+                                    style: TextStyle(
+                                      fontFamily: 'Avenir LT Std',
+                                      fontSize: 18,
+                                      color: const Color(0xff000000),
+                                      fontWeight: FontWeight.w500,
+                                      height: 0.9666666666666667,
+                                    ),
+                                  ),
+                                ),
+                                DropdownMenuItem<String>(
+                                  value: '2',
+                                  child: Text(
+                                    '2do Año',
+                                    style: TextStyle(
+                                      fontFamily: 'Avenir LT Std',
+                                      fontSize: 18,
+                                      color: const Color(0xff000000),
+                                      fontWeight: FontWeight.w500,
+                                      height: 0.9666666666666667,
+                                    ),
+                                  ),
+                                ),
+                                DropdownMenuItem<String>(
+                                  value: '3',
+                                  child: Text(
+                                    '3er Año',
+                                    style: TextStyle(
+                                      fontFamily: 'Avenir LT Std',
+                                      fontSize: 18,
+                                      color: const Color(0xff000000),
+                                      fontWeight: FontWeight.w500,
+                                      height: 0.9666666666666667,
+                                    ),
+                                  ),
+                                ),
+                                DropdownMenuItem<String>(
+                                  value: '4',
+                                  child: Text(
+                                    '4to Año',
+                                    style: TextStyle(
+                                      fontFamily: 'Avenir LT Std',
+                                      fontSize: 18,
+                                      color: const Color(0xff000000),
+                                      fontWeight: FontWeight.w500,
+                                      height: 0.9666666666666667,
+                                    ),
+                                  ),
+                                ),
+                                DropdownMenuItem<String>(
+                                  value: '5',
+                                  child: Text(
+                                    '5to Año',
+                                    style: TextStyle(
+                                      fontFamily: 'Avenir LT Std',
+                                      fontSize: 18,
+                                      color: const Color(0xff000000),
+                                      fontWeight: FontWeight.w500,
+                                      height: 0.9666666666666667,
+                                    ),
+                                  ),
+                                ),
                               ]),
                         ),
                       ),
@@ -301,7 +367,7 @@ class _MisNotasState extends State<MisNotas> {
                               );
                             }
                         }
-                      })
+                      }),
                 ],
               )),
         ));

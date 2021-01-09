@@ -169,9 +169,14 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
                         color: const Color(0xfff7f7f7),
                       ),
                       child: TextField(
+                        style: TextStyle(
+                          fontFamily: 'Avenir LT Std',
+                          fontSize: 16,
+                          color: const Color(0xff000000),
+                        ),
                         controller: _nota,
                         inputFormatters: [
-                          WhitelistingTextInputFormatter(
+                          FilteringTextInputFormatter.allow(
                               RegExp(r'^(?:[1-9]|0[1-9]|10)$')),
                           LengthLimitingTextInputFormatter(2),
                         ],

@@ -772,4 +772,42 @@ class SubjectsDao {
 
     return _map;
   }
+
+  Future<List<Subject>> getAllSubjectsYear(Student student, int year) async {
+    List<Subject> list = List<Subject>();
+    CollectionReference collReference;
+
+    try {
+      collReference = FirebaseFirestore.instance
+          .collection('student')
+          .doc(student.getStudentDocRef())
+          .collection('career_student')
+          .doc(student.getCareerDocRefs()[0])
+          .collection('subject_student');
+
+      Future<QuerySnapshot> docs = FirebaseFirestore.instance
+          .collection(collReference.path)
+          .where('year', isEqualTo: year)
+          .orderBy('name')
+          .get();
+
+      await docs.then((value) {
+        value.docs.forEach((element) {
+          Map<String, dynamic> sub = element.data();
+          if (sub != null) {
+            var subject = mapper(sub);
+            list.add(subject);
+          }
+
+          print('=====succed====');
+        });
+      });
+    } catch (e) {
+      print(e);
+
+      print('=======error======');
+    }
+
+    return list;
+  }
 }

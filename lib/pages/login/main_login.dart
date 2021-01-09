@@ -10,6 +10,7 @@ class MainLogin extends StatefulWidget {
   _MainLoginState createState() => _MainLoginState();
 }
 
+//TODO: No funca con pantalla chica!! Usar mediaquery para el tamanio de los lottie.
 class _MainLoginState extends State<MainLogin> {
   bool _isPressed = false;
 

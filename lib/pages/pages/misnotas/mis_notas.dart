@@ -6,6 +6,8 @@ import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
 
 import 'package:mis_notas/data/subject_dao.dart';
+import 'package:mis_notas/pages/main/home.dart';
+import 'package:mis_notas/pages/main/main_page.dart';
 import 'package:mis_notas/pages/pages/misnotas/notas_info.dart';
 
 import 'package:mis_notas/widgets/styles/grade_card_style.dart';
@@ -37,6 +39,11 @@ class _MisNotasState extends State<MisNotas> {
           _student, condition);
   }
 
+  void initState() {
+    // only create the future once.
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +60,28 @@ class _MisNotasState extends State<MisNotas> {
                       children: <Widget>[
                         IconButton(
                           onPressed: () {
-                            Navigator.pop(context);
+                            Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                    transitionDuration:
+                                        Duration(milliseconds: 250),
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      animation = CurvedAnimation(
+                                          parent: animation,
+                                          curve: Curves.easeInOut);
+                                      return SlideTransition(
+                                        position: Tween(
+                                                begin: Offset(1.0, 0.0),
+                                                end: Offset(0.0, 0.0))
+                                            .animate(animation),
+                                        child: child,
+                                      );
+                                    },
+                                    pageBuilder:
+                                        (context, animation, animationTime) {
+                                      return HomePage();
+                                    }));
                           },
                           icon: Image.asset(
                             'assets/images/3.0x/backarrow.png',

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mis_notas/pages/pages/misnotas/mis_notas.dart';
 
 class MisNotasInfo extends StatefulWidget {
   @override
@@ -36,7 +37,27 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                   children: <Widget>[
                     IconButton(
                       onPressed: () {
-                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 250),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  animation = CurvedAnimation(
+                                      parent: animation,
+                                      curve: Curves.easeInOut);
+                                  return SlideTransition(
+                                    position: Tween(
+                                            begin: Offset(0.0, 1.0),
+                                            end: Offset(0.0, 0.0))
+                                        .animate(animation),
+                                    child: child,
+                                  );
+                                },
+                                pageBuilder:
+                                    (context, animation, animationTime) {
+                                  return MisNotas();
+                                }));
                       },
                       icon: Image.asset(
                         'assets/images/3.0x/backarrow.png',
@@ -78,25 +99,20 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
               ),
               Padding(
                   padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
-                  child: Container(
-                      child: Column(
+                  child: Column(
                     children: [
-                      Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Análisis Matemático I',
-                              style: TextStyle(
-                                fontFamily: 'Avenir LT Std',
-                                fontSize: 25,
-                                color: const Color(0xff000000),
-                                fontWeight: FontWeight.w800,
-                              ),
-                              textAlign: TextAlign.left,
-                            ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Análisis Matemático I',
+                          style: TextStyle(
+                            fontFamily: 'Avenir LT Std',
+                            fontSize: 25,
+                            color: const Color(0xff000000),
+                            fontWeight: FontWeight.w800,
                           ),
-                        ],
+                          textAlign: TextAlign.left,
+                        ),
                       ),
                       SizedBox(
                         height: 20,
@@ -108,17 +124,6 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      '',
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
                                 Container(
                                     width: 35.0,
                                     height: 35.0,
@@ -927,7 +932,7 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                         ),
                       )
                     ],
-                  ))),
+                  )),
             ],
           ),
         ),

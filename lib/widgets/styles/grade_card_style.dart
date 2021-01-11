@@ -54,7 +54,7 @@ class GradeCard extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
         child: InkWell(
           onTap: () {
-            Navigator.push(
+            Navigator.pushAndRemoveUntil(
                 context,
                 PageRouteBuilder(
                     transitionDuration: Duration(milliseconds: 250),
@@ -71,7 +71,8 @@ class GradeCard extends StatelessWidget {
                     },
                     pageBuilder: (context, animation, animationTime) {
                       return MisNotasInfo();
-                    }));
+                    }),
+                (Route<dynamic> route) => false);
           },
           borderRadius: BorderRadius.circular(26),
           child: Container(

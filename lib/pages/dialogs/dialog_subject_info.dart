@@ -6,6 +6,8 @@ class DialogSubjectInfo extends StatelessWidget {
 
   DialogSubjectInfo(this._map);
 
+  //TODO: Cambiar esto
+
   @override
   Widget build(BuildContext context) {
     return Dialog(

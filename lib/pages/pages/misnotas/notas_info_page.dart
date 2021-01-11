@@ -85,27 +85,6 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
               ),
                */
               NotasInfo(widget._subject),
-              Center(
-                child: Container(
-                  width: 313.0,
-                  height: 37.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(26.0),
-                    color: const Color(0xffa7ffad),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Confirmar',
-                      style: TextStyle(
-                        fontFamily: 'Avenir LT Std',
-                        fontSize: 16,
-                        color: Colors.black,
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                ),
-              )
             ],
           ),
         ),

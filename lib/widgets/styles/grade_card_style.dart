@@ -6,8 +6,9 @@ import 'package:mis_notas/pages/pages/misnotas/notas_info_page.dart';
 
 class GradeCard extends StatelessWidget {
   final Subject _subject;
+  final bool action;
 
-  GradeCard(this._subject);
+  GradeCard(this._subject, this.action);
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +18,10 @@ class GradeCard extends StatelessWidget {
     List<int> gradesAp = _subject.getAplazos();
     int nf = _subject.getNf();
 
-    String notasPractico = 'PRÁC:   ';
-    String notasTeorico = '  TEÓ:   ';
-    String notasTp = '     TP:    ';
-    String notasAp = '   APL:    ';
+    String notasPractico = '';
+    String notasTeorico = '';
+    String notasTp = '';
+    String notasAp = '';
 
     gradesP.forEach((element) {
       if (element < 10)
@@ -53,26 +54,29 @@ class GradeCard extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
         child: InkWell(
-          onTap: () {
-            Navigator.push(
-                context,
-                PageRouteBuilder(
-                    transitionDuration: Duration(milliseconds: 250),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      animation = CurvedAnimation(
-                          parent: animation, curve: Curves.easeInOut);
-                      return SlideTransition(
-                        position: Tween(
-                                begin: Offset(0.0, 1.0), end: Offset(0.0, 0.0))
-                            .animate(animation),
-                        child: child,
-                      );
-                    },
-                    pageBuilder: (context, animation, animationTime) {
-                      return MisNotasInfo(_subject);
-                    }));
-          },
+          onTap: action
+              ? () {
+                  Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                          transitionDuration: Duration(milliseconds: 250),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            animation = CurvedAnimation(
+                                parent: animation, curve: Curves.easeInOut);
+                            return SlideTransition(
+                              position: Tween(
+                                      begin: Offset(0.0, 1.0),
+                                      end: Offset(0.0, 0.0))
+                                  .animate(animation),
+                              child: child,
+                            );
+                          },
+                          pageBuilder: (context, animation, animationTime) {
+                            return MisNotasInfo(_subject);
+                          }));
+                }
+              : null,
           borderRadius: BorderRadius.circular(26),
           child: Container(
             decoration: BoxDecoration(
@@ -105,58 +109,110 @@ class GradeCard extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(
-                              notasTeorico,
-                              style: TextStyle(
-                                fontFamily: 'Avenir LT Std',
-                                fontSize: 18,
-                                color: const Color(0xff000000),
-                                height: 1.8571428571428572,
-                              ),
-                              textAlign: TextAlign.left,
+                            Row(
+                              children: [
+                                Text(
+                                  '  TEÓ:   ',
+                                  style: TextStyle(
+                                      fontFamily: 'Avenir LT Std',
+                                      fontSize: 18,
+                                      color: const Color(0xff000000),
+                                      height: 1.8571428571428572,
+                                      fontWeight: FontWeight.w800),
+                                ),
+                                Text(
+                                  notasTeorico,
+                                  style: TextStyle(
+                                    fontFamily: 'Avenir LT Std',
+                                    fontSize: 18,
+                                    color: const Color(0xff000000),
+                                    height: 1.8571428571428572,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ],
                             ),
                             SvgPicture.string(
                               '<svg viewBox="41.0 373.5 181.5 1.0" ><path transform="translate(41.0, 373.5)" d="M 181.5 0 L 0 0" fill="none" stroke="#afafaf" stroke-width="1.5" stroke-dasharray="8 3" stroke-miterlimit="4" stroke-linecap="butt" /></svg>',
                               allowDrawingOutsideViewBox: true,
                             ),
-                            Text(
-                              notasPractico,
-                              style: TextStyle(
-                                fontFamily: 'Avenir LT Std',
-                                fontSize: 18,
-                                color: const Color(0xff000000),
-                                height: 1.8571428571428572,
-                              ),
-                              textAlign: TextAlign.left,
+                            Row(
+                              children: [
+                                Text(
+                                  'PRÁC:   ',
+                                  style: TextStyle(
+                                      fontFamily: 'Avenir LT Std',
+                                      fontSize: 18,
+                                      color: const Color(0xff000000),
+                                      height: 1.8571428571428572,
+                                      fontWeight: FontWeight.w800),
+                                ),
+                                Text(
+                                  notasPractico,
+                                  style: TextStyle(
+                                    fontFamily: 'Avenir LT Std',
+                                    fontSize: 18,
+                                    color: const Color(0xff000000),
+                                    height: 1.8571428571428572,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ],
                             ),
                             SvgPicture.string(
                               '<svg viewBox="41.0 373.5 181.5 1.0" ><path transform="translate(41.0, 373.5)" d="M 181.5 0 L 0 0" fill="none" stroke="#afafaf" stroke-width="1.5" stroke-dasharray="8 3" stroke-miterlimit="4" stroke-linecap="butt" /></svg>',
                               allowDrawingOutsideViewBox: true,
                             ),
-                            Text(
-                              notasTp,
-                              style: TextStyle(
-                                fontFamily: 'Avenir LT Std',
-                                fontSize: 18,
-                                color: const Color(0xff000000),
-                                height: 1.8571428571428572,
-                              ),
-                              textAlign: TextAlign.left,
+                            Row(
+                              children: [
+                                Text(
+                                  '     TP:    ',
+                                  style: TextStyle(
+                                      fontFamily: 'Avenir LT Std',
+                                      fontSize: 18,
+                                      color: const Color(0xff000000),
+                                      height: 1.8571428571428572,
+                                      fontWeight: FontWeight.w800),
+                                ),
+                                Text(
+                                  notasTp,
+                                  style: TextStyle(
+                                    fontFamily: 'Avenir LT Std',
+                                    fontSize: 18,
+                                    color: const Color(0xff000000),
+                                    height: 1.8571428571428572,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ],
                             ),
                             SvgPicture.string(
                               '<svg viewBox="41.0 373.5 181.5 1.0" ><path transform="translate(41.0, 373.5)" d="M 181.5 0 L 0 0" fill="none" stroke="#afafaf" stroke-width="1.5" stroke-dasharray="8 3" stroke-miterlimit="4" stroke-linecap="butt" /></svg>',
                               allowDrawingOutsideViewBox: true,
                             ),
-                            Text(
-                              notasAp,
-                              style: TextStyle(
-                                fontFamily: 'Avenir LT Std',
-                                fontSize: 18,
-                                color: const Color(0xff000000),
-                                height: 1.8571428571428572,
-                              ),
-                              textAlign: TextAlign.left,
-                            )
+                            Row(
+                              children: [
+                                Text(
+                                  '   APL:    ',
+                                  style: TextStyle(
+                                      fontFamily: 'Avenir LT Std',
+                                      fontSize: 18,
+                                      color: const Color(0xff000000),
+                                      height: 1.8571428571428572,
+                                      fontWeight: FontWeight.w800),
+                                ),
+                                Text(
+                                  notasAp,
+                                  style: TextStyle(
+                                    fontFamily: 'Avenir LT Std',
+                                    fontSize: 18,
+                                    color: const Color(0xff000000),
+                                    height: 1.8571428571428572,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                         if (_subject.getState().getState().getName() ==

@@ -359,7 +359,7 @@ class _MisNotasState extends State<MisNotas> {
                                     itemCount: snapshot.data.length,
                                     itemBuilder: (context, index) {
                                       Subject sub = snapshot.data[index];
-                                      return GradeCard(sub);
+                                      return GradeCard(sub, true);
                                     },
                                   ),
                                 ),

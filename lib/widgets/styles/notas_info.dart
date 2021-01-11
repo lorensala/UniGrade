@@ -12,12 +12,55 @@ class NotasInfo extends StatefulWidget {
 }
 
 class _NotasInfoState extends State<NotasInfo> {
-  var _selectedType;
-  var _nota;
-  bool _hasSelectedData;
+  String _selectedTypeAdd;
+  var _notaAdd;
+  bool _hasSelectedDataAdd = false;
+  String _selectedTypeDel;
+  var _notaDel;
+  bool _hasSelectedDataDel = false;
+  String _selectedTypeMod;
+  var _notaMod;
+  bool _hasSelectedDataMod = false;
+  var _newNota;
+
+  //TODO: SI ingresa una nota final, deberia marcar como terminó la materia.
 
   var _types = ['Práctico', 'Teórico', 'TP', 'Final'];
   var _notas = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+
+  List<String> _getGrades(String _type) {
+    List<String> _grades = new List<String>();
+
+    switch (_type) {
+      case 'Práctico':
+        widget._subject.getGradesP().toSet().toList().forEach((grade) {
+          _grades.add(grade.toString());
+        });
+        return _grades;
+
+      case 'Teórico':
+        widget._subject.getGradesT().forEach((grade) {
+          _grades.add(grade.toString());
+        });
+        return _grades;
+
+      case 'TP':
+        widget._subject.getGradesTP().forEach((grade) {
+          _grades.add(grade.toString());
+        });
+        return _grades;
+
+      case 'Final':
+        widget._subject.getAplazos().forEach((grade) {
+          _grades.add(grade.toString());
+        });
+        if (widget._subject.getNf() != -1)
+          _grades.add(widget._subject.getNf().toString());
+        return _grades;
+      default:
+        return [];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,12 +103,12 @@ class _NotasInfoState extends State<NotasInfo> {
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton(
-                      value: _selectedType,
+                      value: _selectedTypeAdd,
                       hint: new Text('Tipo de Nota'),
                       onChanged: (newValue) {
                         setState(() {
-                          _selectedType = newValue;
-                          _hasSelectedData = true;
+                          _selectedTypeAdd = newValue;
+                          _hasSelectedDataAdd = true;
                         });
                       },
                       items: _types
@@ -95,12 +138,12 @@ class _NotasInfoState extends State<NotasInfo> {
                   padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton(
-                        value: _nota,
+                        value: _notaAdd,
                         hint: new Text('Nota'),
                         onChanged: (newValue) {
                           setState(() {
-                            _nota = newValue;
-                            _hasSelectedData = true;
+                            _notaAdd = newValue;
+                            _hasSelectedDataAdd = true;
                           });
                         },
                         items: _notas
@@ -113,18 +156,51 @@ class _NotasInfoState extends State<NotasInfo> {
               SizedBox(
                 width: 10,
               ),
-              Container(
-                width: 38.0,
-                height: 37.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(26.0),
-                  color: const Color(0xffa7ffad),
-                ),
-                child: Center(
-                  child: Icon(
-                    Icons.add,
-                    color: Colors.white,
-                    size: 30,
+              InkWell(
+                onTap: () {
+                  int nota = int.parse(_notaAdd);
+
+                  switch (_selectedTypeAdd) {
+                    case 'Práctico':
+                      if (widget._subject.getGradesP().length < 6)
+                        widget._subject.addgradeP(nota);
+                      break;
+
+                    case 'Teórico':
+                      if (widget._subject.getGradesT().length < 6)
+                        widget._subject.addgradeT(nota);
+                      break;
+
+                    case 'TP':
+                      if (widget._subject.getGradesTP().length < 6)
+                        widget._subject.addgradeTP(nota);
+                      break;
+
+                    case 'Final':
+                      if (widget._subject.getAplazos().length <= 3) {
+                        if (nota > 5)
+                          widget._subject.nf(nota);
+                        else
+                          widget._subject.addgradeAp(nota);
+                        break;
+                      }
+                  }
+
+                  setState(() {});
+                },
+                child: Container(
+                  width: 38.0,
+                  height: 37.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(26.0),
+                    color: const Color(0xffa7ffad),
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 30,
+                    ),
                   ),
                 ),
               ),
@@ -164,18 +240,18 @@ class _NotasInfoState extends State<NotasInfo> {
               child: Padding(
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                      value: _selectedType,
+                  child: DropdownButton<String>(
+                      value: _selectedTypeDel,
                       hint: new Text('Tipo de Nota'),
                       onChanged: (newValue) {
                         setState(() {
-                          _selectedType = newValue;
-                          _hasSelectedData = true;
+                          _selectedTypeDel = newValue;
+                          _hasSelectedDataDel = true;
                         });
                       },
                       items: _types
-                          .map((type) =>
-                              DropdownMenuItem(child: Text(type), value: type))
+                          .map((type) => DropdownMenuItem<String>(
+                              child: Text(type), value: type))
                           .toList()),
                 ),
               ),
@@ -190,7 +266,6 @@ class _NotasInfoState extends State<NotasInfo> {
           child: Row(
             children: [
               Container(
-                //width: 288.0,
                 height: 37.0,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(26.0),
@@ -200,15 +275,15 @@ class _NotasInfoState extends State<NotasInfo> {
                   padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton(
-                        value: _nota,
+                        value: _notaDel,
                         hint: new Text('Nota'),
                         onChanged: (newValue) {
                           setState(() {
-                            _nota = newValue;
-                            _hasSelectedData = true;
+                            _notaDel = newValue;
+                            _hasSelectedDataDel = true;
                           });
                         },
-                        items: _notas
+                        items: _getGrades(_selectedTypeDel)
                             .map((type) => DropdownMenuItem(
                                 child: Text(type), value: type))
                             .toList()),
@@ -218,18 +293,55 @@ class _NotasInfoState extends State<NotasInfo> {
               SizedBox(
                 width: 10,
               ),
-              Container(
-                width: 38.0,
-                height: 37.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(26.0),
-                  color: const Color(0xffFF9A9A),
-                ),
-                child: Center(
-                  child: Icon(
-                    Icons.delete,
-                    color: Colors.white,
-                    size: 25,
+              InkWell(
+                onTap: () {
+                  int nota = int.parse(_notaDel);
+
+                  switch (_selectedTypeDel) {
+                    case 'Práctico':
+                      if (widget._subject.getGradesP().length < 6)
+                        widget._subject.deleteGradeP(nota);
+                      break;
+
+                    case 'Teórico':
+                      if (widget._subject.getGradesT().length < 6)
+                        widget._subject.deleteGradeT(nota);
+                      break;
+
+                    case 'TP':
+                      if (widget._subject.getGradesTP().length < 6)
+                        widget._subject.deleteGradeTP(nota);
+                      break;
+
+                    case 'Final':
+                      if (widget._subject.getAplazos().length <= 3) {
+                        if (nota > 5)
+                          widget._subject.nf(-1);
+                        else
+                          widget._subject.deleteGradeAp(nota);
+                        break;
+                      }
+                  }
+
+                  print(widget._subject.getGradesP().toString() + 'Este');
+
+                  setState(() {
+                    _notaDel = null;
+                  });
+                },
+                child: Container(
+                  width: 38.0,
+                  height: 37.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(26.0),
+                    color: const Color(0xffFF9A9A),
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                      size: 25,
+                    ),
                   ),
                 ),
               ),
@@ -270,12 +382,14 @@ class _NotasInfoState extends State<NotasInfo> {
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton(
-                      value: _selectedType,
+                      value: _selectedTypeMod,
                       hint: new Text('Tipo de Nota'),
                       onChanged: (newValue) {
                         setState(() {
-                          _selectedType = newValue;
-                          _hasSelectedData = true;
+                          _selectedTypeMod = newValue;
+                          _hasSelectedDataMod = true;
+                          _newNota = null;
+                          _notaMod = null;
                         });
                       },
                       items: _types
@@ -305,12 +419,45 @@ class _NotasInfoState extends State<NotasInfo> {
                   padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton(
-                        value: _nota,
+                        value: _notaMod,
                         hint: new Text('Nota'),
                         onChanged: (newValue) {
                           setState(() {
-                            _nota = newValue;
-                            _hasSelectedData = true;
+                            _notaMod = newValue;
+                            _hasSelectedDataMod = true;
+                          });
+                        },
+                        items: _getGrades(_selectedTypeMod)
+                            .map((type) => DropdownMenuItem(
+                                child: Text(type), value: type))
+                            .toList()),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Image.asset('assets/images/arrow.png'),
+              SizedBox(
+                width: 10,
+              ),
+              Container(
+                //width: 288.0,
+                height: 37.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(26.0),
+                  color: const Color(0xfff7f7f7),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                        value: _newNota,
+                        hint: new Text('Nota'),
+                        onChanged: (newValue) {
+                          setState(() {
+                            _newNota = newValue;
+                            _hasSelectedDataMod = true;
                           });
                         },
                         items: _notas
@@ -321,20 +468,57 @@ class _NotasInfoState extends State<NotasInfo> {
                 ),
               ),
               SizedBox(
-                width: 10,
+                width: 30,
               ),
-              Container(
-                width: 38.0,
-                height: 37.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(26.0),
-                  color: Colors.yellow,
-                ),
-                child: Center(
-                  child: Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                    size: 25,
+              InkWell(
+                onTap: () {
+                  int nota = int.parse(_notaMod);
+                  int nuevaNota = int.parse(_newNota);
+
+                  switch (_selectedTypeMod) {
+                    case 'Práctico':
+                      if (widget._subject.getGradesP().length < 6)
+                        widget._subject.modGradeP(nota, nuevaNota);
+                      break;
+
+                    case 'Teórico':
+                      if (widget._subject.getGradesT().length < 6)
+                        widget._subject.modGradeT(nota, nuevaNota);
+                      break;
+
+                    case 'TP':
+                      if (widget._subject.getGradesTP().length < 6)
+                        widget._subject.modGradeTP(nota, nuevaNota);
+                      break;
+
+                    case 'Final':
+                      if (widget._subject.getAplazos().length <= 3) {
+                        if (nota > 5)
+                          widget._subject.nf(nota);
+                        else
+                          widget._subject.modGradAp(nota, nuevaNota);
+                        break;
+                      }
+                  }
+
+                  setState(() {
+                    _newNota = null;
+                    _notaMod = null;
+                  });
+                },
+                child: Container(
+                  width: 38.0,
+                  height: 37.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(26.0),
+                    color: Colors.yellow,
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.edit,
+                      color: Colors.white,
+                      size: 25,
+                    ),
                   ),
                 ),
               ),

@@ -1,6 +1,10 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:mis_notas/data/subject_dao.dart';
+import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
 import 'package:mis_notas/widgets/styles/grade_card_style.dart';
+import 'package:provider/provider.dart';
 
 class NotasInfo extends StatefulWidget {
   final Subject _subject;
@@ -22,8 +26,10 @@ class _NotasInfoState extends State<NotasInfo> {
   var _notaMod;
   bool _hasSelectedDataMod = false;
   var _newNota;
-
+  SubjectsDao _subejctDao = new SubjectsDao();
+  bool done = false;
   //TODO: SI ingresa una nota final, deberia marcar como terminó la materia.
+  //TODO: Provider de estudiante con sus respectivas materias!
 
   var _types = ['Práctico', 'Teórico', 'TP', 'Final'];
   var _notas = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
@@ -64,6 +70,8 @@ class _NotasInfoState extends State<NotasInfo> {
 
   @override
   Widget build(BuildContext context) {
+    Student _student = Provider.of<Student>(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -158,35 +166,40 @@ class _NotasInfoState extends State<NotasInfo> {
               ),
               InkWell(
                 onTap: () {
-                  int nota = int.parse(_notaAdd);
+                  if (_hasSelectedDataAdd &&
+                      _selectedTypeAdd != null &&
+                      _notaAdd != null) {
+                    int nota = int.parse(_notaAdd);
 
-                  switch (_selectedTypeAdd) {
-                    case 'Práctico':
-                      if (widget._subject.getGradesP().length < 6)
-                        widget._subject.addgradeP(nota);
-                      break;
-
-                    case 'Teórico':
-                      if (widget._subject.getGradesT().length < 6)
-                        widget._subject.addgradeT(nota);
-                      break;
-
-                    case 'TP':
-                      if (widget._subject.getGradesTP().length < 6)
-                        widget._subject.addgradeTP(nota);
-                      break;
-
-                    case 'Final':
-                      if (widget._subject.getAplazos().length <= 3) {
-                        if (nota > 5)
-                          widget._subject.nf(nota);
-                        else
-                          widget._subject.addgradeAp(nota);
+                    switch (_selectedTypeAdd) {
+                      case 'Práctico':
+                        if (widget._subject.getGradesP().length < 6)
+                          widget._subject.addgradeP(nota);
                         break;
-                      }
-                  }
 
-                  setState(() {});
+                      case 'Teórico':
+                        if (widget._subject.getGradesT().length < 6)
+                          widget._subject.addgradeT(nota);
+                        break;
+
+                      case 'TP':
+                        if (widget._subject.getGradesTP().length < 6)
+                          widget._subject.addgradeTP(nota);
+                        break;
+
+                      case 'Final':
+                        if (widget._subject.getAplazos().length <= 3) {
+                          if (nota > 5)
+                            //TODO: Mostrar mensaje para que ponga la condicion
+                            widget._subject.nf(nota);
+                          else
+                            widget._subject.addgradeAp(nota);
+                          break;
+                        }
+                    }
+
+                    setState(() {});
+                  }
                 },
                 child: Container(
                   width: 38.0,
@@ -295,39 +308,43 @@ class _NotasInfoState extends State<NotasInfo> {
               ),
               InkWell(
                 onTap: () {
-                  int nota = int.parse(_notaDel);
+                  if (_hasSelectedDataDel &&
+                      _selectedTypeDel != null &&
+                      _notaDel != null) {
+                    int nota = int.parse(_notaDel);
 
-                  switch (_selectedTypeDel) {
-                    case 'Práctico':
-                      if (widget._subject.getGradesP().length < 6)
-                        widget._subject.deleteGradeP(nota);
-                      break;
-
-                    case 'Teórico':
-                      if (widget._subject.getGradesT().length < 6)
-                        widget._subject.deleteGradeT(nota);
-                      break;
-
-                    case 'TP':
-                      if (widget._subject.getGradesTP().length < 6)
-                        widget._subject.deleteGradeTP(nota);
-                      break;
-
-                    case 'Final':
-                      if (widget._subject.getAplazos().length <= 3) {
-                        if (nota > 5)
-                          widget._subject.nf(-1);
-                        else
-                          widget._subject.deleteGradeAp(nota);
+                    switch (_selectedTypeDel) {
+                      case 'Práctico':
+                        if (widget._subject.getGradesP().length < 6)
+                          widget._subject.deleteGradeP(nota);
                         break;
-                      }
+
+                      case 'Teórico':
+                        if (widget._subject.getGradesT().length < 6)
+                          widget._subject.deleteGradeT(nota);
+                        break;
+
+                      case 'TP':
+                        if (widget._subject.getGradesTP().length < 6)
+                          widget._subject.deleteGradeTP(nota);
+                        break;
+
+                      case 'Final':
+                        if (widget._subject.getAplazos().length <= 3) {
+                          if (nota > 5)
+                            widget._subject.nf(-1);
+                          else
+                            widget._subject.deleteGradeAp(nota);
+                          break;
+                        }
+                    }
+
+                    print(widget._subject.getGradesP().toString() + 'Este');
+
+                    setState(() {
+                      _notaDel = null;
+                    });
                   }
-
-                  print(widget._subject.getGradesP().toString() + 'Este');
-
-                  setState(() {
-                    _notaDel = null;
-                  });
                 },
                 child: Container(
                   width: 38.0,
@@ -472,39 +489,41 @@ class _NotasInfoState extends State<NotasInfo> {
               ),
               InkWell(
                 onTap: () {
-                  int nota = int.parse(_notaMod);
-                  int nuevaNota = int.parse(_newNota);
+                  if (_hasSelectedDataMod &&
+                      _selectedTypeMod != null &&
+                      _notaMod != null &&
+                      _newNota != null) {
+                    int nota = int.parse(_notaMod);
+                    int nuevaNota = int.parse(_newNota);
 
-                  switch (_selectedTypeMod) {
-                    case 'Práctico':
-                      if (widget._subject.getGradesP().length < 6)
-                        widget._subject.modGradeP(nota, nuevaNota);
-                      break;
-
-                    case 'Teórico':
-                      if (widget._subject.getGradesT().length < 6)
-                        widget._subject.modGradeT(nota, nuevaNota);
-                      break;
-
-                    case 'TP':
-                      if (widget._subject.getGradesTP().length < 6)
-                        widget._subject.modGradeTP(nota, nuevaNota);
-                      break;
-
-                    case 'Final':
-                      if (widget._subject.getAplazos().length <= 3) {
-                        if (nota > 5)
-                          widget._subject.nf(nota);
-                        else
-                          widget._subject.modGradAp(nota, nuevaNota);
+                    switch (_selectedTypeMod) {
+                      case 'Práctico':
+                        if (widget._subject.getGradesP().length < 6)
+                          widget._subject.modGradeP(nota, nuevaNota);
                         break;
-                      }
-                  }
 
-                  setState(() {
-                    _newNota = null;
-                    _notaMod = null;
-                  });
+                      case 'Teórico':
+                        if (widget._subject.getGradesT().length < 6)
+                          widget._subject.modGradeT(nota, nuevaNota);
+                        break;
+
+                      case 'TP':
+                        if (widget._subject.getGradesTP().length < 6)
+                          widget._subject.modGradeTP(nota, nuevaNota);
+                        break;
+
+                      case 'Final':
+                        if (widget._subject.getAplazos().length <= 3) {
+                          widget._subject.modGradAp(nota, nuevaNota);
+                          break;
+                        }
+                    }
+
+                    setState(() {
+                      _newNota = null;
+                      _notaMod = null;
+                    });
+                  }
                 },
                 child: Container(
                   width: 38.0,
@@ -528,25 +547,55 @@ class _NotasInfoState extends State<NotasInfo> {
         SizedBox(
           height: 20,
         ),
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-            child: Container(
-              //width: 313.0,
-              height: 37.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(26.0),
-                color: const Color(0xffa7ffad),
-              ),
-              child: Center(
-                child: Text(
-                  'Guardar Cambios',
-                  style: TextStyle(
-                    fontFamily: 'Avenir LT Std',
-                    fontSize: 16,
-                    color: Colors.black,
+        FlatButton(
+          color: Colors.transparent,
+          highlightColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          focusColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          onPressed: () async {
+            done = await _subejctDao.updateSubject(widget._subject, _student);
+
+            if (done) {
+              await CoolAlert.show(
+                  borderRadius: 26,
+                  title: 'Éxito',
+                  backgroundColor: Colors.white,
+                  context: context,
+                  type: CoolAlertType.success,
+                  text: '¡Materia actualizada con exito!');
+
+              Navigator.pop(context);
+            } else {
+              CoolAlert.show(
+                  borderRadius: 26,
+                  title: 'Error',
+                  backgroundColor: Colors.white,
+                  context: context,
+                  type: CoolAlertType.error,
+                  text: 'Error al actualizar la materia');
+            }
+          },
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+              child: Container(
+                //width: double.ini,
+                height: 37.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(26.0),
+                  color: const Color(0xffa7ffad),
+                ),
+                child: Center(
+                  child: Text(
+                    'Guardar Cambios',
+                    style: TextStyle(
+                      fontFamily: 'Avenir LT Std',
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.left,
                   ),
-                  textAlign: TextAlign.left,
                 ),
               ),
             ),

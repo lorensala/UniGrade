@@ -810,4 +810,44 @@ class SubjectsDao {
 
     return list;
   }
+
+  Future<bool> updateSubject(Subject subject, Student _student) async {
+    String _docId;
+    DocumentReference _docRef;
+
+    bool isDone = false;
+
+    try {
+      Future<QuerySnapshot> _subCollection = FirebaseFirestore.instance
+          .collection('student')
+          .doc(_student.getStudentDocRef())
+          .collection('career_student')
+          .doc(_student.getCareerDocRefs()[0])
+          .collection('subject_student')
+          .where('name', isEqualTo: subject.getName())
+          .get();
+
+      await _subCollection.then((value) {
+        _docId = value.docs[0].id;
+      });
+
+      if (_docId != null)
+        _docRef = FirebaseFirestore.instance
+            .collection('student')
+            .doc(_student.getStudentDocRef())
+            .collection('career_student')
+            .doc(_student.getCareerDocRefs()[0])
+            .collection('subject_student')
+            .doc(_docId);
+
+      _docRef.update(subject.toMap());
+
+      print('=====succed====');
+      isDone = true;
+    } catch (e) {
+      print(e);
+      print('=====error=====');
+    }
+    return isDone;
+  }
 }

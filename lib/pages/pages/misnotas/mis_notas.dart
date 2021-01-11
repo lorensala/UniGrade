@@ -10,6 +10,7 @@ import 'package:mis_notas/pages/main/home.dart';
 
 import 'package:mis_notas/widgets/styles/grade_card_style.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class MisNotas extends StatefulWidget {
   @override
@@ -18,6 +19,7 @@ class MisNotas extends StatefulWidget {
 
 class _MisNotasState extends State<MisNotas> {
   String _condition = 'Todas';
+  RefreshController _refreshController = new RefreshController();
 
   Future<List<Subject>> getData(Student _student, String condition) async {
     var _subjectDao = new SubjectsDao();

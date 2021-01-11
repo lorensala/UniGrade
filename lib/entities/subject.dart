@@ -13,9 +13,29 @@ class Subject extends ChangeNotifier {
   StateRecord _state;
   String _type;
   String _icon;
-  bool _passed;
+  bool _passed; //TODO: Sacar esto!!
   String _duration;
   bool _elect;
+  int _points; //TODO: Esto
+
+  Map<String, dynamic> toMap() {
+    return {
+      'duration': _duration,
+      'gradesP': _gradesP,
+      'gradesT': _gradesT,
+      'gradesTP': _gradesTP,
+      'nf': _nf,
+      'aplazos': _aplazos,
+      'state': getState().getState().getName(),
+      'type': _type,
+      'year': _year,
+      'name': _name,
+      'icon': _icon,
+      'passed': _passed,
+      'elect': _elect,
+      'points': 0 //TODO: Hardcoded
+    };
+  }
 
   /*TODO: No deberia exisitir el passed, hay que calcular de una si la nota
   es mayor a 6, entonces ahi esta aprobada. Las condiciones deberian ser
@@ -54,23 +74,29 @@ class Subject extends ChangeNotifier {
   }
 
   void modGradeT(int nota, int nuevaNota) {
-    int index = _gradesP.indexOf(nota);
-    _gradesP[index] = nuevaNota;
+    int index = _gradesT.indexOf(nota);
+    _gradesT[index] = nuevaNota;
   }
 
   void modGradeTP(int nota, int nuevaNota) {
-    int index = _gradesP.indexOf(nota);
-    _gradesP[index] = nuevaNota;
+    int index = _gradesTP.indexOf(nota);
+    _gradesTP[index] = nuevaNota;
   }
 
   void modGradAp(int nota, int nuevaNota) {
-    int index = _gradesP.indexOf(nota);
-    _gradesP[index] = nuevaNota;
-  }
+    if (nota >= 6 && nuevaNota >= 6) {
+      nf(nuevaNota);
+    } else if (nota >= 6 && nuevaNota < 6) {
+      nf(-1);
+      _aplazos.add(nuevaNota);
+    } else if (nota < 6 && nuevaNota >= 6) {
+      _aplazos.remove(nota);
 
-  void modGradNf(int nota, int nuevaNota) {
-    int index = _gradesP.indexOf(nota);
-    _gradesP[index] = nuevaNota;
+      nf(nuevaNota);
+    } else {
+      int index = _aplazos.indexOf(nota);
+      _aplazos[index] = nuevaNota;
+    }
   }
 
   Subject(

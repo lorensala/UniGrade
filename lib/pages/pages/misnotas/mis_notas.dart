@@ -7,8 +7,6 @@ import 'package:mis_notas/entities/subject.dart';
 
 import 'package:mis_notas/data/subject_dao.dart';
 import 'package:mis_notas/pages/main/home.dart';
-import 'package:mis_notas/pages/main/main_page.dart';
-import 'package:mis_notas/pages/pages/misnotas/notas_info.dart';
 
 import 'package:mis_notas/widgets/styles/grade_card_style.dart';
 import 'package:provider/provider.dart';

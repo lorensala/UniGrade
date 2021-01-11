@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mis_notas/entities/subject.dart';
-import 'package:mis_notas/pages/pages/misnotas/notas_info.dart';
+import 'package:mis_notas/pages/pages/misnotas/notas_info_page.dart';
 
 class GradeCard extends StatelessWidget {
   final Subject _subject;
@@ -54,7 +54,7 @@ class GradeCard extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
         child: InkWell(
           onTap: () {
-            Navigator.pushAndRemoveUntil(
+            Navigator.push(
                 context,
                 PageRouteBuilder(
                     transitionDuration: Duration(milliseconds: 250),
@@ -70,9 +70,8 @@ class GradeCard extends StatelessWidget {
                       );
                     },
                     pageBuilder: (context, animation, animationTime) {
-                      return MisNotasInfo();
-                    }),
-                (Route<dynamic> route) => false);
+                      return MisNotasInfo(_subject);
+                    }));
           },
           borderRadius: BorderRadius.circular(26),
           child: Container(

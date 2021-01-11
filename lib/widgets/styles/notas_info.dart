@@ -45,19 +45,19 @@ class _NotasInfoState extends State<NotasInfo> {
         return _grades;
 
       case 'Teórico':
-        widget._subject.getGradesT().forEach((grade) {
+        widget._subject.getGradesT().toSet().toList().forEach((grade) {
           _grades.add(grade.toString());
         });
         return _grades;
 
       case 'TP':
-        widget._subject.getGradesTP().forEach((grade) {
+        widget._subject.getGradesTP().toSet().toList().forEach((grade) {
           _grades.add(grade.toString());
         });
         return _grades;
 
       case 'Final':
-        widget._subject.getAplazos().forEach((grade) {
+        widget._subject.getAplazos().toSet().toList().forEach((grade) {
           _grades.add(grade.toString());
         });
         if (widget._subject.getNf() != -1)

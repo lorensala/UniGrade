@@ -18,6 +18,8 @@ class Subject extends ChangeNotifier {
   bool _elect;
   int _points; //TODO: Esto
 
+  //TODO: List<Subjects> _correlativas;
+
   Map<String, dynamic> toMap() {
     return {
       'duration': _duration,

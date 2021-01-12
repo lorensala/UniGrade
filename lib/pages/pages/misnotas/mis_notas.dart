@@ -6,9 +6,11 @@ import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
 
 import 'package:mis_notas/data/subject_dao.dart';
+import 'package:mis_notas/pages/main/home.dart';
 
 import 'package:mis_notas/widgets/styles/grade_card_style.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class MisNotas extends StatefulWidget {
   @override
@@ -17,6 +19,7 @@ class MisNotas extends StatefulWidget {
 
 class _MisNotasState extends State<MisNotas> {
   String _condition = 'Todas';
+  RefreshController _refreshController = new RefreshController();
 
   Future<List<Subject>> getData(Student _student, String condition) async {
     var _subjectDao = new SubjectsDao();
@@ -24,13 +27,21 @@ class _MisNotasState extends State<MisNotas> {
     if (condition == 'Todas')
       return await _subjectDao.getAllSubjectsByUserOrderByYear(_student);
     else if (condition == 'Electiva')
-      return await _subjectDao.getAllSubjectsByUserCondition(
-          _student, condition);
+      return await _subjectDao
+          .getAllElectiveSubjectsByUserOrderByYear(_student);
     else if (condition == 'Aprobada')
       return await _subjectDao.getAllSubjectsByPassed(_student);
+    else if (int.tryParse(condition) != null)
+      return await _subjectDao.getAllSubjectsYear(
+          _student, int.parse(condition));
     else
       return await _subjectDao.getAllSubjectsByUserCondition(
           _student, condition);
+  }
+
+  void initState() {
+    // only create the future once.
+    super.initState();
   }
 
   @override
@@ -49,7 +60,28 @@ class _MisNotasState extends State<MisNotas> {
                       children: <Widget>[
                         IconButton(
                           onPressed: () {
-                            Navigator.pop(context);
+                            Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                    transitionDuration:
+                                        Duration(milliseconds: 250),
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      animation = CurvedAnimation(
+                                          parent: animation,
+                                          curve: Curves.easeInOut);
+                                      return SlideTransition(
+                                        position: Tween(
+                                                begin: Offset(1.0, 0.0),
+                                                end: Offset(0.0, 0.0))
+                                            .animate(animation),
+                                        child: child,
+                                      );
+                                    },
+                                    pageBuilder:
+                                        (context, animation, animationTime) {
+                                      return HomePage();
+                                    }));
                           },
                           icon: Image.asset(
                             'assets/images/3.0x/backarrow.png',
@@ -59,8 +91,6 @@ class _MisNotasState extends State<MisNotas> {
                       ],
                     ),
                   ),
-
-                  // Mis Notas y boton ayuda
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
                     child: Row(
@@ -91,7 +121,6 @@ class _MisNotasState extends State<MisNotas> {
                       allowDrawingOutsideViewBox: true,
                     ),
                   ),
-                  // Filtros
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24, 20, 24, 10),
                     child: Container(
@@ -243,6 +272,71 @@ class _MisNotasState extends State<MisNotas> {
                                     ),
                                   ),
                                 ),
+                                DropdownMenuItem<String>(
+                                  value: '1',
+                                  child: Text(
+                                    '1er Año',
+                                    style: TextStyle(
+                                      fontFamily: 'Avenir LT Std',
+                                      fontSize: 18,
+                                      color: const Color(0xff000000),
+                                      fontWeight: FontWeight.w500,
+                                      height: 0.9666666666666667,
+                                    ),
+                                  ),
+                                ),
+                                DropdownMenuItem<String>(
+                                  value: '2',
+                                  child: Text(
+                                    '2do Año',
+                                    style: TextStyle(
+                                      fontFamily: 'Avenir LT Std',
+                                      fontSize: 18,
+                                      color: const Color(0xff000000),
+                                      fontWeight: FontWeight.w500,
+                                      height: 0.9666666666666667,
+                                    ),
+                                  ),
+                                ),
+                                DropdownMenuItem<String>(
+                                  value: '3',
+                                  child: Text(
+                                    '3er Año',
+                                    style: TextStyle(
+                                      fontFamily: 'Avenir LT Std',
+                                      fontSize: 18,
+                                      color: const Color(0xff000000),
+                                      fontWeight: FontWeight.w500,
+                                      height: 0.9666666666666667,
+                                    ),
+                                  ),
+                                ),
+                                DropdownMenuItem<String>(
+                                  value: '4',
+                                  child: Text(
+                                    '4to Año',
+                                    style: TextStyle(
+                                      fontFamily: 'Avenir LT Std',
+                                      fontSize: 18,
+                                      color: const Color(0xff000000),
+                                      fontWeight: FontWeight.w500,
+                                      height: 0.9666666666666667,
+                                    ),
+                                  ),
+                                ),
+                                DropdownMenuItem<String>(
+                                  value: '5',
+                                  child: Text(
+                                    '5to Año',
+                                    style: TextStyle(
+                                      fontFamily: 'Avenir LT Std',
+                                      fontSize: 18,
+                                      color: const Color(0xff000000),
+                                      fontWeight: FontWeight.w500,
+                                      height: 0.9666666666666667,
+                                    ),
+                                  ),
+                                ),
                               ]),
                         ),
                       ),
@@ -267,7 +361,7 @@ class _MisNotasState extends State<MisNotas> {
                                     itemCount: snapshot.data.length,
                                     itemBuilder: (context, index) {
                                       Subject sub = snapshot.data[index];
-                                      return GradeCard(sub);
+                                      return GradeCard(sub, true);
                                     },
                                   ),
                                 ),
@@ -301,7 +395,7 @@ class _MisNotasState extends State<MisNotas> {
                               );
                             }
                         }
-                      })
+                      }),
                 ],
               )),
         ));

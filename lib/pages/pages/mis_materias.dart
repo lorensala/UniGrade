@@ -29,6 +29,9 @@ class _MisMateriasState extends State<MisMaterias> {
           .getAllElectiveSubjectsByUserOrderByYear(_student);
     else if (condition == 'Aprobada')
       return await _subjectDao.getAllSubjectsByPassed(_student);
+    else if (int.tryParse(condition) != null)
+      return await _subjectDao.getAllSubjectsYear(
+          _student, int.parse(condition));
     else
       return await _subjectDao.getAllSubjectsByUserCondition(
           _student, condition);
@@ -237,6 +240,71 @@ class _MisMateriasState extends State<MisMaterias> {
                             value: 'Electiva',
                             child: Text(
                               'Electiva',
+                              style: TextStyle(
+                                fontFamily: 'Avenir LT Std',
+                                fontSize: 18,
+                                color: const Color(0xff000000),
+                                fontWeight: FontWeight.w500,
+                                height: 0.9666666666666667,
+                              ),
+                            ),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: '1',
+                            child: Text(
+                              '1er Año',
+                              style: TextStyle(
+                                fontFamily: 'Avenir LT Std',
+                                fontSize: 18,
+                                color: const Color(0xff000000),
+                                fontWeight: FontWeight.w500,
+                                height: 0.9666666666666667,
+                              ),
+                            ),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: '2',
+                            child: Text(
+                              '2do Año',
+                              style: TextStyle(
+                                fontFamily: 'Avenir LT Std',
+                                fontSize: 18,
+                                color: const Color(0xff000000),
+                                fontWeight: FontWeight.w500,
+                                height: 0.9666666666666667,
+                              ),
+                            ),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: '3',
+                            child: Text(
+                              '3er Año',
+                              style: TextStyle(
+                                fontFamily: 'Avenir LT Std',
+                                fontSize: 18,
+                                color: const Color(0xff000000),
+                                fontWeight: FontWeight.w500,
+                                height: 0.9666666666666667,
+                              ),
+                            ),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: '4',
+                            child: Text(
+                              '4to Año',
+                              style: TextStyle(
+                                fontFamily: 'Avenir LT Std',
+                                fontSize: 18,
+                                color: const Color(0xff000000),
+                                fontWeight: FontWeight.w500,
+                                height: 0.9666666666666667,
+                              ),
+                            ),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: '5',
+                            child: Text(
+                              '5to Año',
                               style: TextStyle(
                                 fontFamily: 'Avenir LT Std',
                                 fontSize: 18,

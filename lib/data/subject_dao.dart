@@ -772,4 +772,82 @@ class SubjectsDao {
 
     return _map;
   }
+
+  Future<List<Subject>> getAllSubjectsYear(Student student, int year) async {
+    List<Subject> list = List<Subject>();
+    CollectionReference collReference;
+
+    try {
+      collReference = FirebaseFirestore.instance
+          .collection('student')
+          .doc(student.getStudentDocRef())
+          .collection('career_student')
+          .doc(student.getCareerDocRefs()[0])
+          .collection('subject_student');
+
+      Future<QuerySnapshot> docs = FirebaseFirestore.instance
+          .collection(collReference.path)
+          .where('year', isEqualTo: year)
+          .orderBy('name')
+          .get();
+
+      await docs.then((value) {
+        value.docs.forEach((element) {
+          Map<String, dynamic> sub = element.data();
+          if (sub != null) {
+            var subject = mapper(sub);
+            list.add(subject);
+          }
+
+          print('=====succed====');
+        });
+      });
+    } catch (e) {
+      print(e);
+
+      print('=======error======');
+    }
+
+    return list;
+  }
+
+  Future<bool> updateSubject(Subject subject, Student _student) async {
+    String _docId;
+    DocumentReference _docRef;
+
+    bool isDone = false;
+
+    try {
+      Future<QuerySnapshot> _subCollection = FirebaseFirestore.instance
+          .collection('student')
+          .doc(_student.getStudentDocRef())
+          .collection('career_student')
+          .doc(_student.getCareerDocRefs()[0])
+          .collection('subject_student')
+          .where('name', isEqualTo: subject.getName())
+          .get();
+
+      await _subCollection.then((value) {
+        _docId = value.docs[0].id;
+      });
+
+      if (_docId != null)
+        _docRef = FirebaseFirestore.instance
+            .collection('student')
+            .doc(_student.getStudentDocRef())
+            .collection('career_student')
+            .doc(_student.getCareerDocRefs()[0])
+            .collection('subject_student')
+            .doc(_docId);
+
+      _docRef.update(subject.toMap());
+
+      print('=====succed====');
+      isDone = true;
+    } catch (e) {
+      print(e);
+      print('=====error=====');
+    }
+    return isDone;
+  }
 }

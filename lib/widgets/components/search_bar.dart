@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+//TODO: Borrar esta clase.
 class SearchBar extends StatelessWidget {
   final Function _onChanged;
 

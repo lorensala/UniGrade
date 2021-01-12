@@ -9,11 +9,10 @@ import 'package:mis_notas/pages/main/home.dart';
 import 'package:mis_notas/pages/login/login_page.dart';
 import 'package:mis_notas/pages/pages/mis_estadistica.dart';
 import 'package:mis_notas/pages/pages/mis_materias.dart';
-import 'package:mis_notas/pages/pages/mis_notas.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mis_notas/pages/login/new_user_login.dart';
+import 'package:mis_notas/pages/pages/misnotas/mis_notas.dart';
 import 'package:provider/provider.dart';
-import 'entities/statistics.dart';
 
 void main() async {
   bool _isLoggedIn = false;
@@ -43,6 +42,9 @@ void main() async {
           ChangeNotifierProvider<Student>(create: (context) => _activeStudent),
           ChangeNotifierProvider<ValueNotifier<bool>>(
             create: (context) => ValueNotifier<bool>(false),
+          ),
+          ChangeNotifierProvider<ValueNotifier<int>>(
+            create: (context) => ValueNotifier<int>(0),
           ),
         ],
         child: MaterialApp(

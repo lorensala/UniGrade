@@ -35,7 +35,6 @@ class _HomePageState extends State<HomePage> {
   var _studentDao = new StudentDao();
   int page = 0;
   final controller = PageController(initialPage: 0);
-  List<Subject> _listSubj = [];
   var isPressedHome = true;
   var isPressedProfile = false;
   var isPressedSettings = false;
@@ -85,6 +84,7 @@ class _HomePageState extends State<HomePage> {
     SubjectsDao _subjectDao = SubjectsDao();
 
     List<Subject> _list = await _subjectDao.getAllSubjectsByUser(_student);
+
     List<Subject> _listCon =
         await _subjectDao.getAllSubjectsWithCondition(_student);
 
@@ -105,6 +105,8 @@ class _HomePageState extends State<HomePage> {
         await _statisticsService.getAvgNfWithBadGrades(_student, _list, -1));
     _dataList.add(_statisticsService.getProfileStats(_student, _listCon));
 
+    _student.subjects = _list;
+
     return _dataList;
   }
 
@@ -119,6 +121,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Student _student = Provider.of<Student>(context, listen: false);
+    ValueNotifier<int> _isPressed =
+        Provider.of<ValueNotifier<int>>(context, listen: false);
 
     ValueNotifier<bool> _isNew = Provider.of<ValueNotifier<bool>>(context);
     if (_isNew.value) {
@@ -127,13 +131,26 @@ class _HomePageState extends State<HomePage> {
     }
 
     return WillPopScope(
-        // ignore: missing_return
-        onWillPop: () async {
-          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-        },
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: SafeArea(
+      // ignore: missing_return
+      onWillPop: () async {
+        SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: SmartRefresher(
+            header: WaterDropHeader(
+              waterDropColor: Color(0xFF66AAFF),
+            ),
+            controller: _refreshController,
+            onRefresh: () {
+              setState(() {});
+              _refreshController.refreshCompleted();
+            },
+            onLoading: () {
+              setState(() {});
+              _refreshController.loadComplete();
+            },
             child: FutureBuilder(
                 future: getData(),
                 builder: (context, AsyncSnapshot<List> snapshot) {
@@ -152,7 +169,7 @@ class _HomePageState extends State<HomePage> {
 
                       _student.fullname = snapshot.data[0].getFullname();
                       _student.profilePic = snapshot.data[0].getProfilePic();
-                      _student.subjects = _listSubj;
+                      _student.subjects = snapshot.data[0].getSubjects();
                       _student.uid = snapshot.data[0].getId();
                       _student.university = snapshot.data[0].getUniversity();
                       _student.carrerDocRefs =
@@ -175,99 +192,103 @@ class _HomePageState extends State<HomePage> {
 
                       _student.statistics = _statistics;
 
-                      return PageView(controller: controller, children: [
-                        MainPage(),
-                        ProfilePage(),
-                      ]);
+                      return PageView(
+                        controller: controller,
+                        children: [
+                          MainPage(),
+                          ProfilePage(),
+                        ],
+                        onPageChanged: (page) {
+                          _isPressed.value = page;
+                        },
+                      );
                   }
                 }),
           ),
-          bottomNavigationBar: BottomAppBar(
-            elevation: 0,
-            child: Container(
-              height: 50,
-              color: Colors.white,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Stack(
-                    children: <Widget>[
-                      Positioned(
-                        right: 4,
-                        top: 4,
-                        child: CircleAvatar(
-                          backgroundColor:
-                              isPressedSettings ? Colors.blue : Colors.white,
-                        ),
-                      ),
-                      IconButton(
-                          icon: !isPressedSettings
-                              ? Image.asset(buttons['settings'][0])
-                              : Image.asset(buttons['settings'][1]),
-                          onPressed: () {
-                            showSettings(context);
-                          }
-                          //{showNewUserDialog(context)},
+        ),
+        bottomNavigationBar: BottomAppBar(
+          elevation: 0,
+          child: Container(
+            height: 50,
+            color: Colors.white,
+            child: Stack(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Stack(
+                      children: <Widget>[
+                        IconButton(
+                            icon: !isPressedSettings
+                                ? Image.asset(buttons['settings'][0])
+                                : Image.asset(buttons['settings'][1]),
+                            onPressed: () {
+                              showSettings(context);
+                            }
+                            //{showNewUserDialog(context)},
+                            ),
+                      ],
+                    ),
+                    Consumer<ValueNotifier<int>>(
+                      builder: (_, value, __) => Stack(
+                        children: <Widget>[
+                          AnimatedPositioned(
+                            curve: Curves.linear,
+                            duration: Duration(milliseconds: 80),
+                            width: value.value == 0 ? 44 : 0,
+                            right: value.value == 0 ? 2 : 25,
+                            top: value.value == 0 ? 2 : 8,
+                            child: CircleAvatar(
+                                radius: 22, backgroundColor: Color(0xff66AAFF)),
                           ),
-                    ],
-                  ),
-                  Stack(
-                    children: <Widget>[
-                      Positioned(
-                        right: 4,
-                        top: 4,
-                        child: CircleAvatar(
-                          backgroundColor:
-                              isPressedHome ? Colors.blue : Colors.white,
-                        ),
+                          IconButton(
+                            icon: !(_isPressed.value == 0)
+                                ? Image.asset(buttons['home'][0])
+                                : Image.asset(buttons['home'][1]),
+                            onPressed: () {
+                              if (controller.page != 0)
+                                controller.animateToPage(0,
+                                    duration: Duration(milliseconds: 300),
+                                    curve: Curves.ease);
+                            },
+                          ),
+                        ],
                       ),
-                      IconButton(
-                        icon: !isPressedHome
-                            ? Image.asset(buttons['home'][0])
-                            : Image.asset(buttons['home'][1]),
-                        onPressed: () {
-                          if (page != 0)
-                            setState(() {
-                              page = 0;
-                              isPressedHome = true;
-                              isPressedProfile = false;
-                              isPressedSettings = false;
-                            });
-                        },
+                    ),
+                    Consumer<ValueNotifier<int>>(
+                      builder: (_, value, __) => Stack(
+                        children: <Widget>[
+                          AnimatedPositioned(
+                            curve: Curves.bounceInOut,
+                            duration: Duration(milliseconds: 80),
+                            width: value.value == 1 ? 44 : 0,
+                            right: value.value == 1 ? 2 : 25,
+                            top: value.value == 1 ? 2 : 8,
+                            child: CircleAvatar(
+                                radius: 22, backgroundColor: Color(0xff66AAFF)),
+                          ),
+                          IconButton(
+                            icon: !(_isPressed.value == 1)
+                                ? Image.asset(buttons['user'][0])
+                                : Image.asset(buttons['user'][1]),
+                            onPressed: () {
+                              if (controller.page != 1)
+                                controller.animateToPage(1,
+                                    duration: Duration(milliseconds: 300),
+                                    curve: Curves.ease);
+                            },
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  Stack(
-                    children: <Widget>[
-                      Positioned(
-                        right: 4,
-                        top: 4,
-                        child: CircleAvatar(
-                          backgroundColor:
-                              isPressedProfile ? Colors.blue : Colors.white,
-                        ),
-                      ),
-                      IconButton(
-                        icon: !isPressedProfile
-                            ? Image.asset(buttons['user'][0])
-                            : Image.asset(buttons['user'][1]),
-                        onPressed: () {
-                          if (page != 1)
-                            setState(() {
-                              page = 1;
-                              isPressedHome = false;
-                              isPressedProfile = true;
-                              isPressedSettings = false;
-                            });
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                )
+              ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   showSettings(BuildContext context) {

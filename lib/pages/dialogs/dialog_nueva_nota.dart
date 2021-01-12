@@ -21,14 +21,14 @@ class DialogNuevaNota extends StatefulWidget {
 class _DialogNuevaNotaState extends State<DialogNuevaNota> {
   var _selectedSubject;
   var _selectedType;
+  var _nota;
   Future<List<Subject>> _subjects;
   bool _hasSelectedData = true;
-
-  TextEditingController _nota = new TextEditingController();
 
   SubjectsDao _subjectDao = new SubjectsDao();
 
   var _types = ['Práctico', 'Teórico', 'TP', 'Final'];
+  var _notas = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
   @override
   void initState() {
@@ -152,33 +152,30 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(
-                      'Nota:',
-                      style: TextStyle(
-                        fontFamily: 'Avenir LT Std',
-                        fontSize: 16,
-                        color: const Color(0xff000000),
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
                     Container(
-                      width: 76.0,
+                      //width: 288.0,
                       height: 37.0,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(26.0),
                         color: const Color(0xfff7f7f7),
                       ),
-                      child: TextField(
-                        controller: _nota,
-                        inputFormatters: [
-                          WhitelistingTextInputFormatter(
-                              RegExp(r'^(?:[1-9]|0[1-9]|10)$')),
-                          LengthLimitingTextInputFormatter(2),
-                        ],
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 10)),
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                              value: _nota,
+                              hint: new Text('Nota'),
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _nota = newValue;
+                                  _hasSelectedData = true;
+                                });
+                              },
+                              items: _notas
+                                  .map((type) => DropdownMenuItem(
+                                      child: Text(type), value: type))
+                                  .toList()),
+                        ),
                       ),
                     ),
                     InkWell(
@@ -186,16 +183,16 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
                       onTap: () async {
                         if (_selectedSubject != null &&
                             _selectedType != null &&
-                            _nota.text != '' &&
-                            1 < int.parse(_nota.text) &&
-                            int.parse(_nota.text) < 11) {
+                            _nota != null &&
+                            1 < int.parse(_nota) &&
+                            int.parse(_nota) < 11) {
                           setState(() {
                             _hasSelectedData = true;
                           });
 
                           bool isDone = await _subjectDao.addGrade(
                               widget._student,
-                              int.parse(_nota.text),
+                              int.parse(_nota),
                               _selectedSubject,
                               _selectedType);
 
@@ -210,8 +207,6 @@ class _DialogNuevaNotaState extends State<DialogNuevaNota> {
 
                             if (_selectedType == 'Final')
                               Navigator.pop(context);
-
-                            _nota.text = '';
                           } else {
                             CoolAlert.show(
                                 borderRadius: 26,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mis_notas/animation/FadeAnimation.dart';
-import 'package:mis_notas/entities/statistics.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/widgets/components/profile_stats.dart';
 import 'package:provider/provider.dart';

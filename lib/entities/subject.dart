@@ -13,9 +13,34 @@ class Subject extends ChangeNotifier {
   StateRecord _state;
   String _type;
   String _icon;
-  bool _passed;
+  bool _passed; //TODO: Sacar esto!!
   String _duration;
   bool _elect;
+  int _points; //TODO: Esto
+
+  Map<String, dynamic> toMap() {
+    return {
+      'duration': _duration,
+      'gradesP': _gradesP,
+      'gradesT': _gradesT,
+      'gradesTP': _gradesTP,
+      'nf': _nf,
+      'aplazos': _aplazos,
+      'state': getState().getState().getName(),
+      'type': _type,
+      'year': _year,
+      'name': _name,
+      'icon': _icon,
+      'passed': _passed,
+      'elect': _elect,
+      'points': 0 //TODO: Hardcoded
+    };
+  }
+
+  /*TODO: No deberia exisitir el passed, hay que calcular de una si la nota
+  es mayor a 6, entonces ahi esta aprobada. Las condiciones deberian ser
+  regular, porom, ap directa, libre, abandonada.
+  */
 
   bool getElect() => _elect;
   String getDuration() => _duration;
@@ -32,6 +57,47 @@ class Subject extends ChangeNotifier {
   bool getPassed() => _passed;
 
   set passed(passed) => _passed = passed;
+  void addgradeP(grade) => _gradesP.add(grade);
+  void addgradeT(grade) => _gradesT.add(grade);
+  void addgradeTP(grade) => _gradesTP.add(grade);
+  void addgradeAp(grade) => _aplazos.add(grade);
+  void nf(grade) => _nf = grade;
+
+  void deleteGradeP(int nota) => _gradesP.remove(nota);
+  void deleteGradeT(int nota) => _gradesT.remove(nota);
+  void deleteGradeTP(int nota) => _gradesTP.remove(nota);
+  void deleteGradeAp(int nota) => _aplazos.remove(nota);
+
+  void modGradeP(int nota, int nuevaNota) {
+    int index = _gradesP.indexOf(nota);
+    _gradesP[index] = nuevaNota;
+  }
+
+  void modGradeT(int nota, int nuevaNota) {
+    int index = _gradesT.indexOf(nota);
+    _gradesT[index] = nuevaNota;
+  }
+
+  void modGradeTP(int nota, int nuevaNota) {
+    int index = _gradesTP.indexOf(nota);
+    _gradesTP[index] = nuevaNota;
+  }
+
+  void modGradAp(int nota, int nuevaNota) {
+    if (nota >= 6 && nuevaNota >= 6) {
+      nf(nuevaNota);
+    } else if (nota >= 6 && nuevaNota < 6) {
+      nf(-1);
+      _aplazos.add(nuevaNota);
+    } else if (nota < 6 && nuevaNota >= 6) {
+      _aplazos.remove(nota);
+
+      nf(nuevaNota);
+    } else {
+      int index = _aplazos.indexOf(nota);
+      _aplazos[index] = nuevaNota;
+    }
+  }
 
   Subject(
       this._name,

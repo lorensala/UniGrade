@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mis_notas/entities/subject.dart';
-import 'package:mis_notas/widgets/styles/notas_info.dart';
+import 'package:mis_notas/pages/pages/misnotas/notas_info.dart';
 
 class MisNotasInfo extends StatefulWidget {
   final Subject _subject;

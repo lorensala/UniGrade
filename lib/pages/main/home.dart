@@ -35,7 +35,6 @@ class _HomePageState extends State<HomePage> {
   var _studentDao = new StudentDao();
   int page = 0;
   final controller = PageController(initialPage: 0);
-  List<Subject> _listSubj = [];
   var isPressedHome = true;
   var isPressedProfile = false;
   var isPressedSettings = false;
@@ -85,6 +84,7 @@ class _HomePageState extends State<HomePage> {
     SubjectsDao _subjectDao = SubjectsDao();
 
     List<Subject> _list = await _subjectDao.getAllSubjectsByUser(_student);
+
     List<Subject> _listCon =
         await _subjectDao.getAllSubjectsWithCondition(_student);
 
@@ -104,6 +104,8 @@ class _HomePageState extends State<HomePage> {
     _dataList.add(
         await _statisticsService.getAvgNfWithBadGrades(_student, _list, -1));
     _dataList.add(_statisticsService.getProfileStats(_student, _listCon));
+
+    _student.subjects = _list;
 
     return _dataList;
   }
@@ -167,7 +169,7 @@ class _HomePageState extends State<HomePage> {
 
                       _student.fullname = snapshot.data[0].getFullname();
                       _student.profilePic = snapshot.data[0].getProfilePic();
-                      _student.subjects = _listSubj;
+                      _student.subjects = snapshot.data[0].getSubjects();
                       _student.uid = snapshot.data[0].getId();
                       _student.university = snapshot.data[0].getUniversity();
                       _student.carrerDocRefs =

@@ -28,6 +28,10 @@ class _NotasInfoState extends State<NotasInfo> {
   var _newNota;
   SubjectsDao _subejctDao = new SubjectsDao();
   bool done = false;
+
+  //TODO: Implementar logica para ver si cambia realmente.
+  bool changed = false;
+
   //TODO: SI ingresa una nota final, deberia marcar como terminó la materia.
   //TODO: Provider de estudiante con sus respectivas materias!
 
@@ -116,7 +120,15 @@ class _NotasInfoState extends State<NotasInfo> {
                       onChanged: (newValue) {
                         setState(() {
                           _selectedTypeAdd = newValue;
-                          _hasSelectedDataAdd = true;
+                          if (_notaAdd != null) _hasSelectedDataAdd = true;
+
+                          _selectedTypeDel = null;
+                          _notaDel = null;
+                          _hasSelectedDataDel = false;
+                          _selectedTypeMod = null;
+                          _notaMod = null;
+                          _newNota = null;
+                          _hasSelectedDataMod = false;
                         });
                       },
                       items: _types
@@ -151,7 +163,16 @@ class _NotasInfoState extends State<NotasInfo> {
                         onChanged: (newValue) {
                           setState(() {
                             _notaAdd = newValue;
-                            _hasSelectedDataAdd = true;
+                            if (_selectedTypeAdd != null)
+                              _hasSelectedDataAdd = true;
+
+                            _selectedTypeDel = null;
+                            _notaDel = null;
+                            _hasSelectedDataDel = false;
+                            _selectedTypeMod = null;
+                            _notaMod = null;
+                            _newNota = null;
+                            _hasSelectedDataMod = false;
                           });
                         },
                         items: _notas
@@ -197,6 +218,8 @@ class _NotasInfoState extends State<NotasInfo> {
                           break;
                         }
                     }
+
+                    changed = true;
 
                     setState(() {});
                   }
@@ -259,7 +282,15 @@ class _NotasInfoState extends State<NotasInfo> {
                       onChanged: (newValue) {
                         setState(() {
                           _selectedTypeDel = newValue;
-                          _hasSelectedDataDel = true;
+                          if (_notaDel != null) _hasSelectedDataDel = true;
+
+                          _selectedTypeAdd = null;
+                          _notaAdd = null;
+                          _hasSelectedDataAdd = false;
+                          _selectedTypeMod = null;
+                          _notaMod = null;
+                          _newNota = null;
+                          _hasSelectedDataMod = false;
                         });
                       },
                       items: _types
@@ -293,7 +324,16 @@ class _NotasInfoState extends State<NotasInfo> {
                         onChanged: (newValue) {
                           setState(() {
                             _notaDel = newValue;
-                            _hasSelectedDataDel = true;
+                            if (_selectedTypeDel != null)
+                              _hasSelectedDataDel = true;
+
+                            _selectedTypeAdd = null;
+                            _notaAdd = null;
+                            _hasSelectedDataAdd = false;
+                            _selectedTypeMod = null;
+                            _notaMod = null;
+                            _newNota = null;
+                            _hasSelectedDataMod = false;
                           });
                         },
                         items: _getGrades(_selectedTypeDel)
@@ -339,7 +379,7 @@ class _NotasInfoState extends State<NotasInfo> {
                         }
                     }
 
-                    print(widget._subject.getGradesP().toString() + 'Este');
+                    changed = true;
 
                     setState(() {
                       _notaDel = null;
@@ -404,7 +444,16 @@ class _NotasInfoState extends State<NotasInfo> {
                       onChanged: (newValue) {
                         setState(() {
                           _selectedTypeMod = newValue;
-                          _hasSelectedDataMod = true;
+                          if (_notaMod != null && _newNota != null)
+                            _hasSelectedDataMod = true;
+
+                          _selectedTypeAdd = null;
+                          _notaAdd = null;
+                          _hasSelectedDataAdd = false;
+                          _selectedTypeDel = null;
+
+                          _notaDel = null;
+                          _hasSelectedDataDel = false;
                           _newNota = null;
                           _notaMod = null;
                         });
@@ -441,7 +490,15 @@ class _NotasInfoState extends State<NotasInfo> {
                         onChanged: (newValue) {
                           setState(() {
                             _notaMod = newValue;
-                            _hasSelectedDataMod = true;
+                            if (_selectedTypeMod != null && _newNota != null)
+                              _hasSelectedDataMod = true;
+
+                            _selectedTypeAdd = null;
+                            _notaAdd = null;
+                            _hasSelectedDataAdd = false;
+                            _selectedTypeDel = null;
+                            _notaDel = null;
+                            _hasSelectedDataDel = false;
                           });
                         },
                         items: _getGrades(_selectedTypeMod)
@@ -474,7 +531,15 @@ class _NotasInfoState extends State<NotasInfo> {
                         onChanged: (newValue) {
                           setState(() {
                             _newNota = newValue;
-                            _hasSelectedDataMod = true;
+                            if (_selectedTypeMod != null && _notaMod != null)
+                              _hasSelectedDataMod = true;
+
+                            _selectedTypeAdd = null;
+                            _notaAdd = null;
+                            _hasSelectedDataAdd = false;
+                            _selectedTypeDel = null;
+                            _notaDel = null;
+                            _hasSelectedDataDel = false;
                           });
                         },
                         items: _notas
@@ -518,6 +583,8 @@ class _NotasInfoState extends State<NotasInfo> {
                           break;
                         }
                     }
+
+                    changed = true;
 
                     setState(() {
                       _newNota = null;
@@ -584,10 +651,11 @@ class _NotasInfoState extends State<NotasInfo> {
                 height: 37.0,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(26.0),
-                  color: const Color(0xffa7ffad),
+                  color: changed ? const Color(0xffa7ffad) : Colors.grey,
                 ),
                 child: Center(
                   child: Text(
+                    //TODO: NO SE PUEDE TOCAR SI NO SE MODIFICO NADA
                     'Guardar Cambios',
                     style: TextStyle(
                       fontFamily: 'Avenir LT Std',

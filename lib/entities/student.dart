@@ -46,7 +46,7 @@ class Student extends ChangeNotifier {
 
   String getProfilePic() => _profilePic;
 
-  List<Subject> getSubjecs() => _subjects;
+  List<Subject> getSubjects() => _subjects;
 
   Student(this._fullname, this._profilePic, this._subjects, this._uid,
       this._university, _carrerDocRefs, _studentDocRef, _statistics);

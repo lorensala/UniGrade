@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mis_notas/entities/subject.dart';
+import 'package:mis_notas/pages/pages/misnotas/mis_notas.dart';
 import 'package:mis_notas/pages/pages/misnotas/notas_info.dart';
 
 class MisNotasInfo extends StatefulWidget {
@@ -29,7 +30,27 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                   children: <Widget>[
                     IconButton(
                       onPressed: () {
-                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 250),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  animation = CurvedAnimation(
+                                      parent: animation,
+                                      curve: Curves.easeInOut);
+                                  return SlideTransition(
+                                    position: Tween(
+                                            begin: Offset(1.0, 0.0),
+                                            end: Offset(0.0, 0.0))
+                                        .animate(animation),
+                                    child: child,
+                                  );
+                                },
+                                pageBuilder:
+                                    (context, animation, animationTime) {
+                                  return MisNotas();
+                                }));
                       },
                       icon: Image.asset(
                         'assets/images/3.0x/backarrow.png',

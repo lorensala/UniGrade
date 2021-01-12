@@ -20,21 +20,40 @@ class _MisMateriasState extends State<MisMaterias> {
   String _condition = 'Todas';
 
   Future<List<Subject>> getData(Student _student, String condition) async {
-    var _subjectDao = new SubjectsDao();
+    List<Subject> _list = _student.getSubjects();
+    List<Subject> _listAux = new List<Subject>();
 
-    if (condition == 'Todas')
-      return await _subjectDao.getAllSubjectsByUserOrderByYear(_student);
-    else if (condition == 'Electiva')
-      return await _subjectDao
-          .getAllElectiveSubjectsByUserOrderByYear(_student);
-    else if (condition == 'Aprobada')
-      return await _subjectDao.getAllSubjectsByPassed(_student);
-    else if (int.tryParse(condition) != null)
-      return await _subjectDao.getAllSubjectsYear(
-          _student, int.parse(condition));
-    else
-      return await _subjectDao.getAllSubjectsByUserCondition(
-          _student, condition);
+    if (condition == 'Todas') {
+      _list.sort((a, b) => a.getYear().compareTo(b.getYear()));
+      return _list;
+    } else if (condition == 'Electiva') {
+      _list.forEach((sub) {
+        if (sub.getElect()) _listAux.add(sub);
+      });
+      return _listAux;
+    } else if (condition == 'Aprobada') {
+      _list.forEach((sub) {
+        if (sub.getNf() >= 6) {
+          _listAux.add(sub);
+        }
+      });
+      return _listAux;
+    } else if (int.tryParse(condition) != null) {
+      _list.forEach((sub) {
+        if (sub.getYear() == int.parse(condition)) {
+          _listAux.add(sub);
+        }
+      });
+
+      return _listAux;
+    } else {
+      _list.forEach((sub) {
+        if (sub.getState().getState().getName() == condition) {
+          _listAux.add(sub);
+        }
+      });
+      return _listAux;
+    }
   }
 
   @override
@@ -338,7 +357,7 @@ class _MisMateriasState extends State<MisMaterias> {
                             itemBuilder: (context, index) {
                               return SubjectCard(snapshot.data[index]);
                             },
-                            physics: BouncingScrollPhysics(),
+                            physics: AlwaysScrollableScrollPhysics(),
                           ),
                         ));
                       } else {

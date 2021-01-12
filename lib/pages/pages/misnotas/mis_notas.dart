@@ -5,7 +5,6 @@ import 'package:mis_notas/animation/FadeAnimation.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
 
-import 'package:mis_notas/data/subject_dao.dart';
 import 'package:mis_notas/pages/main/home.dart';
 
 import 'package:mis_notas/widgets/styles/grade_card_style.dart';
@@ -19,30 +18,50 @@ class MisNotas extends StatefulWidget {
 
 class _MisNotasState extends State<MisNotas> {
   String _condition = 'Todas';
-  RefreshController _refreshController = new RefreshController();
 
   Future<List<Subject>> getData(Student _student, String condition) async {
-    var _subjectDao = new SubjectsDao();
+    List<Subject> _list = _student.getSubjects();
+    List<Subject> _listAux = new List<Subject>();
 
-    if (condition == 'Todas')
-      return await _subjectDao.getAllSubjectsByUserOrderByYear(_student);
-    else if (condition == 'Electiva')
-      return await _subjectDao
-          .getAllElectiveSubjectsByUserOrderByYear(_student);
-    else if (condition == 'Aprobada')
-      return await _subjectDao.getAllSubjectsByPassed(_student);
-    else if (int.tryParse(condition) != null)
-      return await _subjectDao.getAllSubjectsYear(
-          _student, int.parse(condition));
-    else
-      return await _subjectDao.getAllSubjectsByUserCondition(
-          _student, condition);
+    if (condition == 'Todas') {
+      _list.sort((a, b) => a.getYear().compareTo(b.getYear()));
+      return _list;
+    } else if (condition == 'Electiva') {
+      _list.forEach((sub) {
+        if (sub.getElect()) _listAux.add(sub);
+      });
+      return _listAux;
+    } else if (condition == 'Aprobada') {
+      _list.forEach((sub) {
+        if (sub.getNf() >= 6) {
+          _listAux.add(sub);
+        }
+      });
+      return _listAux;
+    } else if (int.tryParse(condition) != null) {
+      _list.forEach((sub) {
+        if (sub.getYear() == int.parse(condition)) {
+          _listAux.add(sub);
+        }
+      });
+
+      return _listAux;
+    } else {
+      _list.forEach((sub) {
+        if (sub.getState().getState().getName() == condition) {
+          _listAux.add(sub);
+        }
+      });
+      return _listAux;
+    }
   }
 
   void initState() {
     // only create the future once.
     super.initState();
   }
+
+  ScrollController _controller = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +79,8 @@ class _MisNotasState extends State<MisNotas> {
                       children: <Widget>[
                         IconButton(
                           onPressed: () {
+                            //_controller.position.pixels;
+                            //Navigator.pop(context);
                             Navigator.push(
                                 context,
                                 PageRouteBuilder(
@@ -342,60 +363,62 @@ class _MisNotasState extends State<MisNotas> {
                       ),
                     ),
                   ),
-                  FutureBuilder(
-                      future:
-                          getData(Provider.of<Student>(context), _condition),
-                      builder: (context, snapshot) {
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.waiting:
-                            return Center(child: CircularProgressIndicator());
+                  Consumer<Student>(
+                    builder: (_, _student, __) => FutureBuilder(
+                        future: getData(_student, _condition),
+                        builder: (context, snapshot) {
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.waiting:
+                              return Center(child: CircularProgressIndicator());
 
-                          default:
-                            if (snapshot.hasError) return Text('error');
-                            if (!snapshot.data.isEmpty) {
-                              return Expanded(
-                                child: FadeAnimation(
-                                  delay: 0.1,
-                                  child: ListView.builder(
-                                    physics: BouncingScrollPhysics(),
-                                    itemCount: snapshot.data.length,
-                                    itemBuilder: (context, index) {
-                                      Subject sub = snapshot.data[index];
-                                      return GradeCard(sub, true);
-                                    },
-                                  ),
-                                ),
-                              );
-                            } else {
-                              return Column(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 20),
-                                    child: Image.asset(
-                                      'assets/images/not_found.png',
-                                      scale: 4,
+                            default:
+                              if (snapshot.hasError) return Text('error');
+                              if (!snapshot.data.isEmpty) {
+                                return Expanded(
+                                  child: FadeAnimation(
+                                    delay: 0.1,
+                                    child: ListView.builder(
+                                      controller: _controller,
+                                      physics: AlwaysScrollableScrollPhysics(),
+                                      itemCount: snapshot.data.length,
+                                      itemBuilder: (context, index) {
+                                        Subject sub = snapshot.data[index];
+                                        return GradeCard(sub, true);
+                                      },
                                     ),
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.all(24),
-                                    child: Center(
-                                      child: Text(
-                                        'No se encontraron materias en esta categoría.',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontFamily: 'Avenir LT Std',
-                                          fontSize: 18,
-                                          color: Colors.black45,
-                                          fontWeight: FontWeight.w800,
+                                );
+                              } else {
+                                return Column(
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 20),
+                                      child: Image.asset(
+                                        'assets/images/not_found.png',
+                                        scale: 4,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(24),
+                                      child: Center(
+                                        child: Text(
+                                          'No se encontraron materias en esta categoría.',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontFamily: 'Avenir LT Std',
+                                            fontSize: 18,
+                                            color: Colors.black45,
+                                            fontWeight: FontWeight.w800,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              );
-                            }
-                        }
-                      }),
+                                  ],
+                                );
+                              }
+                          }
+                        }),
+                  ),
                 ],
               )),
         ));

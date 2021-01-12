@@ -80,7 +80,10 @@ class _NotasInfoState extends State<NotasInfo> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        GradeCard(widget._subject, false),
+        GradeCard(
+            _student.getSubjects().firstWhere(
+                (s) => (s.getName().compareTo(widget._subject.getName()) == 0)),
+            false),
         SizedBox(
           height: 10,
         ),
@@ -185,57 +188,88 @@ class _NotasInfoState extends State<NotasInfo> {
               SizedBox(
                 width: 10,
               ),
-              InkWell(
-                onTap: () {
-                  if (_hasSelectedDataAdd &&
-                      _selectedTypeAdd != null &&
-                      _notaAdd != null) {
-                    int nota = int.parse(_notaAdd);
+              Consumer<Student>(
+                builder: (context, value, __) => InkWell(
+                  onTap: () {
+                    if (_hasSelectedDataAdd &&
+                        _selectedTypeAdd != null &&
+                        _notaAdd != null) {
+                      int nota = int.parse(_notaAdd);
 
-                    switch (_selectedTypeAdd) {
-                      case 'Práctico':
-                        if (widget._subject.getGradesP().length < 6)
-                          widget._subject.addgradeP(nota);
-                        break;
-
-                      case 'Teórico':
-                        if (widget._subject.getGradesT().length < 6)
-                          widget._subject.addgradeT(nota);
-                        break;
-
-                      case 'TP':
-                        if (widget._subject.getGradesTP().length < 6)
-                          widget._subject.addgradeTP(nota);
-                        break;
-
-                      case 'Final':
-                        if (widget._subject.getAplazos().length <= 3) {
-                          if (nota > 5)
-                            //TODO: Mostrar mensaje para que ponga la condicion
-                            widget._subject.nf(nota);
-                          else
-                            widget._subject.addgradeAp(nota);
+                      switch (_selectedTypeAdd) {
+                        case 'Práctico':
+                          if (widget._subject.getGradesP().length < 5)
+                            _student
+                                .getSubjects()
+                                .firstWhere((s) => (s
+                                        .getName()
+                                        .compareTo(widget._subject.getName()) ==
+                                    0))
+                                .addgradeP(nota);
                           break;
-                        }
+
+                        case 'Teórico':
+                          if (widget._subject.getGradesT().length < 5)
+                            _student
+                                .getSubjects()
+                                .firstWhere((s) => (s
+                                        .getName()
+                                        .compareTo(widget._subject.getName()) ==
+                                    0))
+                                .addgradeT(nota);
+                          break;
+
+                        case 'TP':
+                          if (widget._subject.getGradesTP().length < 5)
+                            _student
+                                .getSubjects()
+                                .firstWhere((s) => (s
+                                        .getName()
+                                        .compareTo(widget._subject.getName()) ==
+                                    0))
+                                .addgradeTP(nota);
+                          break;
+
+                        case 'Final':
+                          if (widget._subject.getAplazos().length <= 3) {
+                            if (nota > 5)
+
+                              //TODO: Mostrar mensaje para que ponga la condicion
+                              _student
+                                  .getSubjects()
+                                  .firstWhere((s) => (s.getName().compareTo(
+                                          widget._subject.getName()) ==
+                                      0))
+                                  .nf(nota);
+                            else
+                              _student
+                                  .getSubjects()
+                                  .firstWhere((s) => (s.getName().compareTo(
+                                          widget._subject.getName()) ==
+                                      0))
+                                  .addgradeAp(nota);
+                            break;
+                          }
+                      }
+
+                      changed = true;
+
+                      setState(() {});
                     }
-
-                    changed = true;
-
-                    setState(() {});
-                  }
-                },
-                child: Container(
-                  width: 38.0,
-                  height: 37.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(26.0),
-                    color: const Color(0xffa7ffad),
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.add,
-                      color: Colors.white,
-                      size: 30,
+                  },
+                  child: Container(
+                    width: 38.0,
+                    height: 37.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(26.0),
+                      color: const Color(0xffa7ffad),
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.add,
+                        color: Colors.white,
+                        size: 30,
+                      ),
                     ),
                   ),
                 ),
@@ -631,8 +665,6 @@ class _NotasInfoState extends State<NotasInfo> {
                   context: context,
                   type: CoolAlertType.success,
                   text: '¡Materia actualizada con exito!');
-
-              Navigator.pop(context);
             } else {
               CoolAlert.show(
                   borderRadius: 26,

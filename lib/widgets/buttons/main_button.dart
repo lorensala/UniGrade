@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mis_notas/pages/pages/mis_materias.dart';
 
 class MainButton extends StatelessWidget {
   final String _text;
@@ -15,27 +14,24 @@ class MainButton extends StatelessWidget {
       children: [
         Container(
           padding: EdgeInsets.only(top: 30),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(24, 0, 0, 0),
-            child: Container(
-              width: 129.0,
-              height: 92.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(26.0),
-                color: _color,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(17, 40, 0, 0),
-                child: Text(
-                  _text,
-                  style: TextStyle(
-                    fontFamily: 'Avenir LT Std',
-                    fontSize: 18,
-                    color: const Color(0xff484848),
-                    fontWeight: FontWeight.w800,
-                  ),
-                  textAlign: TextAlign.left,
+          child: Container(
+            width: 159.0,
+            height: 142.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(26.0),
+              color: _color,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(17, 70, 0, 0),
+              child: Text(
+                _text,
+                style: TextStyle(
+                  fontFamily: 'Avenir LT Std',
+                  fontSize: 22,
+                  color: const Color(0xff484848),
+                  fontWeight: FontWeight.w800,
                 ),
+                textAlign: TextAlign.left,
               ),
             ),
           ),
@@ -45,8 +41,8 @@ class MainButton extends StatelessWidget {
           left: 63,
           child: Image.asset(
             _icon,
-            width: 54.0,
-            height: 54.0,
+            width: 84.0,
+            height: 84.0,
           ),
         )
       ],

@@ -15,6 +15,7 @@ import 'package:mis_notas/widgets/buttons/quick_buttons.dart';
 import 'package:mis_notas/widgets/components/quick_bar.dart';
 
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -148,12 +149,12 @@ class _MainPageState extends State<MainPage> {
             ),
             // Listview
             Padding(
-              padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
+              padding: const EdgeInsets.fromLTRB(0, 10, 0, 18),
               child: Container(
-                //height: 130,
-                child: Wrap(
-                  spacing: 25,
-                  alignment: WrapAlignment.spaceBetween,
+                height: 130,
+                child: ListView(
+                  physics: BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
                   children: <Widget>[
                     InkWell(
                       highlightColor: Colors.transparent,
@@ -255,8 +256,59 @@ class _MainPageState extends State<MainPage> {
                 ),
               ),
             ),
-
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+              child: Text(
+                'Funciones Rápidas',
+                style: TextStyle(
+                  fontFamily: 'Avenir LT Std',
+                  fontSize: 22,
+                  color: const Color(0xff484848),
+                  fontWeight: FontWeight.w800,
+                ),
+                textAlign: TextAlign.left,
+              ),
+            ),
             // Funciones rapidas
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
+              child: Wrap(
+                  spacing: 20,
+                  runSpacing: 10,
+                  crossAxisAlignment: WrapCrossAlignment.end,
+                  direction: Axis.horizontal,
+                  children: [
+                    InkWell(
+                        borderRadius: BorderRadius.circular(26),
+                        onTap: () {
+                          //student.addPromedio();
+                          showNuevaNota(context, _student);
+                        },
+                        child: QuickButton('Nueva Nota', Color(0xFFF5F5F5))),
+                    InkWell(
+                      borderRadius: BorderRadius.circular(26),
+                      onTap: () {
+                        showActualizarMateria(context, _student);
+                      },
+                      child:
+                          QuickButton('Actualizar Materia', Color(0xFFFFDCDC)),
+                    ),
+                    InkWell(
+                      borderRadius: BorderRadius.circular(26),
+                      onTap: () {
+                        showNuevaMateria(context, _student);
+                      },
+                      child: QuickButton('Nueva Materia', Color(0xFFF5DCFF)),
+                    ),
+                    InkWell(
+                      borderRadius: BorderRadius.circular(26),
+                      onTap: () {
+                        showModificarNota(context, _student);
+                      },
+                      child: QuickButton('Modificar Nota', Color(0xFFCAFFC6)),
+                    )
+                  ]),
+            )
           ],
         ),
       ),

@@ -25,7 +25,7 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(12, 0, 0, 0),
+                padding: const EdgeInsets.fromLTRB(12, 20, 0, 0),
                 child: Row(
                   children: <Widget>[
                     IconButton(

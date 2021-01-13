@@ -76,14 +76,26 @@ class _NotasInfoState extends State<NotasInfo> {
   Widget build(BuildContext context) {
     Student _student = Provider.of<Student>(context);
 
+    Subject _aux = new Subject(
+        widget._subject.getName(),
+        widget._subject.getYear(),
+        widget._subject.getGradesP(),
+        widget._subject.getGradesT(),
+        widget._subject.getGradesTP(),
+        widget._subject.getNf(),
+        widget._subject.getState(),
+        widget._subject.getType(),
+        widget._subject.getIcon(),
+        widget._subject.getPassed(),
+        widget._subject.getAplazos(),
+        widget._subject.getDuration(),
+        widget._subject.getElect());
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        GradeCard(
-            _student.getSubjects().firstWhere(
-                (s) => (s.getName().compareTo(widget._subject.getName()) == 0)),
-            false),
+        GradeCard(_aux, false),
         SizedBox(
           height: 10,
         ),
@@ -188,88 +200,56 @@ class _NotasInfoState extends State<NotasInfo> {
               SizedBox(
                 width: 10,
               ),
-              Consumer<Student>(
-                builder: (context, value, __) => InkWell(
-                  onTap: () {
-                    if (_hasSelectedDataAdd &&
-                        _selectedTypeAdd != null &&
-                        _notaAdd != null) {
-                      int nota = int.parse(_notaAdd);
+              InkWell(
+                onTap: () {
+                  if (_hasSelectedDataAdd &&
+                      _selectedTypeAdd != null &&
+                      _notaAdd != null) {
+                    int nota = int.parse(_notaAdd);
 
-                      switch (_selectedTypeAdd) {
-                        case 'Práctico':
-                          if (widget._subject.getGradesP().length < 5)
-                            _student
-                                .getSubjects()
-                                .firstWhere((s) => (s
-                                        .getName()
-                                        .compareTo(widget._subject.getName()) ==
-                                    0))
-                                .addgradeP(nota);
+                    switch (_selectedTypeAdd) {
+                      case 'Práctico':
+                        if (_aux.getGradesP().length < 5) _aux.addgradeP(nota);
+                        break;
+
+                      case 'Teórico':
+                        if (_aux.getGradesT().length < 5) _aux.addgradeT(nota);
+                        break;
+
+                      case 'TP':
+                        if (_aux.getGradesTP().length < 5)
+                          _aux.addgradeTP(nota);
+                        break;
+
+                      case 'Final':
+                        if (widget._subject.getAplazos().length <= 3) {
+                          if (nota > 5)
+
+                            //TODO: Mostrar mensaje para que ponga la condicion
+                            _aux.nf(nota);
+                          else
+                            _aux.addgradeAp(nota);
                           break;
-
-                        case 'Teórico':
-                          if (widget._subject.getGradesT().length < 5)
-                            _student
-                                .getSubjects()
-                                .firstWhere((s) => (s
-                                        .getName()
-                                        .compareTo(widget._subject.getName()) ==
-                                    0))
-                                .addgradeT(nota);
-                          break;
-
-                        case 'TP':
-                          if (widget._subject.getGradesTP().length < 5)
-                            _student
-                                .getSubjects()
-                                .firstWhere((s) => (s
-                                        .getName()
-                                        .compareTo(widget._subject.getName()) ==
-                                    0))
-                                .addgradeTP(nota);
-                          break;
-
-                        case 'Final':
-                          if (widget._subject.getAplazos().length <= 3) {
-                            if (nota > 5)
-
-                              //TODO: Mostrar mensaje para que ponga la condicion
-                              _student
-                                  .getSubjects()
-                                  .firstWhere((s) => (s.getName().compareTo(
-                                          widget._subject.getName()) ==
-                                      0))
-                                  .nf(nota);
-                            else
-                              _student
-                                  .getSubjects()
-                                  .firstWhere((s) => (s.getName().compareTo(
-                                          widget._subject.getName()) ==
-                                      0))
-                                  .addgradeAp(nota);
-                            break;
-                          }
-                      }
-
-                      changed = true;
-
-                      setState(() {});
+                        }
                     }
-                  },
-                  child: Container(
-                    width: 38.0,
-                    height: 37.0,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(26.0),
-                      color: const Color(0xffa7ffad),
-                    ),
-                    child: Center(
-                      child: Icon(
-                        Icons.add,
-                        color: Colors.white,
-                        size: 30,
-                      ),
+
+                    changed = true;
+
+                    setState(() {});
+                  }
+                },
+                child: Container(
+                  width: 38.0,
+                  height: 37.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(26.0),
+                    color: const Color(0xffa7ffad),
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 30,
                     ),
                   ),
                 ),
@@ -389,26 +369,26 @@ class _NotasInfoState extends State<NotasInfo> {
 
                     switch (_selectedTypeDel) {
                       case 'Práctico':
-                        if (widget._subject.getGradesP().length < 6)
-                          widget._subject.deleteGradeP(nota);
+                        if (_aux.getGradesP().length < 6)
+                          _aux.deleteGradeP(nota);
                         break;
 
                       case 'Teórico':
-                        if (widget._subject.getGradesT().length < 6)
-                          widget._subject.deleteGradeT(nota);
+                        if (_aux.getGradesT().length < 6)
+                          _aux.deleteGradeT(nota);
                         break;
 
                       case 'TP':
-                        if (widget._subject.getGradesTP().length < 6)
-                          widget._subject.deleteGradeTP(nota);
+                        if (_aux.getGradesTP().length < 6)
+                          _aux.deleteGradeTP(nota);
                         break;
 
                       case 'Final':
-                        if (widget._subject.getAplazos().length <= 3) {
+                        if (_aux.getAplazos().length <= 3) {
                           if (nota > 5)
-                            widget._subject.nf(-1);
+                            _aux.nf(-1);
                           else
-                            widget._subject.deleteGradeAp(nota);
+                            _aux.deleteGradeAp(nota);
                           break;
                         }
                     }
@@ -597,23 +577,23 @@ class _NotasInfoState extends State<NotasInfo> {
 
                     switch (_selectedTypeMod) {
                       case 'Práctico':
-                        if (widget._subject.getGradesP().length < 6)
-                          widget._subject.modGradeP(nota, nuevaNota);
+                        if (_aux.getGradesP().length < 6)
+                          _aux.modGradeP(nota, nuevaNota);
                         break;
 
                       case 'Teórico':
-                        if (widget._subject.getGradesT().length < 6)
-                          widget._subject.modGradeT(nota, nuevaNota);
+                        if (_aux.getGradesT().length < 6)
+                          _aux.modGradeT(nota, nuevaNota);
                         break;
 
                       case 'TP':
-                        if (widget._subject.getGradesTP().length < 6)
-                          widget._subject.modGradeTP(nota, nuevaNota);
+                        if (_aux.getGradesTP().length < 6)
+                          _aux.modGradeTP(nota, nuevaNota);
                         break;
 
                       case 'Final':
-                        if (widget._subject.getAplazos().length <= 3) {
-                          widget._subject.modGradAp(nota, nuevaNota);
+                        if (_aux.getAplazos().length <= 3) {
+                          _aux.modGradAp(nota, nuevaNota);
                           break;
                         }
                     }

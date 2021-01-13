@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
 import 'package:mis_notas/pages/pages/misnotas/mis_notas.dart';
 import 'package:mis_notas/pages/pages/misnotas/notas_info.dart';
+import 'package:provider/provider.dart';
 
 class MisNotasInfo extends StatefulWidget {
   final Subject _subject;
@@ -16,6 +18,7 @@ class MisNotasInfo extends StatefulWidget {
 class _MisNotasInfoState extends State<MisNotasInfo> {
   @override
   Widget build(BuildContext context) {
+    Student _student = Provider.of<Student>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -49,7 +52,8 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                                 },
                                 pageBuilder:
                                     (context, animation, animationTime) {
-                                  return MisNotas();
+                                  return MisNotas(
+                                      getIndex(widget._subject, _student));
                                 }));
                       },
                       icon: Image.asset(
@@ -111,5 +115,13 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
         ),
       ),
     );
+  }
+
+  int getIndex(Subject subject, Student _student) {
+    List<Subject> _list = _student.getSubjects();
+
+    _list.sort((a, b) => a.getYear().compareTo(b.getYear()));
+
+    return _list.indexOf(subject);
   }
 }

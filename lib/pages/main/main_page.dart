@@ -213,7 +213,7 @@ class _MainPageState extends State<MainPage> {
                                 },
                                 pageBuilder:
                                     (context, animation, animationTime) {
-                                  return MisNotas();
+                                  return MisNotas(0);
                                 }));
                       },
                       child: MainButton('Mis\nNotas', 'assets/images/notas.png',

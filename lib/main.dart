@@ -54,7 +54,7 @@ void main() async {
               '/login': (context) => LoginPage(),
               '/homepage': (context) => HomePage(),
               '/mismaterias': (context) => MisMaterias(),
-              '/misnotas': (context) => MisNotas(),
+              '/misnotas': (context) => MisNotas(0),
               '/estadisticas': (context) => MisEstadisticas(),
             },
             debugShowCheckedModeBanner: false),

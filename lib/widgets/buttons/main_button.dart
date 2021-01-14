@@ -17,19 +17,19 @@ class MainButton extends StatelessWidget {
           Container(
             padding: EdgeInsets.only(top: 30),
             child: Container(
-              width: 129.0,
-              height: 92.0,
+              width: 159.0,
+              height: 122.0,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(26.0),
                 color: _color,
               ),
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(17, 40, 0, 0),
+                padding: const EdgeInsets.fromLTRB(17, 55, 0, 0),
                 child: Text(
                   _text,
                   style: TextStyle(
                     fontFamily: 'Avenir LT Std',
-                    fontSize: 18,
+                    fontSize: 19,
                     color: const Color(0xff484848),
                     fontWeight: FontWeight.w800,
                   ),
@@ -40,11 +40,11 @@ class MainButton extends StatelessWidget {
           ),
           Positioned(
             top: 5,
-            left: 63,
+            left: 40,
             child: Image.asset(
               _icon,
-              width: 54.0,
-              height: 54.0,
+              width: 74.0,
+              height: 74.0,
             ),
           )
         ],

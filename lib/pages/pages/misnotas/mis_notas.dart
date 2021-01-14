@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mis_notas/animation/FadeAnimation.dart';
+import 'package:mis_notas/data/subject_dao.dart';
 
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
@@ -28,7 +29,8 @@ class _MisNotasState extends State<MisNotas> {
       ItemPositionsListener.create();
 
   Future<List<Subject>> getData(Student _student, String condition) async {
-    List<Subject> _list = _student.getSubjects();
+    SubjectsDao _subjectDao = new SubjectsDao();
+    List<Subject> _list = await _subjectDao.getAllSubjectsByUser(_student);
     List<Subject> _listAux = new List<Subject>();
 
     if (condition == 'Todas') {
@@ -71,6 +73,8 @@ class _MisNotasState extends State<MisNotas> {
 
   @override
   Widget build(BuildContext context) {
+    Student _student = Provider.of<Student>(context, listen: false);
+
     return Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -372,66 +376,68 @@ class _MisNotasState extends State<MisNotas> {
                       ),
                     ),
                   ),
-                  Consumer<Student>(
-                    builder: (_, _student, __) => FutureBuilder(
-                        future: getData(_student, _condition),
-                        builder: (context, snapshot) {
-                          switch (snapshot.connectionState) {
-                            case ConnectionState.waiting:
-                              return Center(child: CircularProgressIndicator());
+                  /* Consumer<Student>(
+                    builder: (_, _student, __) =>  */
 
-                            default:
-                              if (snapshot.hasError) return Text('error');
-                              if (!snapshot.data.isEmpty) {
-                                return Expanded(
-                                  child: FadeAnimation(
-                                    delay: 0.1,
-                                    child: ScrollablePositionedList.builder(
-                                      initialScrollIndex: widget.index,
-                                      itemScrollController:
-                                          itemScrollController,
-                                      itemPositionsListener:
-                                          itemPositionsListener,
-                                      physics: AlwaysScrollableScrollPhysics(),
-                                      itemCount: snapshot.data.length,
-                                      itemBuilder: (context, index) {
-                                        Subject sub = snapshot.data[index];
-                                        return GradeCard(sub, true);
-                                      },
+                  //TODO: Revisar.Este future deberia activarse cuando hay cambios nomas.
+                  FutureBuilder(
+                      future: getData(_student, _condition),
+                      builder: (context, snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return Center(child: CircularProgressIndicator());
+
+                          default:
+                            if (snapshot.hasError) return Text('error');
+                            if (!snapshot.data.isEmpty) {
+                              return Expanded(
+                                child: FadeAnimation(
+                                  delay: 0.1,
+                                  child: ScrollablePositionedList.builder(
+                                    initialScrollIndex: widget.index,
+                                    itemScrollController: itemScrollController,
+                                    itemPositionsListener:
+                                        itemPositionsListener,
+                                    physics: AlwaysScrollableScrollPhysics(),
+                                    itemCount: snapshot.data.length,
+                                    itemBuilder: (context, index) {
+                                      Subject sub = snapshot.data[index];
+                                      return GradeCard(sub, true);
+                                    },
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return Column(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 20),
+                                    child: Image.asset(
+                                      'assets/images/not_found.png',
+                                      scale: 4,
                                     ),
                                   ),
-                                );
-                              } else {
-                                return Column(
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 20),
-                                      child: Image.asset(
-                                        'assets/images/not_found.png',
-                                        scale: 4,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.all(24),
-                                      child: Center(
-                                        child: Text(
-                                          'No se encontraron materias en esta categoría.',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontFamily: 'Avenir LT Std',
-                                            fontSize: 18,
-                                            color: Colors.black45,
-                                            fontWeight: FontWeight.w800,
-                                          ),
+                                  Padding(
+                                    padding: EdgeInsets.all(24),
+                                    child: Center(
+                                      child: Text(
+                                        'No se encontraron materias en esta categoría.',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontFamily: 'Avenir LT Std',
+                                          fontSize: 18,
+                                          color: Colors.black45,
+                                          fontWeight: FontWeight.w800,
                                         ),
                                       ),
                                     ),
-                                  ],
-                                );
-                              }
-                          }
-                        }),
-                  ),
+                                  ),
+                                ],
+                              );
+                            }
+                        }
+                      }),
+                  /* ), */
                 ],
               )),
         ));

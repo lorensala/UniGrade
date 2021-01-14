@@ -1,14 +1,18 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mis_notas/data/subject_dao.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
+import 'package:mis_notas/pages/dialogs/dialog_actualizar_materia.dart';
+
 import 'package:mis_notas/pages/pages/misnotas/mis_notas.dart';
-import 'package:mis_notas/pages/pages/misnotas/notas_info.dart';
+
+import 'package:mis_notas/widgets/styles/grade_card_style.dart';
 import 'package:provider/provider.dart';
 
 class MisNotasInfo extends StatefulWidget {
   final Subject _subject;
-
   const MisNotasInfo(this._subject);
 
   @override
@@ -16,9 +20,72 @@ class MisNotasInfo extends StatefulWidget {
 }
 
 class _MisNotasInfoState extends State<MisNotasInfo> {
+  String _selectedTypeAdd;
+  var _notaAdd;
+  bool _hasSelectedDataAdd = false;
+  String _selectedTypeDel;
+  var _notaDel;
+  bool _hasSelectedDataDel = false;
+  String _selectedTypeMod;
+  var _notaMod;
+  bool _hasSelectedDataMod = false;
+  var _newNota;
+  SubjectsDao _subejctDao = new SubjectsDao();
+  bool updated = false;
+
+  //TODO: Implementar logica para ver si cambia realmente.
+  bool changed = false;
+
+  //TODO: SI ingresa una nota final, deberia marcar como terminó la materia.
+  //TODO: Provider de estudiante con sus respectivas materias!
+
+  var _types = ['Práctico', 'Teórico', 'TP', 'Final'];
+  var _notas = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+
+  List<String> _getGrades(String _type, Subject _aux) {
+    List<String> _grades = new List<String>();
+
+    switch (_type) {
+      case 'Práctico':
+        _aux.getGradesP().toSet().toList().forEach((grade) {
+          _grades.add(grade.toString());
+        });
+        return _grades;
+
+      case 'Teórico':
+        _aux.getGradesT().toSet().toList().forEach((grade) {
+          _grades.add(grade.toString());
+        });
+        return _grades;
+
+      case 'TP':
+        _aux.getGradesTP().toSet().toList().forEach((grade) {
+          _grades.add(grade.toString());
+        });
+        return _grades;
+
+      case 'Final':
+        _aux.getAplazos().toSet().toList().forEach((grade) {
+          _grades.add(grade.toString());
+        });
+        if (_aux.getNf() != -1) _grades.add(_aux.getNf().toString());
+        return _grades;
+      default:
+        return [];
+    }
+  }
+
+  Subject _aux;
+
+  @override
+  void initState() {
+    _aux = Subject.fromOther(widget._subject);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    Student _student = Provider.of<Student>(context);
+    Student _student = Provider.of<Student>(context, listen: false);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -33,28 +100,60 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                   children: <Widget>[
                     IconButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                                transitionDuration: Duration(milliseconds: 250),
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  animation = CurvedAnimation(
-                                      parent: animation,
-                                      curve: Curves.easeInOut);
-                                  return SlideTransition(
-                                    position: Tween(
-                                            begin: Offset(1.0, 0.0),
-                                            end: Offset(0.0, 0.0))
-                                        .animate(animation),
-                                    child: child,
-                                  );
-                                },
-                                pageBuilder:
-                                    (context, animation, animationTime) {
-                                  return MisNotas(
-                                      getIndex(widget._subject, _student));
-                                }));
+                        !changed
+                            ? Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                    transitionDuration:
+                                        Duration(milliseconds: 250),
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      animation = CurvedAnimation(
+                                          parent: animation,
+                                          curve: Curves.easeInOut);
+                                      return SlideTransition(
+                                        position: Tween(
+                                                begin: Offset(1.0, 0.0),
+                                                end: Offset(0.0, 0.0))
+                                            .animate(animation),
+                                        child: child,
+                                      );
+                                    },
+                                    pageBuilder:
+                                        (context, animation, animationTime) {
+                                      return MisNotas(getIndex(_aux, _student));
+                                    }))
+                            : CoolAlert.show(
+                                context: context,
+                                backgroundColor: Colors.white,
+                                type: CoolAlertType.confirm,
+                                onConfirmBtnTap: () {
+                                  Navigator.push(
+                                      context,
+                                      PageRouteBuilder(
+                                          transitionDuration:
+                                              Duration(milliseconds: 250),
+                                          transitionsBuilder: (context,
+                                              animation,
+                                              secondaryAnimation,
+                                              child) {
+                                            animation = CurvedAnimation(
+                                                parent: animation,
+                                                curve: Curves.easeInOut);
+                                            return SlideTransition(
+                                              position: Tween(
+                                                      begin: Offset(1.0, 0.0),
+                                                      end: Offset(0.0, 0.0))
+                                                  .animate(animation),
+                                              child: child,
+                                            );
+                                          },
+                                          pageBuilder: (context, animation,
+                                              animationTime) {
+                                            return MisNotas(
+                                                getIndex(_aux, _student));
+                                          }));
+                                });
                       },
                       icon: Image.asset(
                         'assets/images/3.0x/backarrow.png',
@@ -97,19 +196,608 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
               SizedBox(
                 height: 30,
               ),
-              /* Flexible(
-                child: Container(
-                  height: 500,
-                  child: PageView.builder(
-                    itemCount: 4,
-                    itemBuilder: (context, index) {
-                      return NotasInfo();
-                    },
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  GradeCard(_aux, false),
+                  SizedBox(
+                    height: 10,
                   ),
-                ),
-              ),
-               */
-              NotasInfo(widget._subject),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+                    child: Text(
+                      'Añadir Nota',
+                      style: TextStyle(
+                        fontFamily: 'Avenir LT Std',
+                        fontSize: 22,
+                        color: const Color(0xff484848),
+                        fontWeight: FontWeight.w800,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        width: 288.0,
+                        height: 37.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(26.0),
+                          color: const Color(0xfff7f7f7),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                                value: _selectedTypeAdd,
+                                hint: new Text('Tipo de Nota'),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _selectedTypeAdd = newValue;
+                                    if (_notaAdd != null)
+                                      _hasSelectedDataAdd = true;
+
+                                    _selectedTypeDel = null;
+                                    _notaDel = null;
+                                    _hasSelectedDataDel = false;
+                                    _selectedTypeMod = null;
+                                    _notaMod = null;
+                                    _newNota = null;
+                                    _hasSelectedDataMod = false;
+                                  });
+                                },
+                                items: _types
+                                    .map((type) => DropdownMenuItem(
+                                        child: Text(type), value: type))
+                                    .toList()),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+                    child: Row(
+                      children: [
+                        Container(
+                          //width: 288.0,
+                          height: 37.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(26.0),
+                            color: const Color(0xfff7f7f7),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                  value: _notaAdd,
+                                  hint: new Text('Nota'),
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      _notaAdd = newValue;
+                                      if (_selectedTypeAdd != null)
+                                        _hasSelectedDataAdd = true;
+
+                                      _selectedTypeDel = null;
+                                      _notaDel = null;
+                                      _hasSelectedDataDel = false;
+                                      _selectedTypeMod = null;
+                                      _notaMod = null;
+                                      _newNota = null;
+                                      _hasSelectedDataMod = false;
+                                    });
+                                  },
+                                  items: _notas
+                                      .map((type) => DropdownMenuItem(
+                                          child: Text(type), value: type))
+                                      .toList()),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            if (_hasSelectedDataAdd &&
+                                _selectedTypeAdd != null &&
+                                _notaAdd != null) {
+                              int nota = int.parse(_notaAdd);
+
+                              switch (_selectedTypeAdd) {
+                                case 'Práctico':
+                                  if (_aux.getGradesP().length < 5)
+                                    _aux.addgradeP(nota);
+                                  break;
+
+                                case 'Teórico':
+                                  if (_aux.getGradesT().length < 5)
+                                    _aux.addgradeT(nota);
+                                  break;
+
+                                case 'TP':
+                                  if (_aux.getGradesTP().length < 5)
+                                    _aux.addgradeTP(nota);
+                                  break;
+
+                                case 'Final':
+                                  if (_aux.getAplazos().length <= 3) {
+                                    if (nota > 5) {
+                                      await showActualizarMateria(
+                                          context, _aux);
+
+                                      //TODO: Mostrar mensaje para que ponga la condicion
+                                      _aux.nf(nota);
+                                      setState(() {});
+                                    } else
+                                      _aux.addgradeAp(nota);
+                                    break;
+                                  }
+                              }
+
+                              changed = true;
+
+                              setState(() {});
+                            }
+                          },
+                          child: Container(
+                            width: 38.0,
+                            height: 37.0,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(26.0),
+                              color: const Color(0xffa7ffad),
+                            ),
+                            child: Center(
+                              child: Icon(
+                                Icons.add,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+                    child: Text(
+                      'Eliminar Nota',
+                      style: TextStyle(
+                        fontFamily: 'Avenir LT Std',
+                        fontSize: 22,
+                        color: const Color(0xff484848),
+                        fontWeight: FontWeight.w800,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        width: 288.0,
+                        height: 37.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(26.0),
+                          color: const Color(0xfff7f7f7),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                                value: _selectedTypeDel,
+                                hint: new Text('Tipo de Nota'),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _selectedTypeDel = newValue;
+                                    if (_notaDel != null)
+                                      _hasSelectedDataDel = true;
+
+                                    _selectedTypeAdd = null;
+                                    _notaAdd = null;
+                                    _hasSelectedDataAdd = false;
+                                    _selectedTypeMod = null;
+                                    _notaMod = null;
+                                    _newNota = null;
+                                    _hasSelectedDataMod = false;
+                                  });
+                                },
+                                items: _types
+                                    .map((type) => DropdownMenuItem<String>(
+                                        child: Text(type), value: type))
+                                    .toList()),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 37.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(26.0),
+                            color: const Color(0xfff7f7f7),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                  value: _notaDel,
+                                  hint: new Text('Nota'),
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      _notaDel = newValue;
+                                      if (_selectedTypeDel != null)
+                                        _hasSelectedDataDel = true;
+
+                                      _selectedTypeAdd = null;
+                                      _notaAdd = null;
+                                      _hasSelectedDataAdd = false;
+                                      _selectedTypeMod = null;
+                                      _notaMod = null;
+                                      _newNota = null;
+                                      _hasSelectedDataMod = false;
+                                    });
+                                  },
+                                  items: _getGrades(_selectedTypeDel, _aux)
+                                      .map((type) => DropdownMenuItem(
+                                          child: Text(type), value: type))
+                                      .toList()),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            if (_hasSelectedDataDel &&
+                                _selectedTypeDel != null &&
+                                _notaDel != null) {
+                              int nota = int.parse(_notaDel);
+
+                              switch (_selectedTypeDel) {
+                                case 'Práctico':
+                                  if (_aux.getGradesP().length < 6)
+                                    _aux.deleteGradeP(nota);
+                                  break;
+
+                                case 'Teórico':
+                                  if (_aux.getGradesT().length < 6)
+                                    _aux.deleteGradeT(nota);
+                                  break;
+
+                                case 'TP':
+                                  if (_aux.getGradesTP().length < 6)
+                                    _aux.deleteGradeTP(nota);
+                                  break;
+
+                                case 'Final':
+                                  if (nota > 5)
+                                    _aux.nf(-1);
+                                  else
+                                    _aux.deleteGradeAp(nota);
+                                  break;
+                              }
+
+                              changed = true;
+
+                              setState(() {
+                                _notaDel = null;
+                              });
+                            }
+                          },
+                          child: Container(
+                            width: 38.0,
+                            height: 37.0,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(26.0),
+                              color: const Color(0xffFF9A9A),
+                            ),
+                            child: Center(
+                              child: Icon(
+                                Icons.delete,
+                                color: Colors.white,
+                                size: 25,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+                    child: Text(
+                      'Modificar Nota',
+                      style: TextStyle(
+                        fontFamily: 'Avenir LT Std',
+                        fontSize: 22,
+                        color: const Color(0xff484848),
+                        fontWeight: FontWeight.w800,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        width: 288.0,
+                        height: 37.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(26.0),
+                          color: const Color(0xfff7f7f7),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                                value: _selectedTypeMod,
+                                hint: new Text('Tipo de Nota'),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _selectedTypeMod = newValue;
+                                    if (_notaMod != null && _newNota != null)
+                                      _hasSelectedDataMod = true;
+
+                                    _selectedTypeAdd = null;
+                                    _notaAdd = null;
+                                    _hasSelectedDataAdd = false;
+                                    _selectedTypeDel = null;
+
+                                    _notaDel = null;
+                                    _hasSelectedDataDel = false;
+                                    _newNota = null;
+                                    _notaMod = null;
+                                  });
+                                },
+                                items: _types
+                                    .map((type) => DropdownMenuItem(
+                                        child: Text(type), value: type))
+                                    .toList()),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+                    child: Row(
+                      children: [
+                        Container(
+                          //width: 288.0,
+                          height: 37.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(26.0),
+                            color: const Color(0xfff7f7f7),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                  value: _notaMod,
+                                  hint: new Text('Nota'),
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      _notaMod = newValue;
+                                      if (_selectedTypeMod != null &&
+                                          _newNota != null)
+                                        _hasSelectedDataMod = true;
+
+                                      _selectedTypeAdd = null;
+                                      _notaAdd = null;
+                                      _hasSelectedDataAdd = false;
+                                      _selectedTypeDel = null;
+                                      _notaDel = null;
+                                      _hasSelectedDataDel = false;
+                                    });
+                                  },
+                                  items: _getGrades(_selectedTypeMod, _aux)
+                                      .map((type) => DropdownMenuItem(
+                                          child: Text(type), value: type))
+                                      .toList()),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Image.asset('assets/images/arrow.png'),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Container(
+                          //width: 288.0,
+                          height: 37.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(26.0),
+                            color: const Color(0xfff7f7f7),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                  value: _newNota,
+                                  hint: new Text('Nota'),
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      _newNota = newValue;
+                                      if (_selectedTypeMod != null &&
+                                          _notaMod != null)
+                                        _hasSelectedDataMod = true;
+
+                                      _selectedTypeAdd = null;
+                                      _notaAdd = null;
+                                      _hasSelectedDataAdd = false;
+                                      _selectedTypeDel = null;
+                                      _notaDel = null;
+                                      _hasSelectedDataDel = false;
+                                    });
+                                  },
+                                  items: _notas
+                                      .map((type) => DropdownMenuItem(
+                                          child: Text(type), value: type))
+                                      .toList()),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            if (_hasSelectedDataMod &&
+                                _selectedTypeMod != null &&
+                                _notaMod != null &&
+                                _newNota != null) {
+                              int nota = int.parse(_notaMod);
+                              int nuevaNota = int.parse(_newNota);
+
+                              switch (_selectedTypeMod) {
+                                case 'Práctico':
+                                  if (_aux.getGradesP().length < 6)
+                                    _aux.modGradeP(nota, nuevaNota);
+                                  break;
+
+                                case 'Teórico':
+                                  if (_aux.getGradesT().length < 6)
+                                    _aux.modGradeT(nota, nuevaNota);
+                                  break;
+
+                                case 'TP':
+                                  if (_aux.getGradesTP().length < 6)
+                                    _aux.modGradeTP(nota, nuevaNota);
+                                  break;
+
+                                case 'Final':
+                                  if (_aux.getAplazos().length <= 3) {
+                                    _aux.modGradAp(nota, nuevaNota);
+                                    break;
+                                  }
+                              }
+
+                              changed = true;
+
+                              setState(() {
+                                _newNota = null;
+                                _notaMod = null;
+                              });
+                            }
+                          },
+                          child: Container(
+                            width: 38.0,
+                            height: 37.0,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(26.0),
+                              color: Colors.yellow,
+                            ),
+                            child: Center(
+                              child: Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                                size: 25,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  FlatButton(
+                    color: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    focusColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    onPressed: () async {
+                      updated = await _subejctDao.updateSubject(
+                          Subject.fromOther(_aux), _student);
+
+                      if (updated) {
+                        await CoolAlert.show(
+                            borderRadius: 26,
+                            title: 'Éxito',
+                            backgroundColor: Colors.white,
+                            context: context,
+                            type: CoolAlertType.success,
+                            text: '¡Materia actualizada con exito!');
+                      } else {
+                        CoolAlert.show(
+                            borderRadius: 26,
+                            title: 'Error',
+                            backgroundColor: Colors.white,
+                            context: context,
+                            type: CoolAlertType.error,
+                            text: 'Error al actualizar la materia');
+                      }
+                      changed = false;
+                    },
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+                        child: Container(
+                          //width: double.ini,
+                          height: 37.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(26.0),
+                            color:
+                                changed ? const Color(0xffa7ffad) : Colors.grey,
+                          ),
+                          child: Center(
+                            child: Text(
+                              //TODO: NO SE PUEDE TOCAR SI NO SE MODIFICO NADA
+                              'Guardar Cambios',
+                              style: TextStyle(
+                                fontFamily: 'Avenir LT Std',
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              )
             ],
           ),
         ),
@@ -117,11 +805,25 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
     );
   }
 
+  Future<void> showActualizarMateria(BuildContext _context, Subject _subject) {
+    return showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return DialogActualizarMateria(_subject);
+      },
+    );
+  }
+
   int getIndex(Subject subject, Student _student) {
     List<Subject> _list = _student.getSubjects();
 
-    _list.sort((a, b) => a.getYear().compareTo(b.getYear()));
+    try {
+      _list.sort((a, b) => a.getYear().compareTo(b.getYear()));
 
-    return _list.indexOf(subject);
+      return _list.indexWhere((s) => s.getName() == subject.getName());
+    } catch (e) {
+      return 0;
+    }
   }
 }

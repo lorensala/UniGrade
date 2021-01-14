@@ -1,8 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mis_notas/entities/state_record.dart';
 
-class Subject extends ChangeNotifier {
+class Subject {
   String _name;
   int _year;
   List<int> _gradesP;
@@ -70,6 +69,8 @@ class Subject extends ChangeNotifier {
   void deleteGradeTP(int nota) => _gradesTP.remove(nota);
   void deleteGradeAp(int nota) => _aplazos.remove(nota);
 
+  set state(state) => _state = state;
+
   void modGradeP(int nota, int nuevaNota) {
     int index = _gradesP.indexOf(nota);
     _gradesP[index] = nuevaNota;
@@ -100,6 +101,23 @@ class Subject extends ChangeNotifier {
       _aplazos[index] = nuevaNota;
     }
   }
+
+  Subject.allNull();
+
+  Subject.fromOther(Subject other)
+      : this._name = other.getName(),
+        this._year = other.getYear(),
+        this._gradesP = other.getGradesP(),
+        this._gradesT = other.getGradesT(),
+        this._gradesTP = other.getGradesTP(),
+        this._nf = other.getNf(),
+        this._state = other.getState(),
+        this._type = other.getType(),
+        this._icon = other.getIcon(),
+        this._passed = other.getPassed(),
+        this._aplazos = other.getAplazos(),
+        this._duration = other.getDuration(),
+        this._elect = other.getElect();
 
   Subject(
       this._name,

@@ -81,15 +81,16 @@ class StatisticsService extends ChangeNotifier {
       Student _student, List<Subject> _list, int _year) async {
     int _countTotal = 0;
     int _countPassed = 0;
+    SubjectsDao _subjectDao = new SubjectsDao();
+    List<Subject> _listAll = await _subjectDao.getAllSubjectsByUser(_student);
 
     if (_year != -1) {
-      SubjectsDao _subjectDao = new SubjectsDao();
-      List<Subject> _listAll = await _subjectDao.getAllSubjectsByUser(_student);
       _countPassed = await getSubjectsCount(_student, _listAll, _year);
     }
 
     if (_year == -1) {
       _countTotal = _list.length;
+      _countPassed = await getSubjectsPassed(_student, _listAll, -1);
     } else {
       _list.forEach((element) {
         if (element.getYear() == _year) _countTotal++;
@@ -108,7 +109,7 @@ class StatisticsService extends ChangeNotifier {
 
     if (_year == -1) {
       _list.forEach((element) {
-        if (element.getPassed() && !element.getElect()) {
+        if (element.getNf() >= 6 && !element.getElect()) {
           _count++;
         }
       });

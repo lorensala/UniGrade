@@ -149,9 +149,10 @@ class _MainPageState extends State<MainPage> {
             ),
             // Listview
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 18),
+              padding: const EdgeInsets.fromLTRB(24, 10, 24, 18),
               child: Container(
                 child: Wrap(
+                  spacing: 20,
                   children: <Widget>[
                     InkWell(
                       highlightColor: Colors.transparent,
@@ -181,10 +182,10 @@ class _MainPageState extends State<MainPage> {
                                 }));
                       },
                       child: MainButton(
-                          'Mis\nMaterias',
-                          'assets/images/materias.png',
-                          Color(0xFFF7F7F7),
-                          '/mismaterias'),
+                        'Mis\nMaterias',
+                        'assets/images/materias.png',
+                        Color(0xFFF7F7F7),
+                      ),
                     ),
                     InkWell(
                       highlightColor: Colors.transparent,
@@ -213,8 +214,11 @@ class _MainPageState extends State<MainPage> {
                                   return MisNotas(0);
                                 }));
                       },
-                      child: MainButton('Mis\nNotas', 'assets/images/notas.png',
-                          Color(0xFFFFDCDC), '/misnotas'),
+                      child: MainButton(
+                        'Mis\nNotas',
+                        'assets/images/notas.png',
+                        Color(0xFFFFDCDC),
+                      ),
                     ),
                     InkWell(
                       highlightColor: Colors.transparent,
@@ -244,10 +248,10 @@ class _MainPageState extends State<MainPage> {
                                 }));
                       },
                       child: MainButton(
-                          'Mis\nEstadísticas',
-                          'assets/images/estadisticas.png',
-                          Color(0xFFF5DCFF),
-                          '/estadisticas'),
+                        'Mis\nEstadísticas',
+                        'assets/images/estadisticas.png',
+                        Color(0xFFF5DCFF),
+                      ),
                     )
                   ],
                 ),

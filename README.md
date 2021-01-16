@@ -1,10 +1,16 @@
-# mis_notas
+# UniGrade
 
-A new Flutter project.
+## ¿Qué es UniGrade?
 
-## Getting Started
+Uni grade es una aplicación mobile multiplataforma, realizada con el framework Flutter de Google. Está tiene como objetivo organizar la carrera del estudiante, y obtener estadísticas en base a sus notas y la condición de las materias.
 
-This project is a starting point for a Flutter application.
+## Requerimientos
+
+⋅⋅* Iniciar sesión con la cuenta de Google a través de Firebase Auth.
+⋅⋅* Cargar notas
+⋅⋅* Actualizar condición de las materias
+⋅⋅* 
+
 
 A few resources to get you started if this is your first Flutter project:
 

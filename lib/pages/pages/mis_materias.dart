@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mis_notas/animation/FadeAnimation.dart';
-import 'package:mis_notas/data/subject_dao.dart';
 
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
@@ -13,8 +12,6 @@ class MisMaterias extends StatefulWidget {
   @override
   _MisMateriasState createState() => _MisMateriasState();
 }
-
-//TODO: Falta la imagen cuando no encuentra materias!!
 
 class _MisMateriasState extends State<MisMaterias> {
   String _condition = 'Todas';

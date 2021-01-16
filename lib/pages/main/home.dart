@@ -164,7 +164,7 @@ class _HomePageState extends State<HomePage> {
                                     width: 300))),
                       );
                     default:
-                      //TODO: Que devuelva un mensaje mas lindo.
+                      //TODO: Esto pasa cuando no hay wifi! Mejorar la estética
                       if (snapshot.hasError) return Text('Error fetching data');
 
                       _student.fullname = snapshot.data[0].getFullname();

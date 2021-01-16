@@ -4,8 +4,6 @@ import 'package:mis_notas/entities/state_record.dart';
 
 import 'package:mis_notas/entities/subject.dart';
 
-import 'package:mis_notas/data/subject_dao.dart';
-
 class DialogActualizarMateria extends StatefulWidget {
   final Subject _subject;
 
@@ -16,8 +14,6 @@ class DialogActualizarMateria extends StatefulWidget {
 }
 
 class _DialogActualizarMateriaState extends State<DialogActualizarMateria> {
-  //var db = DataManager();
-
   bool _hasSelectedData = true;
   bool _isEmpty = false;
 

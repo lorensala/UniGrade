@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mis_notas/entities/student.dart';
-import 'package:mis_notas/pages/dialogs/dialog_modificar_nota.dart';
-import 'package:mis_notas/pages/dialogs/dialog_nueva_materia.dart';
-import 'package:mis_notas/pages/dialogs/dialog_nueva_nota.dart';
+
 import 'package:mis_notas/pages/dialogs/new_user_dialog.dart';
 import 'package:mis_notas/pages/pages/mis_estadistica.dart';
 import 'package:mis_notas/pages/pages/mis_materias.dart';
@@ -256,45 +254,6 @@ class _MainPageState extends State<MainPage> {
           ],
         ),
       ),
-    );
-  }
-
-  void showNuevaNota(BuildContext context, Student _student) {
-    showDialog(
-        barrierDismissible: true,
-        context: context,
-        builder: (BuildContext context) {
-          return DialogNuevaNota(_student);
-        });
-  }
-
-  void showActualizarMateria(BuildContext _context, Student _student) {
-    showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (BuildContext context) {
-        return;
-      },
-    );
-  }
-
-  void showNuevaMateria(BuildContext _context, Student _student) {
-    showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (BuildContext context) {
-        return DialogNuevaMateria(_student);
-      },
-    );
-  }
-
-  void showModificarNota(BuildContext _context, Student _student) {
-    showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (BuildContext context) {
-        return DialogModificarNota(_student);
-      },
     );
   }
 

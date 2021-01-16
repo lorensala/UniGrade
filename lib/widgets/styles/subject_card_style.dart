@@ -5,14 +5,6 @@ import 'package:mis_notas/entities/subject.dart';
 import 'package:mis_notas/pages/dialogs/dialog_subject_info.dart';
 
 class SubjectCard extends StatelessWidget {
-  /* This widgets represents the subejct's bar styles, each one with it's
-  color, name, and icon asset.
-  
-  [subject] uses a Subject objet to get it's properties and set the values
-  to the widget.
-
-   */
-
   final Subject _subject;
   final SubjectsDao _subjectDao = new SubjectsDao();
 

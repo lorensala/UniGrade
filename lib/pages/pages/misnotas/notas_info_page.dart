@@ -10,7 +10,6 @@ import 'package:mis_notas/pages/pages/misnotas/mis_notas.dart';
 
 import 'package:mis_notas/widgets/styles/grade_card_style.dart';
 import 'package:provider/provider.dart';
-import 'package:undo/undo.dart';
 
 class MisNotasInfo extends StatefulWidget {
   Subject _subject;
@@ -33,16 +32,10 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
   var _newNota;
   SubjectsDao _subjectDao = new SubjectsDao();
   bool updated = false;
-  var changes = new ChangeStack();
   bool firstTime = true;
-
-  //TODO: Implementar logica para ver si cambia realmente.
   bool changed = false;
 
   Subject _original;
-
-  //TODO: SI ingresa una nota final, deberia marcar como terminó la materia.
-  //TODO: Provider de estudiante con sus respectivas materias!
 
   var _types = ['Práctico', 'Teórico', 'TP', 'Final'];
   var _notas = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
@@ -135,7 +128,7 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                                 await _subjectDao
                                     .getSubject(widget._subject, _student)
                                     .then((s) {
-                                  widget._subject = Subject.fromOther(s);
+                                  _original = Subject.fromOther(s);
                                 });
 
                                 Subject aux = _student.getSubjects().firstWhere(
@@ -143,16 +136,14 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                                         s.getName() ==
                                         widget._subject.getName());
 
-                                /* aux.gradesTP = _original.getGradesTP();
+                                aux.gradesTP = _original.getGradesTP();
                                 aux.gradesP = _original.getGradesP();
 
                                 aux.gradesT = _original.getGradesT();
 
                                 aux.aplazos = _original.getAplazos();
 
-                                aux.notaFinal = _original.getNf(); */
-
-                                aux = Subject.fromOther(_original);
+                                aux.notaFinal = _original.getNf();
 
                                 Navigator.push(
                                     context,
@@ -351,11 +342,7 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
 
                                 case 'TP':
                                   if (widget._subject.getGradesTP().length < 5)
-                                    changes.add(new Change(
-                                        widget._subject.getGradesTP(),
-                                        () => widget._subject.addgradeTP(nota),
-                                        (oldValue) => widget._subject.gradesTP =
-                                            oldValue));
+                                    widget._subject.addgradeTP(nota);
 
                                   break;
 
@@ -366,7 +353,6 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                                       await showActualizarMateria(
                                           context, widget._subject);
 
-                                      //TODO: Mostrar mensaje para que ponga la condicion
                                       widget._subject.nf(nota);
                                       setState(() {});
                                     } else
@@ -816,7 +802,6 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                           ),
                           child: Center(
                             child: Text(
-                              //TODO: NO SE PUEDE TOCAR SI NO SE MODIFICO NADA
                               'Guardar Cambios',
                               style: TextStyle(
                                 fontFamily: 'Avenir LT Std',

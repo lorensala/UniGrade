@@ -319,7 +319,7 @@ class SubjectsDao {
         gradesT,
         gradesTp,
         sub['nf'],
-        StateRecord(State(sub['state']), DateTime.now()),
+        StateRecord(StateSubject(sub['state']), DateTime.now()),
         sub['type'],
         sub['icon'],
         sub['passed'],
@@ -849,5 +849,30 @@ class SubjectsDao {
       print('=====error=====');
     }
     return isDone;
+  }
+
+  Future<Subject> getSubject(Subject subject, Student _student) async {
+    Subject sub;
+    try {
+      Future<QuerySnapshot> _subCollection = FirebaseFirestore.instance
+          .collection('student')
+          .doc(_student.getStudentDocRef())
+          .collection('career_student')
+          .doc(_student.getCareerDocRefs()[0])
+          .collection('subject_student')
+          .where('name', isEqualTo: subject.getName())
+          .get();
+
+      await _subCollection.then((value) {
+        Map map = value.docs[0].data();
+        sub = mapper(map);
+      });
+
+      print('=====succed====');
+    } catch (e) {
+      print(e);
+      print('=====error=====');
+    }
+    return sub;
   }
 }

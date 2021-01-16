@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mis_notas/entities/state_record.dart';
 
@@ -59,6 +58,16 @@ class Subject extends ChangeNotifier {
   bool getPassed() => _passed;
 
   set passed(passed) => _passed = passed;
+  set elect(elec) => _elect = elec;
+  set duration(dur) => _duration = dur;
+  set aplazos(ap) => _aplazos = ap;
+  set name(name) => _name = name;
+  set year(year) => _year = year;
+  set gradesP(gradesP) => _gradesP = gradesP;
+  set gradesT(gradesT) => _gradesT = gradesT;
+  set gradesTP(gradesTP) => _gradesTP = gradesTP;
+  set notaFinal(nf) => _nf = nf;
+
   void addgradeP(grade) => _gradesP.add(grade);
   void addgradeT(grade) => _gradesT.add(grade);
   void addgradeTP(grade) => _gradesTP.add(grade);
@@ -69,6 +78,8 @@ class Subject extends ChangeNotifier {
   void deleteGradeT(int nota) => _gradesT.remove(nota);
   void deleteGradeTP(int nota) => _gradesTP.remove(nota);
   void deleteGradeAp(int nota) => _aplazos.remove(nota);
+
+  set state(state) => _state = state;
 
   void modGradeP(int nota, int nuevaNota) {
     int index = _gradesP.indexOf(nota);
@@ -100,6 +111,31 @@ class Subject extends ChangeNotifier {
       _aplazos[index] = nuevaNota;
     }
   }
+
+  Subject.allNull();
+
+  Subject.empty() {
+    this.gradesP = null;
+    this.gradesT = null;
+    this.gradesTP = null;
+    this._aplazos = null;
+    this._nf = null;
+  }
+
+  Subject.fromOther(Subject other)
+      : this._name = other.getName(),
+        this._year = other.getYear(),
+        this._gradesP = other.getGradesP(),
+        this._gradesT = other.getGradesT(),
+        this._gradesTP = other.getGradesTP(),
+        this._nf = other.getNf(),
+        this._state = other.getState(),
+        this._type = other.getType(),
+        this._icon = other.getIcon(),
+        this._passed = other.getPassed(),
+        this._aplazos = other.getAplazos(),
+        this._duration = other.getDuration(),
+        this._elect = other.getElect();
 
   Subject(
       this._name,

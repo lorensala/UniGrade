@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mis_notas/entities/subject.dart';
 import 'package:mis_notas/pages/pages/misnotas/notas_info_page.dart';
+import 'package:provider/provider.dart';
 
 class GradeCard extends StatelessWidget {
   final Subject _subject;
@@ -22,6 +23,16 @@ class GradeCard extends StatelessWidget {
     String notasTeorico = '';
     String notasTp = '';
     String notasAp = '';
+
+    Map<String, Color> _colors = {
+      'Regular': Color(0xffFEFFD9),
+      'Aprobación Directa': Color(0xffE2FFE3),
+      'Promoción Teórica': Color(0xffE4F0FF),
+      'Promoción Práctica': Color(0xffEAD6FF),
+      'Abandonada': Color(0xffFFE4E4),
+      'Libre': Color(0xffFFE4E4),
+      'Cursando': Color(0xffF2F2F2),
+    };
 
     gradesP.forEach((element) {
       if (element < 10)
@@ -73,16 +84,19 @@ class GradeCard extends StatelessWidget {
                             );
                           },
                           pageBuilder: (context, animation, animationTime) {
-                            return MisNotasInfo(_subject);
+                            return ChangeNotifierProvider(
+                                create: (context) => Subject.empty(),
+                                child: MisNotasInfo(_subject));
                           }));
                 }
               : null,
           borderRadius: BorderRadius.circular(26),
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(26.0),
-              color: const Color(0xfff7f7f7),
-            ),
+                borderRadius: BorderRadius.circular(26.0),
+                color: _colors[_subject.getState().getState().getName()] != null
+                    ? _colors[_subject.getState().getState().getName()]
+                    : Color(0xfff7f7f7)),
             child: Padding(
               padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
               child: Column(
@@ -220,10 +234,6 @@ class GradeCard extends StatelessWidget {
                             nf != -1)
                           Column(
                             children: <Widget>[
-                              SvgPicture.string(
-                                '<svg viewBox="229.0 399.5 98.5 1.0" ><path transform="translate(229.0, 399.5)" d="M 0 0 L 98.5 0" fill="none" stroke="#faff72" stroke-width="4" stroke-miterlimit="4" stroke-linecap="round" /></svg>',
-                                allowDrawingOutsideViewBox: true,
-                              ),
                               Text(
                                 'NOTA FINAL:',
                                 style: TextStyle(
@@ -248,10 +258,6 @@ class GradeCard extends StatelessWidget {
                                   ),
                                   textAlign: TextAlign.left,
                                 ),
-                              ),
-                              SvgPicture.string(
-                                '<svg viewBox="229.0 399.5 98.5 1.0" ><path transform="translate(229.0, 399.5)" d="M 0 0 L 98.5 0" fill="none" stroke="#faff72" stroke-width="4" stroke-miterlimit="4" stroke-linecap="round" /></svg>',
-                                allowDrawingOutsideViewBox: true,
                               ),
                             ],
                           ),
@@ -262,10 +268,6 @@ class GradeCard extends StatelessWidget {
                             nf != -1)
                           Column(
                             children: <Widget>[
-                              SvgPicture.string(
-                                '<svg viewBox="229.0 714.5 98.0 1.0" ><path transform="translate(229.0, 714.5)" d="M 0 0 L 98 0" fill="none" stroke="#96cbff" stroke-width="4" stroke-miterlimit="4" stroke-linecap="round" /></svg>',
-                                allowDrawingOutsideViewBox: true,
-                              ),
                               Text(
                                 'NOTA FINAL:',
                                 style: TextStyle(
@@ -290,10 +292,6 @@ class GradeCard extends StatelessWidget {
                                   ),
                                   textAlign: TextAlign.left,
                                 ),
-                              ),
-                              SvgPicture.string(
-                                '<svg viewBox="229.0 714.5 98.0 1.0" ><path transform="translate(229.0, 714.5)" d="M 0 0 L 98 0" fill="none" stroke="#96cbff" stroke-width="4" stroke-miterlimit="4" stroke-linecap="round" /></svg>',
-                                allowDrawingOutsideViewBox: true,
                               ),
                             ],
                           ),
@@ -302,10 +300,6 @@ class GradeCard extends StatelessWidget {
                             nf != -1)
                           Column(
                             children: <Widget>[
-                              SvgPicture.string(
-                                '<svg viewBox="229.0 357.5 98.0 1.0" ><path transform="translate(229.0, 357.5)" d="M 0 0 L 98 0" fill="none" stroke="#6df97f" stroke-width="4" stroke-miterlimit="4" stroke-linecap="round" /></svg>',
-                                allowDrawingOutsideViewBox: true,
-                              ),
                               Text(
                                 'NOTA FINAL:',
                                 style: TextStyle(
@@ -330,10 +324,6 @@ class GradeCard extends StatelessWidget {
                                   ),
                                   textAlign: TextAlign.left,
                                 ),
-                              ),
-                              SvgPicture.string(
-                                '<svg viewBox="229.0 357.5 98.0 1.0" ><path transform="translate(229.0, 357.5)" d="M 0 0 L 98 0" fill="none" stroke="#6df97f" stroke-width="4" stroke-miterlimit="4" stroke-linecap="round" /></svg>',
-                                allowDrawingOutsideViewBox: true,
                               ),
                             ],
                           ),
@@ -344,10 +334,6 @@ class GradeCard extends StatelessWidget {
                             nf != -1)
                           Column(
                             children: <Widget>[
-                              SvgPicture.string(
-                                '<svg viewBox="205.5 665.5 122.0 1.0" ><path transform="translate(205.5, 665.5)" d="M 0 0 L 122 0" fill="none" stroke="#4f5973" stroke-width="4" stroke-miterlimit="4" stroke-linecap="round" /></svg>',
-                                allowDrawingOutsideViewBox: true,
-                              ),
                               Text(
                                 'NOTA FINAL:',
                                 style: TextStyle(
@@ -373,10 +359,6 @@ class GradeCard extends StatelessWidget {
                                   textAlign: TextAlign.left,
                                 ),
                               ),
-                              SvgPicture.string(
-                                '<svg viewBox="205.5 665.5 122.0 1.0" ><path transform="translate(205.5, 665.5)" d="M 0 0 L 122 0" fill="none" stroke="#4f5973" stroke-width="4" stroke-miterlimit="4" stroke-linecap="round" /></svg>',
-                                allowDrawingOutsideViewBox: true,
-                              ),
                             ],
                           ),
                         if (nf == -1 &&
@@ -384,10 +366,6 @@ class GradeCard extends StatelessWidget {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              SvgPicture.string(
-                                '<svg viewBox="222.5 665.5 105.0 1.0" ><path transform="translate(222.5, 665.5)" d="M 0 0 L 105 0" fill="none" stroke="#4f5973" stroke-width="4" stroke-miterlimit="4" stroke-linecap="round" /></svg>',
-                                allowDrawingOutsideViewBox: true,
-                              ),
                               _subject.getState().getState().getName() ==
                                       'Abandonada'
                                   ? Text(
@@ -416,10 +394,6 @@ class GradeCard extends StatelessWidget {
                                     ),
                               SizedBox(
                                 height: 10,
-                              ),
-                              SvgPicture.string(
-                                '<svg viewBox="222.5 665.5 105.0 1.0" ><path transform="translate(222.5, 665.5)" d="M 0 0 L 105 0" fill="none" stroke="#4f5973" stroke-width="4" stroke-miterlimit="4" stroke-linecap="round" /></svg>',
-                                allowDrawingOutsideViewBox: true,
                               ),
                             ],
                           )

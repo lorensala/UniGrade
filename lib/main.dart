@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mis_notas/entities/career.dart';
+import 'package:mis_notas/entities/subject.dart';
 import 'package:mis_notas/entities/university.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/pages/main/home.dart';
@@ -12,6 +13,7 @@ import 'package:mis_notas/pages/pages/mis_materias.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mis_notas/pages/login/new_user_login.dart';
 import 'package:mis_notas/pages/pages/misnotas/mis_notas.dart';
+import 'package:mis_notas/pages/pages/misnotas/notas_info_page.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -54,7 +56,7 @@ void main() async {
               '/login': (context) => LoginPage(),
               '/homepage': (context) => HomePage(),
               '/mismaterias': (context) => MisMaterias(),
-              '/misnotas': (context) => MisNotas(),
+              '/misnotas': (context) => MisNotas(0),
               '/estadisticas': (context) => MisEstadisticas(),
             },
             debugShowCheckedModeBanner: false),

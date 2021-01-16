@@ -1,9 +1,6 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
-import 'package:mis_notas/animation/FadeAnimation.dart';
-import 'package:mis_notas/data/subject_dao.dart';
-import 'package:mis_notas/entities/statistics.dart';
+
 import 'package:mis_notas/entities/subject.dart';
 import 'package:mis_notas/services/statistics_service.dart';
 
@@ -13,7 +10,6 @@ import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/widgets/styles/statistics_container_blank.dart';
 
 import 'package:provider/provider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
@@ -24,17 +20,18 @@ class MisEstadisticas extends StatefulWidget {
 
 class _MisEstadisticasState extends State<MisEstadisticas> {
   int _selectedYear = 1;
-  RefreshController _refreshController = new RefreshController();
 
   Future<List> getYearStatisticsData(Student _student, int _year) async {
     List _statisticsList = new List();
-
-    var _subjectDao = SubjectsDao();
     var _statisticsService = StatisticsService();
 
-    List<Subject> _list =
-        await _subjectDao.getAllSubjectsWithCondition(_student);
-    List<Subject> _listAll = await _subjectDao.getAllSubjectsByUser(_student);
+    List<Subject> _list = List<Subject>();
+
+    List<Subject> _listAll = _student.getSubjects();
+
+    _listAll.forEach((s) {
+      if (s.getState().getState().getName() != '') _list.add(s);
+    });
 
     _statisticsList
         .add(await _statisticsService.getAvgNf(_student, _list, _year));
@@ -61,11 +58,15 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
   Future<List<Subject>> getSubjectsData(Student _student) async {
     List<Subject> _statisticsList = new List<Subject>();
     List<Subject> _filteredList = new List<Subject>();
-    var _subjectDao = SubjectsDao();
     var _statisticsService = StatisticsService();
 
-    List<Subject> _list =
-        await _subjectDao.getAllSubjectsWithCondition(_student);
+    List<Subject> _list = List<Subject>();
+
+    List<Subject> _listAll = _student.getSubjects();
+
+    _listAll.forEach((s) {
+      if (s.getState().getState().getName() != '') _list.add(s);
+    });
 
     if (_list.length != 0) {
       _list.forEach((Subject sub) {

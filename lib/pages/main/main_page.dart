@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mis_notas/entities/student.dart';
-
-import 'package:mis_notas/pages/dialogs/dialog_actualizar_materia.dart';
 import 'package:mis_notas/pages/dialogs/dialog_modificar_nota.dart';
 import 'package:mis_notas/pages/dialogs/dialog_nueva_materia.dart';
 import 'package:mis_notas/pages/dialogs/dialog_nueva_nota.dart';
@@ -11,7 +9,6 @@ import 'package:mis_notas/pages/pages/mis_materias.dart';
 import 'package:mis_notas/pages/pages/misnotas/mis_notas.dart';
 
 import 'package:mis_notas/widgets/buttons/main_button.dart';
-import 'package:mis_notas/widgets/buttons/quick_buttons.dart';
 import 'package:mis_notas/widgets/components/quick_bar.dart';
 
 import 'package:provider/provider.dart';
@@ -148,12 +145,10 @@ class _MainPageState extends State<MainPage> {
             ),
             // Listview
             Padding(
-              padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
+              padding: const EdgeInsets.fromLTRB(24, 10, 24, 18),
               child: Container(
-                //height: 130,
                 child: Wrap(
-                  spacing: 25,
-                  alignment: WrapAlignment.spaceBetween,
+                  spacing: 20,
                   children: <Widget>[
                     InkWell(
                       highlightColor: Colors.transparent,
@@ -183,10 +178,10 @@ class _MainPageState extends State<MainPage> {
                                 }));
                       },
                       child: MainButton(
-                          'Mis\nMaterias',
-                          'assets/images/materias.png',
-                          Color(0xFFF7F7F7),
-                          '/mismaterias'),
+                        'Mis\nMaterias',
+                        'assets/images/materias.png',
+                        Color(0xFFF7F7F7),
+                      ),
                     ),
                     InkWell(
                       highlightColor: Colors.transparent,
@@ -212,11 +207,14 @@ class _MainPageState extends State<MainPage> {
                                 },
                                 pageBuilder:
                                     (context, animation, animationTime) {
-                                  return MisNotas();
+                                  return MisNotas(0);
                                 }));
                       },
-                      child: MainButton('Mis\nNotas', 'assets/images/notas.png',
-                          Color(0xFFFFDCDC), '/misnotas'),
+                      child: MainButton(
+                        'Mis\nNotas',
+                        'assets/images/notas.png',
+                        Color(0xFFFFDCDC),
+                      ),
                     ),
                     InkWell(
                       highlightColor: Colors.transparent,
@@ -246,17 +244,15 @@ class _MainPageState extends State<MainPage> {
                                 }));
                       },
                       child: MainButton(
-                          'Mis\nEstadísticas',
-                          'assets/images/estadisticas.png',
-                          Color(0xFFF5DCFF),
-                          '/estadisticas'),
+                        'Mis\nEstadísticas',
+                        'assets/images/estadisticas.png',
+                        Color(0xFFF5DCFF),
+                      ),
                     )
                   ],
                 ),
               ),
             ),
-
-            // Funciones rapidas
           ],
         ),
       ),
@@ -277,7 +273,7 @@ class _MainPageState extends State<MainPage> {
       barrierDismissible: true,
       context: context,
       builder: (BuildContext context) {
-        return DialogActualizarMateria(_student);
+        return;
       },
     );
   }

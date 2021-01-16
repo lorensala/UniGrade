@@ -851,7 +851,8 @@ class SubjectsDao {
     return isDone;
   }
 
-  Future<Map> getSubject(Subject subject, Student _student) async {
+  Future<Subject> getSubject(Subject subject, Student _student) async {
+    Subject sub;
     try {
       Future<QuerySnapshot> _subCollection = FirebaseFirestore.instance
           .collection('student')
@@ -863,7 +864,8 @@ class SubjectsDao {
           .get();
 
       await _subCollection.then((value) {
-        return value.docs[0].data();
+        Map map = value.docs[0].data();
+        sub = mapper(map);
       });
 
       print('=====succed====');
@@ -871,6 +873,6 @@ class SubjectsDao {
       print(e);
       print('=====error=====');
     }
-    return null;
+    return sub;
   }
 }

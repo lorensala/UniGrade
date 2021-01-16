@@ -10,10 +10,11 @@ import 'package:mis_notas/pages/pages/misnotas/mis_notas.dart';
 
 import 'package:mis_notas/widgets/styles/grade_card_style.dart';
 import 'package:provider/provider.dart';
+import 'package:undo/undo.dart';
 
 class MisNotasInfo extends StatefulWidget {
-  final Subject _subject;
-  const MisNotasInfo(this._subject);
+  Subject _subject;
+  MisNotasInfo(this._subject);
 
   @override
   _MisNotasInfoState createState() => _MisNotasInfoState();
@@ -30,11 +31,15 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
   var _notaMod;
   bool _hasSelectedDataMod = false;
   var _newNota;
-  SubjectsDao _subejctDao = new SubjectsDao();
+  SubjectsDao _subjectDao = new SubjectsDao();
   bool updated = false;
+  var changes = new ChangeStack();
+  bool firstTime = true;
 
   //TODO: Implementar logica para ver si cambia realmente.
   bool changed = false;
+
+  Subject _original;
 
   //TODO: SI ingresa una nota final, deberia marcar como terminó la materia.
   //TODO: Provider de estudiante con sus respectivas materias!
@@ -42,50 +47,44 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
   var _types = ['Práctico', 'Teórico', 'TP', 'Final'];
   var _notas = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
-  List<String> _getGrades(String _type, Subject _aux) {
+  List<String> _getGrades(String _type, Subject _subject) {
     List<String> _grades = new List<String>();
 
     switch (_type) {
       case 'Práctico':
-        _aux.getGradesP().toSet().toList().forEach((grade) {
+        widget._subject.getGradesP().toSet().toList().forEach((grade) {
           _grades.add(grade.toString());
         });
         return _grades;
 
       case 'Teórico':
-        _aux.getGradesT().toSet().toList().forEach((grade) {
+        widget._subject.getGradesT().toSet().toList().forEach((grade) {
           _grades.add(grade.toString());
         });
         return _grades;
 
       case 'TP':
-        _aux.getGradesTP().toSet().toList().forEach((grade) {
+        widget._subject.getGradesTP().toSet().toList().forEach((grade) {
           _grades.add(grade.toString());
         });
         return _grades;
 
       case 'Final':
-        _aux.getAplazos().toSet().toList().forEach((grade) {
+        widget._subject.getAplazos().toSet().toList().forEach((grade) {
           _grades.add(grade.toString());
         });
-        if (_aux.getNf() != -1) _grades.add(_aux.getNf().toString());
+        if (widget._subject.getNf() != -1)
+          _grades.add(widget._subject.getNf().toString());
         return _grades;
       default:
         return [];
     }
   }
 
-  Subject _aux;
-
-  @override
-  void initState() {
-    _aux = Subject.fromOther(widget._subject);
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    Student _student = Provider.of<Student>(context, listen: false);
+    Student _student = Provider.of<Student>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -99,61 +98,87 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                 child: Row(
                   children: <Widget>[
                     IconButton(
-                      onPressed: () {
-                        !changed
-                            ? Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                    transitionDuration:
-                                        Duration(milliseconds: 250),
-                                    transitionsBuilder: (context, animation,
-                                        secondaryAnimation, child) {
-                                      animation = CurvedAnimation(
-                                          parent: animation,
-                                          curve: Curves.easeInOut);
-                                      return SlideTransition(
-                                        position: Tween(
-                                                begin: Offset(1.0, 0.0),
-                                                end: Offset(0.0, 0.0))
-                                            .animate(animation),
-                                        child: child,
-                                      );
-                                    },
-                                    pageBuilder:
-                                        (context, animation, animationTime) {
-                                      return MisNotas(getIndex(_aux, _student));
-                                    }))
-                            : CoolAlert.show(
-                                context: context,
-                                backgroundColor: Colors.white,
-                                type: CoolAlertType.confirm,
-                                onConfirmBtnTap: () {
-                                  Navigator.push(
-                                      context,
-                                      PageRouteBuilder(
-                                          transitionDuration:
-                                              Duration(milliseconds: 250),
-                                          transitionsBuilder: (context,
-                                              animation,
-                                              secondaryAnimation,
-                                              child) {
-                                            animation = CurvedAnimation(
-                                                parent: animation,
-                                                curve: Curves.easeInOut);
-                                            return SlideTransition(
-                                              position: Tween(
-                                                      begin: Offset(1.0, 0.0),
-                                                      end: Offset(0.0, 0.0))
-                                                  .animate(animation),
-                                              child: child,
-                                            );
-                                          },
-                                          pageBuilder: (context, animation,
-                                              animationTime) {
-                                            return MisNotas(
-                                                getIndex(_aux, _student));
-                                          }));
+                      onPressed: () async {
+                        _original = await _subjectDao.getSubject(
+                            widget._subject, _student);
+
+                        if (!changed) {
+                          Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                  transitionDuration:
+                                      Duration(milliseconds: 250),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    animation = CurvedAnimation(
+                                        parent: animation,
+                                        curve: Curves.easeInOut);
+                                    return SlideTransition(
+                                      position: Tween(
+                                              begin: Offset(1.0, 0.0),
+                                              end: Offset(0.0, 0.0))
+                                          .animate(animation),
+                                      child: child,
+                                    );
+                                  },
+                                  pageBuilder:
+                                      (context, animation, animationTime) {
+                                    return MisNotas(
+                                        getIndex(_original, _student));
+                                  }));
+                        } else {
+                          CoolAlert.show(
+                              context: context,
+                              backgroundColor: Colors.white,
+                              type: CoolAlertType.confirm,
+                              onConfirmBtnTap: () async {
+                                await _subjectDao
+                                    .getSubject(widget._subject, _student)
+                                    .then((s) {
+                                  widget._subject = Subject.fromOther(s);
                                 });
+
+                                Subject aux = _student.getSubjects().firstWhere(
+                                    (s) =>
+                                        s.getName() ==
+                                        widget._subject.getName());
+
+                                /* aux.gradesTP = _original.getGradesTP();
+                                aux.gradesP = _original.getGradesP();
+
+                                aux.gradesT = _original.getGradesT();
+
+                                aux.aplazos = _original.getAplazos();
+
+                                aux.notaFinal = _original.getNf(); */
+
+                                aux = Subject.fromOther(_original);
+
+                                Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                        transitionDuration:
+                                            Duration(milliseconds: 250),
+                                        transitionsBuilder: (context, animation,
+                                            secondaryAnimation, child) {
+                                          animation = CurvedAnimation(
+                                              parent: animation,
+                                              curve: Curves.easeInOut);
+                                          return SlideTransition(
+                                            position: Tween(
+                                                    begin: Offset(1.0, 0.0),
+                                                    end: Offset(0.0, 0.0))
+                                                .animate(animation),
+                                            child: child,
+                                          );
+                                        },
+                                        pageBuilder: (context, animation,
+                                            animationTime) {
+                                          return MisNotas(getIndex(
+                                              widget._subject, _student));
+                                        }));
+                              });
+                        }
                       },
                       icon: Image.asset(
                         'assets/images/3.0x/backarrow.png',
@@ -200,7 +225,7 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  GradeCard(_aux, false),
+                  GradeCard(widget._subject, false),
                   SizedBox(
                     height: 10,
                   ),
@@ -315,31 +340,37 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
 
                               switch (_selectedTypeAdd) {
                                 case 'Práctico':
-                                  if (_aux.getGradesP().length < 5)
-                                    _aux.addgradeP(nota);
+                                  if (widget._subject.getGradesP().length < 5)
+                                    widget._subject.addgradeP(nota);
                                   break;
 
                                 case 'Teórico':
-                                  if (_aux.getGradesT().length < 5)
-                                    _aux.addgradeT(nota);
+                                  if (widget._subject.getGradesT().length < 5)
+                                    widget._subject.addgradeT(nota);
                                   break;
 
                                 case 'TP':
-                                  if (_aux.getGradesTP().length < 5)
-                                    _aux.addgradeTP(nota);
+                                  if (widget._subject.getGradesTP().length < 5)
+                                    changes.add(new Change(
+                                        widget._subject.getGradesTP(),
+                                        () => widget._subject.addgradeTP(nota),
+                                        (oldValue) => widget._subject.gradesTP =
+                                            oldValue));
+
                                   break;
 
                                 case 'Final':
-                                  if (_aux.getAplazos().length <= 3) {
+                                  if (widget._subject.getAplazos().length <=
+                                      3) {
                                     if (nota > 5) {
                                       await showActualizarMateria(
-                                          context, _aux);
+                                          context, widget._subject);
 
                                       //TODO: Mostrar mensaje para que ponga la condicion
-                                      _aux.nf(nota);
+                                      widget._subject.nf(nota);
                                       setState(() {});
                                     } else
-                                      _aux.addgradeAp(nota);
+                                      widget._subject.addgradeAp(nota);
                                     break;
                                   }
                               }
@@ -462,7 +493,8 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                                       _hasSelectedDataMod = false;
                                     });
                                   },
-                                  items: _getGrades(_selectedTypeDel, _aux)
+                                  items: _getGrades(
+                                          _selectedTypeDel, widget._subject)
                                       .map((type) => DropdownMenuItem(
                                           child: Text(type), value: type))
                                       .toList()),
@@ -481,25 +513,25 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
 
                               switch (_selectedTypeDel) {
                                 case 'Práctico':
-                                  if (_aux.getGradesP().length < 6)
-                                    _aux.deleteGradeP(nota);
+                                  if (widget._subject.getGradesP().length < 6)
+                                    widget._subject.deleteGradeP(nota);
                                   break;
 
                                 case 'Teórico':
-                                  if (_aux.getGradesT().length < 6)
-                                    _aux.deleteGradeT(nota);
+                                  if (widget._subject.getGradesT().length < 6)
+                                    widget._subject.deleteGradeT(nota);
                                   break;
 
                                 case 'TP':
-                                  if (_aux.getGradesTP().length < 6)
-                                    _aux.deleteGradeTP(nota);
+                                  if (widget._subject.getGradesTP().length < 6)
+                                    widget._subject.deleteGradeTP(nota);
                                   break;
 
                                 case 'Final':
                                   if (nota > 5)
-                                    _aux.nf(-1);
+                                    widget._subject.nf(-1);
                                   else
-                                    _aux.deleteGradeAp(nota);
+                                    widget._subject.deleteGradeAp(nota);
                                   break;
                               }
 
@@ -626,7 +658,8 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                                       _hasSelectedDataDel = false;
                                     });
                                   },
-                                  items: _getGrades(_selectedTypeMod, _aux)
+                                  items: _getGrades(
+                                          _selectedTypeMod, widget._subject)
                                       .map((type) => DropdownMenuItem(
                                           child: Text(type), value: type))
                                       .toList()),
@@ -689,23 +722,24 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
 
                               switch (_selectedTypeMod) {
                                 case 'Práctico':
-                                  if (_aux.getGradesP().length < 6)
-                                    _aux.modGradeP(nota, nuevaNota);
+                                  if (widget._subject.getGradesP().length < 6)
+                                    widget._subject.modGradeP(nota, nuevaNota);
                                   break;
 
                                 case 'Teórico':
-                                  if (_aux.getGradesT().length < 6)
-                                    _aux.modGradeT(nota, nuevaNota);
+                                  if (widget._subject.getGradesT().length < 6)
+                                    widget._subject.modGradeT(nota, nuevaNota);
                                   break;
 
                                 case 'TP':
-                                  if (_aux.getGradesTP().length < 6)
-                                    _aux.modGradeTP(nota, nuevaNota);
+                                  if (widget._subject.getGradesTP().length < 6)
+                                    widget._subject.modGradeTP(nota, nuevaNota);
                                   break;
 
                                 case 'Final':
-                                  if (_aux.getAplazos().length <= 3) {
-                                    _aux.modGradAp(nota, nuevaNota);
+                                  if (widget._subject.getAplazos().length <=
+                                      3) {
+                                    widget._subject.modGradAp(nota, nuevaNota);
                                     break;
                                   }
                               }
@@ -747,8 +781,8 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                     focusColor: Colors.transparent,
                     splashColor: Colors.transparent,
                     onPressed: () async {
-                      updated = await _subejctDao.updateSubject(
-                          Subject.fromOther(_aux), _student);
+                      updated = await _subjectDao.updateSubject(
+                          Subject.fromOther(widget._subject), _student);
 
                       if (updated) {
                         await CoolAlert.show(

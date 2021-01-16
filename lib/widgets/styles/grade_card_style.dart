@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mis_notas/entities/subject.dart';
 import 'package:mis_notas/pages/pages/misnotas/notas_info_page.dart';
+import 'package:provider/provider.dart';
 
 class GradeCard extends StatelessWidget {
   final Subject _subject;
@@ -83,7 +84,9 @@ class GradeCard extends StatelessWidget {
                             );
                           },
                           pageBuilder: (context, animation, animationTime) {
-                            return MisNotasInfo(_subject);
+                            return ChangeNotifierProvider(
+                                create: (context) => Subject.empty(),
+                                child: MisNotasInfo(_subject));
                           }));
                 }
               : null,
@@ -231,10 +234,6 @@ class GradeCard extends StatelessWidget {
                             nf != -1)
                           Column(
                             children: <Widget>[
-                              SvgPicture.string(
-                                '<svg viewBox="229.0 399.5 98.5 1.0" ><path transform="translate(229.0, 399.5)" d="M 0 0 L 98.5 0" fill="none" stroke="#faff72" stroke-width="4" stroke-miterlimit="4" stroke-linecap="round" /></svg>',
-                                allowDrawingOutsideViewBox: true,
-                              ),
                               Text(
                                 'NOTA FINAL:',
                                 style: TextStyle(
@@ -259,10 +258,6 @@ class GradeCard extends StatelessWidget {
                                   ),
                                   textAlign: TextAlign.left,
                                 ),
-                              ),
-                              SvgPicture.string(
-                                '<svg viewBox="229.0 399.5 98.5 1.0" ><path transform="translate(229.0, 399.5)" d="M 0 0 L 98.5 0" fill="none" stroke="#faff72" stroke-width="4" stroke-miterlimit="4" stroke-linecap="round" /></svg>',
-                                allowDrawingOutsideViewBox: true,
                               ),
                             ],
                           ),

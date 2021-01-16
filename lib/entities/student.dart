@@ -22,10 +22,6 @@ class Student extends ChangeNotifier {
   set subjects(subjects) => _subjects = subjects;
   set statistics(statistics) => _statistics = statistics;
 
-  void updated() {
-    notifyListeners();
-  }
-
   Statistics getStatistics() => _statistics;
 
   List<String> getCareerDocRefs() => _carrerDocRefs;
@@ -50,11 +46,6 @@ class Student extends ChangeNotifier {
 
   Student(this._fullname, this._profilePic, this._subjects, this._uid,
       this._university, _carrerDocRefs, _studentDocRef, _statistics);
-
-  void test() {
-    _fullname = 'Lorencio Sala';
-    notifyListeners();
-  }
 
   @override
   String toString() {

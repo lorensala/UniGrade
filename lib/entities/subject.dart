@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mis_notas/entities/state_record.dart';
 
-class Subject {
+class Subject extends ChangeNotifier {
   String _name;
   int _year;
   List<int> _gradesP;
@@ -58,6 +58,16 @@ class Subject {
   bool getPassed() => _passed;
 
   set passed(passed) => _passed = passed;
+  set elect(elec) => _elect = elec;
+  set duration(dur) => _duration = dur;
+  set aplazos(ap) => _aplazos = ap;
+  set name(name) => _name = name;
+  set year(year) => _year = year;
+  set gradesP(gradesP) => _gradesP = gradesP;
+  set gradesT(gradesT) => _gradesT = gradesT;
+  set gradesTP(gradesTP) => _gradesTP = gradesTP;
+  set notaFinal(nf) => _nf = nf;
+
   void addgradeP(grade) => _gradesP.add(grade);
   void addgradeT(grade) => _gradesT.add(grade);
   void addgradeTP(grade) => _gradesTP.add(grade);
@@ -103,6 +113,14 @@ class Subject {
   }
 
   Subject.allNull();
+
+  Subject.empty() {
+    this.gradesP = null;
+    this.gradesT = null;
+    this.gradesTP = null;
+    this._aplazos = null;
+    this._nf = null;
+  }
 
   Subject.fromOther(Subject other)
       : this._name = other.getName(),

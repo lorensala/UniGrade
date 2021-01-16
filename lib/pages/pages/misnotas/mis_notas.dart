@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mis_notas/animation/FadeAnimation.dart';
-import 'package:mis_notas/data/subject_dao.dart';
 
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
@@ -29,8 +28,9 @@ class _MisNotasState extends State<MisNotas> {
       ItemPositionsListener.create();
 
   Future<List<Subject>> getData(Student _student, String condition) async {
-    SubjectsDao _subjectDao = new SubjectsDao();
-    List<Subject> _list = await _subjectDao.getAllSubjectsByUser(_student);
+    //SubjectsDao _subjectDao = new SubjectsDao();
+    List<Subject> _list = _student
+        .getSubjects(); //await _subjectDao.getAllSubjectsByUser(_student);
     List<Subject> _listAux = new List<Subject>();
 
     if (condition == 'Todas') {
@@ -74,6 +74,8 @@ class _MisNotasState extends State<MisNotas> {
   @override
   Widget build(BuildContext context) {
     Student _student = Provider.of<Student>(context, listen: false);
+
+    //TODO: Cambiar funcion al volver atras.
 
     return Scaffold(
         backgroundColor: Colors.white,

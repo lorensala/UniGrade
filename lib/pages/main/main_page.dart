@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mis_notas/entities/student.dart';
-
-import 'package:mis_notas/pages/dialogs/dialog_actualizar_materia.dart';
 import 'package:mis_notas/pages/dialogs/dialog_modificar_nota.dart';
 import 'package:mis_notas/pages/dialogs/dialog_nueva_materia.dart';
 import 'package:mis_notas/pages/dialogs/dialog_nueva_nota.dart';
@@ -11,11 +9,9 @@ import 'package:mis_notas/pages/pages/mis_materias.dart';
 import 'package:mis_notas/pages/pages/misnotas/mis_notas.dart';
 
 import 'package:mis_notas/widgets/buttons/main_button.dart';
-import 'package:mis_notas/widgets/buttons/quick_buttons.dart';
 import 'package:mis_notas/widgets/components/quick_bar.dart';
 
 import 'package:provider/provider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class MainPage extends StatefulWidget {
   @override

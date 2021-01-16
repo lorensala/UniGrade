@@ -6,10 +6,9 @@ Uni grade es una aplicación mobile multiplataforma, realizada con el framework 
 
 ## Requerimientos
 
-⋅⋅* Iniciar sesión con la cuenta de Google a través de Firebase Auth.
-⋅⋅* Cargar notas
-⋅⋅* Actualizar condición de las materias
-⋅⋅* 
+⋅⋅*Iniciar sesión con la cuenta de Google a través de Firebase Auth.
+⋅⋅*Cargar notas.
+⋅⋅*Actualizar condición de las materias.
 
 
 A few resources to get you started if this is your first Flutter project:

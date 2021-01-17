@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:mis_notas/data/subject_dao.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
 
@@ -20,7 +19,7 @@ class StatisticsService extends ChangeNotifier {
     } else {
       _list.forEach((element) {
         if (element.getNf() != -1 &&
-            //element.getNf() > 5 &&
+            !element.getElect() &&
             element.getYear() == _year) {
           _total += element.getNf();
           _count += 1;
@@ -71,34 +70,42 @@ class StatisticsService extends ChangeNotifier {
     int count = 0;
 
     _list.forEach((element) {
-      if (element.getYear() == _year) count++;
+      if (element.getYear() == _year && !element.getElect()) count++;
     });
 
     return count;
+  }
+
+  int getPoints(Student _student, List<Subject> _listAll) {
+    int points = 0;
+
+    _listAll.forEach((s) {
+      if (s.getElect() && s.getNf() >= 6) {
+        points += s.getPoints();
+      }
+    });
+    return points;
   }
 
   Future<int> getSubjectsLeft(
       Student _student, List<Subject> _list, int _year) async {
     int _countTotal = 0;
     int _countPassed = 0;
-    SubjectsDao _subjectDao = new SubjectsDao();
-    List<Subject> _listAll = await _subjectDao.getAllSubjectsByUser(_student);
-
-    if (_year != -1) {
-      _countPassed = await getSubjectsCount(_student, _listAll, _year);
-    }
 
     if (_year == -1) {
       _countTotal = _list.length;
-      _countPassed = await getSubjectsPassed(_student, _listAll, -1);
+      _countPassed = await getSubjectsPassed(_student, _list, -1);
     } else {
+      _countTotal = await getSubjectsCount(_student, _list, _year);
       _list.forEach((element) {
-        if (element.getYear() == _year) _countTotal++;
+        if (element.getYear() == _year &&
+            element.getNf() >= 6 &&
+            !element.getElect()) _countPassed++;
       });
     }
 
     if (_year != -1)
-      return -(_countTotal - _countPassed);
+      return (_countTotal - _countPassed);
     else
       return (_countTotal - _countPassed);
   }
@@ -115,7 +122,7 @@ class StatisticsService extends ChangeNotifier {
       });
     } else {
       _list.forEach((element) {
-        if (element.getPassed() &&
+        if (element.getNf() >= 6 &&
             !element.getElect() &&
             element.getYear() == _year) {
           _count++;

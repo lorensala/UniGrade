@@ -293,6 +293,7 @@ class SubjectsDao {
     var gradesTp;
     var aplazos;
     var elect;
+    var points;
 
     sub['gradesP'] != null
         ? gradesP = new List<int>.from(sub['gradesP'])
@@ -312,6 +313,8 @@ class SubjectsDao {
 
     sub['elect'] != null ? elect = sub['elect'] : elect = false;
 
+    sub['points'] != null ? points = sub['points'] : points = 0;
+
     return Subject(
         sub['name'],
         sub['year'],
@@ -325,7 +328,8 @@ class SubjectsDao {
         sub['passed'],
         aplazos,
         sub['duration'],
-        elect);
+        elect,
+        points);
   }
 
   Future<bool> addSubject(Student _student, Subject subject) async {

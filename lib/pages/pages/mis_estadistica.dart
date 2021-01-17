@@ -37,8 +37,8 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
         .add(await _statisticsService.getAvgNf(_student, _list, _year));
     _statisticsList.add(
         await _statisticsService.getSubjectsPassed(_student, _list, _year));
-    _statisticsList
-        .add(await _statisticsService.getSubjectsLeft(_student, _list, _year));
+    _statisticsList.add(
+        await _statisticsService.getSubjectsLeft(_student, _listAll, _year));
     _statisticsList.add(await _statisticsService.getSubjectsCondition(
         _student, _list, _year, 'Promoción Práctica'));
     _statisticsList.add(await _statisticsService.getSubjectsCondition(
@@ -97,8 +97,11 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
 
     //TODO: Fijarse que la cantidad de materias es dinamica. Hardcoded
 
-    int percentage =
-        ((_student.getStatistics().getPassed() * 100 / 35)).round();
+    int percentage = (((_student.getStatistics().getPassed() +
+                _student.getStatistics().getPoints()) *
+            100 /
+            59))
+        .round();
 
     return Scaffold(
         backgroundColor: Colors.white,

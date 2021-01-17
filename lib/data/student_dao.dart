@@ -354,7 +354,7 @@ class StudentDao {
         'icon': 'assets/images/software.png',
         'passed': false,
         'elect': true,
-        'points': 2
+        'points': 3
       },
       {
         'duration': 'cuatrimestral',
@@ -370,7 +370,7 @@ class StudentDao {
         'icon': 'assets/images/default.png',
         'passed': false,
         'elect': true,
-        'points': 2
+        'points': 3
       },
       {
         'duration': 'cuatrimestral',
@@ -386,7 +386,7 @@ class StudentDao {
         'icon': 'assets/images/default.png',
         'passed': false,
         'elect': true,
-        'points': 2
+        'points': 3
       },
 
       {
@@ -459,7 +459,7 @@ class StudentDao {
         'icon': 'assets/images/software.png',
         'passed': false,
         'elect': true,
-        'points': 2
+        'points': 4
       },
       {
         'duration': 'cuatrimestral',
@@ -475,7 +475,7 @@ class StudentDao {
         'icon': 'assets/images/software.png',
         'passed': false,
         'elect': true,
-        'points': 2
+        'points': 4
       },
       {
         'duration': 'cuatrimestral',
@@ -553,7 +553,7 @@ class StudentDao {
         'icon': 'assets/images/software.png',
         'passed': false,
         'elect': true,
-        'points': 2
+        'points': 4
       },
       {
         'duration': 'anual',
@@ -670,7 +670,7 @@ class StudentDao {
         'icon': 'assets/images/default.png',
         'passed': false,
         'elect': true,
-        'points': 3
+        'points': 4
       },
       {
         'duration': 'cuatrimestral',
@@ -686,7 +686,7 @@ class StudentDao {
         'icon': 'assets/images/default.png',
         'passed': false,
         'elect': true,
-        'points': 3
+        'points': 4
       },
       {
         'duration': 'cuatrimestral',
@@ -702,7 +702,7 @@ class StudentDao {
         'icon': 'assets/images/default.png',
         'passed': false,
         'elect': true,
-        'points': 3
+        'points': 4
       },
       {
         'duration': 'cuatrimestral',
@@ -718,7 +718,7 @@ class StudentDao {
         'icon': 'assets/images/default.png',
         'passed': false,
         'elect': true,
-        'points': 3
+        'points': 4
       },
 
       {
@@ -735,7 +735,7 @@ class StudentDao {
         'icon': 'assets/images/default.png',
         'passed': false,
         'elect': true,
-        'points': 3
+        'points': 4
       },
 
       {
@@ -752,7 +752,7 @@ class StudentDao {
         'icon': 'assets/images/default.png',
         'passed': false,
         'elect': true,
-        'points': 3
+        'points': 4
       },
 
       {
@@ -769,7 +769,7 @@ class StudentDao {
         'icon': 'assets/images/default.png',
         'passed': false,
         'elect': true,
-        'points': 3
+        'points': 4
       },
 
       {
@@ -786,7 +786,7 @@ class StudentDao {
         'icon': 'assets/images/default.png',
         'passed': false,
         'elect': true,
-        'points': 3
+        'points': 4
       },
       {
         'duration': 'cuatrimestral',
@@ -802,7 +802,7 @@ class StudentDao {
         'icon': 'assets/images/default.png',
         'passed': false,
         'elect': true,
-        'points': 3
+        'points': 4
       },
       {
         'duration': 'cuatrimestral',
@@ -818,7 +818,7 @@ class StudentDao {
         'icon': 'assets/images/default.png',
         'passed': false,
         'elect': true,
-        'points': 3
+        'points': 4
       },
       {
         'duration': 'cuatrimestral',
@@ -834,7 +834,7 @@ class StudentDao {
         'icon': 'assets/images/default.png',
         'passed': false,
         'elect': true,
-        'points': 3
+        'points': 4
       },
 
       {

@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 
 class Statistics extends ChangeNotifier {
   Statistics(this._avg, this._realAvg, this._left, this._passed, this._pp,
-      this._pt, this._ap, this._reg, this._prof);
+      this._pt, this._ap, this._reg, this._prof, this._points);
 
   double _avg;
   double _realAvg;
@@ -13,6 +13,7 @@ class Statistics extends ChangeNotifier {
   int _ap;
   int _reg;
   List<int> _prof;
+  int _points;
 
   set avg(avg) => _avg = avg;
   set realAvg(avg) => _realAvg = avg;
@@ -23,6 +24,12 @@ class Statistics extends ChangeNotifier {
   set ap(ap) => _ap = ap;
   set reg(reg) => _reg = reg;
   set prof(prf) => _prof = prf;
+  set points(points) {
+    if (points > 23)
+      _points = 23;
+    else
+      _points = points;
+  }
 
   double getAvg() => _avg;
   double getRealAvg() => _realAvg;
@@ -33,4 +40,5 @@ class Statistics extends ChangeNotifier {
   int getAP() => _ap;
   int getReg() => _reg;
   List<int> getProf() => _prof;
+  int getPoints() => _points;
 }

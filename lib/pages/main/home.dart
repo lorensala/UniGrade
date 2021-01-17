@@ -105,6 +105,8 @@ class _HomePageState extends State<HomePage> {
         await _statisticsService.getAvgNfWithBadGrades(_student, _list, -1));
     _dataList.add(_statisticsService.getProfileStats(_student, _listCon));
 
+    _dataList.add(_statisticsService.getPoints(_student, _list));
+
     _student.subjects = _list;
 
     return _dataList;
@@ -188,7 +190,8 @@ class _HomePageState extends State<HomePage> {
                           snapshot.data[1][4],
                           snapshot.data[1][5],
                           snapshot.data[1][6],
-                          snapshot.data[1][8]);
+                          snapshot.data[1][8],
+                          snapshot.data[1][9]);
 
                       _student.statistics = _statistics;
 

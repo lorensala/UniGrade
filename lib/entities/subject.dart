@@ -15,7 +15,7 @@ class Subject extends ChangeNotifier {
   bool _passed; //TODO: Sacar esto!!
   String _duration;
   bool _elect;
-  int _points; //TODO: Esto
+  int _points;
 
   //TODO: List<Subjects> _correlativas;
 
@@ -56,6 +56,7 @@ class Subject extends ChangeNotifier {
   String getType() => _type;
   String getIcon() => _icon;
   bool getPassed() => _passed;
+  int getPoints() => _points;
 
   set passed(passed) => _passed = passed;
   set elect(elec) => _elect = elec;
@@ -67,6 +68,8 @@ class Subject extends ChangeNotifier {
   set gradesT(gradesT) => _gradesT = gradesT;
   set gradesTP(gradesTP) => _gradesTP = gradesTP;
   set notaFinal(nf) => _nf = nf;
+  set points(points) => _points = points;
+  set state(state) => _state = state;
 
   void addgradeP(grade) => _gradesP.add(grade);
   void addgradeT(grade) => _gradesT.add(grade);
@@ -78,8 +81,6 @@ class Subject extends ChangeNotifier {
   void deleteGradeT(int nota) => _gradesT.remove(nota);
   void deleteGradeTP(int nota) => _gradesTP.remove(nota);
   void deleteGradeAp(int nota) => _aplazos.remove(nota);
-
-  set state(state) => _state = state;
 
   void modGradeP(int nota, int nuevaNota) {
     int index = _gradesP.indexOf(nota);
@@ -135,7 +136,8 @@ class Subject extends ChangeNotifier {
         this._passed = other.getPassed(),
         this._aplazos = other.getAplazos(),
         this._duration = other.getDuration(),
-        this._elect = other.getElect();
+        this._elect = other.getElect(),
+        this._points = other.getPoints();
 
   Subject(
       this._name,
@@ -150,7 +152,8 @@ class Subject extends ChangeNotifier {
       this._passed,
       this._aplazos,
       this._duration,
-      this._elect);
+      this._elect,
+      this._points);
 
   @override
   String toString() {

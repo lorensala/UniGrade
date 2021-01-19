@@ -18,9 +18,7 @@ class _DialogActualizarMateriaState extends State<DialogActualizarMateria> {
   bool _isEmpty = false;
 
   List<String> _conditions = [
-    'Regular',
-    'Promoción Teórica',
-    'Promoción Práctica',
+    'Aprobada',
     'Aprobación Directa',
   ];
   List<String> _conditionsEmpty = ['Libre', 'Abandonada', 'Aprobación Directa'];

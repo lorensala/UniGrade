@@ -7,6 +7,7 @@ import 'package:mis_notas/entities/state_record.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
 import 'package:mis_notas/pages/dialogs/dialog_actualizar_materia.dart';
+import 'package:mis_notas/pages/main/home.dart';
 
 import 'package:mis_notas/pages/pages/misnotas/mis_notas.dart';
 
@@ -45,6 +46,7 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
   var _types = ['Práctico', 'Teórico', 'TP', 'Final'];
   var _notas = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
   var _condicion = [
+    'Ninguna',
     'Regular',
     'Aprobación Directa',
     'Promoción Teórica',
@@ -108,24 +110,7 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
         _original = await _subjectDao.getSubject(widget._subject, _student);
 
         if (!changed) {
-          Navigator.push(
-              context,
-              PageRouteBuilder(
-                  transitionDuration: Duration(milliseconds: 250),
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    animation = CurvedAnimation(
-                        parent: animation, curve: Curves.easeInOut);
-                    return SlideTransition(
-                      position:
-                          Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-                              .animate(animation),
-                      child: child,
-                    );
-                  },
-                  pageBuilder: (context, animation, animationTime) {
-                    return MisNotas(getIndex(_original, _student));
-                  }));
+          exit(_student);
         } else {
           CoolAlert.show(
               context: context,
@@ -150,25 +135,7 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
 
                 aux.notaFinal = _original.getNf();
 
-                Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                        transitionDuration: Duration(milliseconds: 250),
-                        transitionsBuilder:
-                            (context, animation, secondaryAnimation, child) {
-                          animation = CurvedAnimation(
-                              parent: animation, curve: Curves.easeInOut);
-                          return SlideTransition(
-                            position: Tween(
-                                    begin: Offset(1.0, 0.0),
-                                    end: Offset(0.0, 0.0))
-                                .animate(animation),
-                            child: child,
-                          );
-                        },
-                        pageBuilder: (context, animation, animationTime) {
-                          return MisNotas(getIndex(widget._subject, _student));
-                        }));
+                exit(_student);
               });
         }
       },
@@ -190,29 +157,7 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                               widget._subject, _student);
 
                           if (!changed) {
-                            Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                    transitionDuration:
-                                        Duration(milliseconds: 250),
-                                    transitionsBuilder: (context, animation,
-                                        secondaryAnimation, child) {
-                                      animation = CurvedAnimation(
-                                          parent: animation,
-                                          curve: Curves.easeInOut);
-                                      return SlideTransition(
-                                        position: Tween(
-                                                begin: Offset(1.0, 0.0),
-                                                end: Offset(0.0, 0.0))
-                                            .animate(animation),
-                                        child: child,
-                                      );
-                                    },
-                                    pageBuilder:
-                                        (context, animation, animationTime) {
-                                      return MisNotas(
-                                          getIndex(_original, _student));
-                                    }));
+                            exit(_student);
                           } else {
                             CoolAlert.show(
                                 context: context,
@@ -240,31 +185,8 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
 
                                   aux.notaFinal = _original.getNf();
 
-                                  Navigator.push(
-                                      context,
-                                      PageRouteBuilder(
-                                          transitionDuration:
-                                              Duration(milliseconds: 250),
-                                          transitionsBuilder: (context,
-                                              animation,
-                                              secondaryAnimation,
-                                              child) {
-                                            animation = CurvedAnimation(
-                                                parent: animation,
-                                                curve: Curves.easeInOut);
-                                            return SlideTransition(
-                                              position: Tween(
-                                                      begin: Offset(1.0, 0.0),
-                                                      end: Offset(0.0, 0.0))
-                                                  .animate(animation),
-                                              child: child,
-                                            );
-                                          },
-                                          pageBuilder: (context, animation,
-                                              animationTime) {
-                                            return MisNotas(getIndex(
-                                                widget._subject, _student));
-                                          }));
+                                  exit(_student);
+                                  ;
                                 });
                           }
                         },
@@ -469,8 +391,12 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                                             if (nota > 5) {
                                               await showActualizarMateria(
                                                   context, widget._subject);
-
                                               widget._subject.nf(nota);
+                                              widget._subject.state =
+                                                  StateRecord(
+                                                      StateSubject('Aprobada'),
+                                                      DateTime.now());
+
                                               setState(() {});
                                             } else
                                               widget._subject.addgradeAp(nota);
@@ -960,15 +886,22 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                                   hint: new Text('Condicion'),
                                   onChanged: (newValue) {
                                     setState(() {
-                                      _selectedCondition = newValue;
-                                      widget._subject.state = StateRecord(
-                                          StateSubject(_selectedCondition),
-                                          DateTime.now());
+                                      if (newValue != 'Ninguna') {
+                                        _selectedCondition = newValue;
+                                        widget._subject.state = StateRecord(
+                                            StateSubject(_selectedCondition),
+                                            DateTime.now());
+                                      } else {
+                                        _selectedCondition = null;
+                                        widget._subject.state = StateRecord(
+                                            StateSubject(''), DateTime.now());
+                                      }
 
                                       changed = true;
                                     });
                                   },
-                                  items: recursar
+                                  items: (recursar ||
+                                          widget._subject.getNf() != -1)
                                       ? null
                                       : _condicion
                                           .map((type) => DropdownMenuItem(
@@ -1001,6 +934,8 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                                     context: context,
                                     type: CoolAlertType.success,
                                     text: '¡Materia actualizada con exito!');
+
+                                exit(_student);
                               } else {
                                 CoolAlert.show(
                                     borderRadius: 26,
@@ -1079,8 +1014,7 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                                         },
                                         pageBuilder: (context, animation,
                                             animationTime) {
-                                          return MisNotas(
-                                              getIndex(_original, _student));
+                                          return HomePage();
                                         }));
                               } else {
                                 CoolAlert.show(
@@ -1161,5 +1095,25 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
     } catch (e) {
       return 0;
     }
+  }
+
+  void exit(Student _student) {
+    Navigator.push(
+        context,
+        PageRouteBuilder(
+            transitionDuration: Duration(milliseconds: 250),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              animation =
+                  CurvedAnimation(parent: animation, curve: Curves.easeInOut);
+              return SlideTransition(
+                position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                    .animate(animation),
+                child: child,
+              );
+            },
+            pageBuilder: (context, animation, animationTime) {
+              return MisNotas(getIndex(_original, _student));
+            }));
   }
 }

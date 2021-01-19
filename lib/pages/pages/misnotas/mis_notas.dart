@@ -113,8 +113,6 @@ class _MisNotasState extends State<MisNotas> {
                         children: <Widget>[
                           IconButton(
                             onPressed: () {
-                              //_controller.position.pixels;
-                              //Navigator.pop(context);
                               Navigator.push(
                                   context,
                                   PageRouteBuilder(

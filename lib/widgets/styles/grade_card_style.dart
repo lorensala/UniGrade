@@ -239,161 +239,59 @@ class GradeCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        if (_subject.getState().getState().getName() ==
-                                'Regular' &&
-                            nf != -1)
-                          Column(
-                            children: <Widget>[
-                              Text(
-                                'NOTA FINAL:',
-                                style: TextStyle(
-                                  fontFamily: 'Avenir LT Std',
-                                  fontSize: 13,
-                                  color: const Color(0xff000000),
-                                  fontWeight: FontWeight.w800,
-                                  height: 2.3636363636363638,
-                                ),
-                                textAlign: TextAlign.left,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(0, 20, 0, 10),
-                                child: Text(
-                                  nf.toString(),
-                                  style: TextStyle(
-                                    fontFamily: 'Avenir LT Std',
-                                    fontSize: 50,
-                                    color: const Color(0xff000000),
-                                    height: 0.52,
+                        (nf != -1)
+                            ? Column(
+                                children: <Widget>[
+                                  Text(
+                                    'NOTA FINAL:',
+                                    style: TextStyle(
+                                      fontFamily: 'Avenir LT Std',
+                                      fontSize: 13,
+                                      color: const Color(0xff000000),
+                                      fontWeight: FontWeight.w800,
+                                      height: 2.3636363636363638,
+                                    ),
+                                    textAlign: TextAlign.left,
                                   ),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                            ],
-                          ),
-                        if ((_subject.getState().getState().getName() ==
-                                    'Promoción Práctica' ||
-                                _subject.getState().getState().getName() ==
-                                    'Promoción Teórica') &&
-                            nf != -1)
-                          Column(
-                            children: <Widget>[
-                              Text(
-                                'NOTA FINAL:',
-                                style: TextStyle(
-                                  fontFamily: 'Avenir LT Std',
-                                  fontSize: 13,
-                                  color: const Color(0xff000000),
-                                  fontWeight: FontWeight.w800,
-                                  height: 2.3636363636363638,
-                                ),
-                                textAlign: TextAlign.left,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(0, 20, 0, 10),
-                                child: Text(
-                                  nf.toString(),
-                                  style: TextStyle(
-                                    fontFamily: 'Avenir LT Std',
-                                    fontSize: 50,
-                                    color: const Color(0xff000000),
-                                    height: 0.52,
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                                    child: Text(
+                                      nf.toString(),
+                                      style: TextStyle(
+                                        fontFamily: 'Avenir LT Std',
+                                        fontSize: 50,
+                                        color: const Color(0xff000000),
+                                        height: 0.52,
+                                      ),
+                                      textAlign: TextAlign.left,
+                                    ),
                                   ),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                            ],
-                          ),
-                        if (_subject.getState().getState().getName() ==
-                                'Aprobación Directa' &&
-                            nf != -1)
-                          Column(
-                            children: <Widget>[
-                              Text(
-                                'NOTA FINAL:',
-                                style: TextStyle(
-                                  fontFamily: 'Avenir LT Std',
-                                  fontSize: 13,
-                                  color: const Color(0xff000000),
-                                  fontWeight: FontWeight.w800,
-                                  height: 2.3636363636363638,
-                                ),
-                                textAlign: TextAlign.left,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(0, 20, 0, 10),
-                                child: Text(
-                                  nf.toString(),
-                                  style: TextStyle(
-                                    fontFamily: 'Avenir LT Std',
-                                    fontSize: 50,
-                                    color: const Color(0xff000000),
-                                    height: 0.52,
+                                ],
+                              )
+                            : Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Center(
+                                    child: Text(
+                                      _stateText[_subject
+                                          .getState()
+                                          .getState()
+                                          .getName()],
+                                      style: TextStyle(
+                                        fontFamily: 'Avenir LT Std',
+                                        fontSize: 18,
+                                        color: const Color(0xff000000),
+                                        fontWeight: FontWeight.w600,
+                                        height: 2.3636363636363638,
+                                      ),
+                                    ),
                                   ),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                            ],
-                          ),
-                        if ((_subject.getState().getState().getName() ==
-                                    'Libre' ||
-                                _subject.getState().getState().getName() ==
-                                    'Abandonada') &&
-                            nf != -1)
-                          Column(
-                            children: <Widget>[
-                              Text(
-                                'NOTA FINAL:',
-                                style: TextStyle(
-                                  fontFamily: 'Avenir LT Std',
-                                  fontSize: 13,
-                                  color: const Color(0xff000000),
-                                  fontWeight: FontWeight.w800,
-                                  height: 2.3636363636363638,
-                                ),
-                                textAlign: TextAlign.left,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(0, 20, 0, 10),
-                                child: Text(
-                                  nf.toString(),
-                                  style: TextStyle(
-                                    fontFamily: 'Avenir LT Std',
-                                    fontSize: 50,
-                                    color: const Color(0xff000000),
-                                    height: 0.52,
+                                  SizedBox(
+                                    height: 10,
                                   ),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                            ],
-                          ),
-                        if (nf == -1 &&
-                            _subject.getState().getState().getName() != '')
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Center(
-                                child: Text(
-                                  _stateText[
-                                      _subject.getState().getState().getName()],
-                                  style: TextStyle(
-                                    fontFamily: 'Avenir LT Std',
-                                    fontSize: 18,
-                                    color: const Color(0xff000000),
-                                    fontWeight: FontWeight.w600,
-                                    height: 2.3636363636363638,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                            ],
-                          )
+                                ],
+                              )
                       ],
                     ),
                   ),

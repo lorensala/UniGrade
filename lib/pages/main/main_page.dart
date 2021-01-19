@@ -4,7 +4,7 @@ import 'package:mis_notas/entities/student.dart';
 
 import 'package:mis_notas/pages/dialogs/new_user_dialog.dart';
 import 'package:mis_notas/pages/pages/mis_estadistica.dart';
-import 'package:mis_notas/pages/pages/mis_materias.dart';
+import 'package:mis_notas/pages/pages/mismaterias/mis_materias.dart';
 import 'package:mis_notas/pages/pages/misnotas/mis_notas.dart';
 
 import 'package:mis_notas/widgets/buttons/main_button.dart';

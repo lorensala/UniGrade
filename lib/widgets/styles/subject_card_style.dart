@@ -1,22 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:mis_notas/data/subject_dao.dart';
-
 import 'package:mis_notas/entities/subject.dart';
-import 'package:mis_notas/pages/dialogs/dialog_subject_info.dart';
+import 'package:mis_notas/pages/pages/mismaterias/materias_info_page.dart';
 
 class SubjectCard extends StatelessWidget {
   final Subject _subject;
-  final SubjectsDao _subjectDao = new SubjectsDao();
 
   SubjectCard(this._subject);
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
       child: InkWell(
-        onTap: () {
-          showSubjectInfo(context, _subject);
+        onTap: () async {
+          SubjectsDao _subjectsDao = new SubjectsDao();
+
+          Map _map = await _subjectsDao.getCorrelativas(_subject);
+
+          Navigator.push(
+              context,
+              PageRouteBuilder(
+                  transitionDuration: Duration(milliseconds: 250),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    animation = CurvedAnimation(
+                        parent: animation, curve: Curves.easeInOut);
+                    return SlideTransition(
+                      position:
+                          Tween(begin: Offset(0.0, 1.0), end: Offset(0.0, 0.0))
+                              .animate(animation),
+                      child: child,
+                    );
+                  },
+                  pageBuilder: (context, animation, animationTime) {
+                    return MisMateriasInfo(_subject, _map);
+                  }));
         },
         child: Stack(
           children: <Widget>[
@@ -63,37 +84,13 @@ class SubjectCard extends StatelessWidget {
                 child: CircleAvatar(
                   backgroundColor: Colors.transparent,
                   child: Image.asset(_subject.getIcon()),
-                  radius: 50,
+                  radius: 45,
                 ),
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  void showSubjectInfo(BuildContext context, Subject subject) {
-    print('tocuh');
-    showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (BuildContext context) {
-        return FutureBuilder(
-            future: _subjectDao.getCorrelativas(subject),
-            builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.waiting:
-                  return Center(child: CircularProgressIndicator());
-
-                default:
-                  if (snapshot.hasData && snapshot.data != null)
-                    return DialogSubjectInfo(snapshot.data);
-                  else
-                    return Text('No data');
-              }
-            });
-      },
     );
   }
 }

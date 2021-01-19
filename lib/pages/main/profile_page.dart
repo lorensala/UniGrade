@@ -94,8 +94,7 @@ class ProfilePage extends StatelessWidget {
                     child: ProfileStat(
                         'Programador',
                         'assets/images/software.png',
-                        (_student.getStatistics().getProf()[0] * 10)
-                            .toDouble()),
+                        (_student.getStatistics().getProf()[0]).toDouble()),
                   ),
                 ),
                 FadeAnimation(
@@ -105,19 +104,15 @@ class ProfilePage extends StatelessWidget {
                     child: ProfileStat(
                         'Calculador y Lógico',
                         'assets/images/matematica.png',
-                        (_student.getStatistics().getProf()[1] * 10)
-                            .toDouble()),
+                        (_student.getStatistics().getProf()[1]).toDouble()),
                   ),
                 ),
                 FadeAnimation(
                   delay: 0.1,
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(14, 0, 24, 0),
-                    child: ProfileStat(
-                        'Analista',
-                        'assets/images/analista.png',
-                        (_student.getStatistics().getProf()[2] * 10)
-                            .toDouble()),
+                    child: ProfileStat('Analista', 'assets/images/analista.png',
+                        (_student.getStatistics().getProf()[2]).toDouble()),
                   ),
                 ),
               ],

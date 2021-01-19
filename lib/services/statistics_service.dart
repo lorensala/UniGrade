@@ -93,7 +93,10 @@ class StatisticsService extends ChangeNotifier {
     int _countPassed = 0;
 
     if (_year == -1) {
-      _countTotal = _list.length;
+      _list.forEach((s) {
+        if (!s.getElect()) _countTotal++;
+      });
+
       _countPassed = await getSubjectsPassed(_student, _list, -1);
     } else {
       _countTotal = await getSubjectsCount(_student, _list, _year);

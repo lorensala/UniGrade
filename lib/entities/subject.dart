@@ -16,8 +16,7 @@ class Subject extends ChangeNotifier {
   String _duration;
   bool _elect;
   int _points;
-
-  //TODO: List<Subjects> _correlativas;
+  bool _visible;
 
   Map<String, dynamic> toMap() {
     return {
@@ -34,7 +33,8 @@ class Subject extends ChangeNotifier {
       'icon': _icon,
       'passed': _passed,
       'elect': _elect,
-      'points': 0 //TODO: Hardcoded
+      'points': _points,
+      'visible': _visible
     };
   }
 
@@ -57,6 +57,7 @@ class Subject extends ChangeNotifier {
   String getIcon() => _icon;
   bool getPassed() => _passed;
   int getPoints() => _points;
+  bool getVisible() => _visible;
 
   set passed(passed) => _passed = passed;
   set elect(elec) => _elect = elec;
@@ -153,7 +154,8 @@ class Subject extends ChangeNotifier {
       this._aplazos,
       this._duration,
       this._elect,
-      this._points);
+      this._points,
+      this._visible);
 
   @override
   String toString() {

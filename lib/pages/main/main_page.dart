@@ -1,3 +1,4 @@
+import 'package:coast/coast.dart';
 import 'package:flutter/material.dart';
 import 'package:mis_notas/entities/student.dart';
 
@@ -68,7 +69,7 @@ class _MainPageState extends State<MainPage> {
                         fit: BoxFit.cover,
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

@@ -20,9 +20,9 @@ class MisNotas extends StatefulWidget {
   _MisNotasState createState() => _MisNotasState();
 }
 
-//TODO: Cuando
 class _MisNotasState extends State<MisNotas> {
   String _condition = 'Todas';
+  List<Subject> toRemove = new List<Subject>();
 
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
@@ -30,6 +30,14 @@ class _MisNotasState extends State<MisNotas> {
 
   Future<List<Subject>> getData(Student _student, String condition) async {
     List<Subject> _list = _student.getSubjects();
+    _list.forEach((s) {
+      if (!s.getVisible()) {
+        toRemove.add(s);
+      }
+    });
+
+    _list.removeWhere((s) => toRemove.contains(s));
+
     List<Subject> _listAux = new List<Subject>();
 
     if (condition == 'Todas') {
@@ -395,7 +403,6 @@ class _MisNotasState extends State<MisNotas> {
                     /* Consumer<Student>(
                       builder: (_, _student, __) =>  */
 
-                    //TODO: Revisar.Este future deberia activarse cuando hay cambios nomas.
                     FutureBuilder(
                         future: getData(_student, _condition),
                         builder: (context, snapshot) {
@@ -404,13 +411,20 @@ class _MisNotasState extends State<MisNotas> {
                               return Center(child: CircularProgressIndicator());
 
                             default:
-                              if (snapshot.hasError) return Text('error');
+                              if (snapshot.hasError) {
+                                print(snapshot.error);
+
+                                return Text('error');
+                              }
+
                               if (!snapshot.data.isEmpty) {
                                 return Expanded(
                                   child: FadeAnimation(
                                     delay: 0.1,
                                     child: ScrollablePositionedList.builder(
-                                      initialScrollIndex: widget.index,
+                                      initialScrollIndex: _condition == 'Todas'
+                                          ? widget.index
+                                          : 0,
                                       itemScrollController:
                                           itemScrollController,
                                       itemPositionsListener:

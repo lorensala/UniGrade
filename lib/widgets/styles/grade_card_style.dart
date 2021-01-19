@@ -31,7 +31,17 @@ class GradeCard extends StatelessWidget {
       'Promoción Práctica': Color(0xffEAD6FF),
       'Abandonada': Color(0xffFFE4E4),
       'Libre': Color(0xffFFE4E4),
-      'Cursando': Color(0xffF2F2F2),
+      '': Color(0xffF7F7F7),
+    };
+
+    Map<String, String> _stateText = {
+      'Regular': 'REG.',
+      'Aprobación Directa': 'AP.DIR.',
+      'Promoción Teórica': 'PROM.T',
+      'Promoción Práctica': 'PROM.P',
+      'Abandonada': 'ABAN.',
+      'Libre': 'LIB.',
+      '': '',
     };
 
     gradesP.forEach((element) {
@@ -94,9 +104,9 @@ class GradeCard extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(26.0),
-                color: _colors[_subject.getState().getState().getName()] != null
+                color: !(nf >= 6)
                     ? _colors[_subject.getState().getState().getName()]
-                    : Color(0xfff7f7f7)),
+                    : Color(0xffE2FFE3)),
             child: Padding(
               padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
               child: Column(
@@ -366,32 +376,19 @@ class GradeCard extends StatelessWidget {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              _subject.getState().getState().getName() ==
-                                      'Abandonada'
-                                  ? Text(
-                                      'ABAN.',
-                                      style: TextStyle(
-                                        fontFamily: 'Avenir LT Std',
-                                        fontSize: 18,
-                                        color: const Color(0xff000000),
-                                        fontWeight: FontWeight.w600,
-                                        height: 2.3636363636363638,
-                                      ),
-                                    )
-                                  : Text(
-                                      _subject
-                                          .getState()
-                                          .getState()
-                                          .getName()
-                                          .toUpperCase(),
-                                      style: TextStyle(
-                                        fontFamily: 'Avenir LT Std',
-                                        fontSize: 18,
-                                        color: const Color(0xff000000),
-                                        fontWeight: FontWeight.w600,
-                                        height: 2.3636363636363638,
-                                      ),
-                                    ),
+                              Center(
+                                child: Text(
+                                  _stateText[
+                                      _subject.getState().getState().getName()],
+                                  style: TextStyle(
+                                    fontFamily: 'Avenir LT Std',
+                                    fontSize: 18,
+                                    color: const Color(0xff000000),
+                                    fontWeight: FontWeight.w600,
+                                    height: 2.3636363636363638,
+                                  ),
+                                ),
+                              ),
                               SizedBox(
                                 height: 10,
                               ),

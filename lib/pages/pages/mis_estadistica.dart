@@ -86,11 +86,6 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
     return _statisticsList;
   }
 
-  //TODO: Lo unico que falta es ver los puntajes de las electivas.
-  // Despues, ver como calcular el porcentaje de la carrera hecha!
-  // Revisar el porcentaje de materias hechas por anio, y que no tenga
-  // en cuenta las electivas.
-
   @override
   Widget build(BuildContext context) {
     Student _student = Provider.of<Student>(context);

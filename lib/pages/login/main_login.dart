@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mis_notas/api/api.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/services/sing_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -54,20 +53,24 @@ class _MainLoginState extends State<MainLogin> {
                   return InkWell(
                       highlightColor: Colors.transparent,
                       splashColor: Colors.transparent,
-                      onTap: () async {
-                        /* Sesion sesion =
-                            new Sesion('80215', 'sistemas', 'Lorenzo90'); */
-                        _isPressed = true;
-                        UserCredential _userCredentials =
-                            await signInWithGoogle();
-                        _isNew.value = false;
+                      onTap: !_isPressed
+                          ? () async {
+                              setState(() {
+                                _isPressed = true;
+                              });
 
-                        if (_userCredentials.additionalUserInfo.isNewUser) {
-                          _isNew.value = true;
-                        } else {
-                          Navigator.pushNamed(context, '/homepage');
-                        }
-                      },
+                              UserCredential _userCredentials =
+                                  await signInWithGoogle();
+                              _isNew.value = false;
+
+                              if (_userCredentials
+                                  .additionalUserInfo.isNewUser) {
+                                _isNew.value = true;
+                              } else {
+                                Navigator.pushNamed(context, '/homepage');
+                              }
+                            }
+                          : null,
                       child: Container(
                         width: 300.0,
                         height: 50.0,

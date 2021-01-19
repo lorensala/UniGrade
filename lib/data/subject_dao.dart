@@ -23,7 +23,6 @@ class SubjectsDao {
       Future<QuerySnapshot> docs = FirebaseFirestore.instance
           .collection(collReference.path)
           .where('state', isNotEqualTo: '')
-          //.orderBy('name')
           .get();
 
       await docs.then((value) {
@@ -294,6 +293,7 @@ class SubjectsDao {
     var aplazos;
     var elect;
     var points;
+    var visible;
 
     sub['gradesP'] != null
         ? gradesP = new List<int>.from(sub['gradesP'])
@@ -315,6 +315,8 @@ class SubjectsDao {
 
     sub['points'] != null ? points = sub['points'] : points = 0;
 
+    sub['visible'] != null ? visible = sub['visible'] : visible = true;
+
     return Subject(
         sub['name'],
         sub['year'],
@@ -329,7 +331,8 @@ class SubjectsDao {
         aplazos,
         sub['duration'],
         elect,
-        points);
+        points,
+        visible);
   }
 
   Future<bool> addSubject(Student _student, Subject subject) async {
@@ -878,5 +881,55 @@ class SubjectsDao {
       print('=====error=====');
     }
     return sub;
+  }
+
+  Future<bool> recursarSubject(Subject subject, Student _student) async {
+    String _docId;
+    DocumentReference _docRef;
+
+    bool isDone = false;
+
+    try {
+      Future<QuerySnapshot> _subCollection = FirebaseFirestore.instance
+          .collection('student')
+          .doc(_student.getStudentDocRef())
+          .collection('career_student')
+          .doc(_student.getCareerDocRefs()[0])
+          .collection('subject_student')
+          .where('name', isEqualTo: subject.getName())
+          .get();
+
+      await _subCollection.then((value) {
+        _docId = value.docs[0].id;
+      });
+
+      if (_docId != null)
+        _docRef = FirebaseFirestore.instance
+            .collection('student')
+            .doc(_student.getStudentDocRef())
+            .collection('career_student')
+            .doc(_student.getCareerDocRefs()[0])
+            .collection('subject_student')
+            .doc(_docId);
+
+      _docRef.update({'visible': false});
+
+      subject.state = StateRecord(StateSubject('Regular'), DateTime.now());
+
+      FirebaseFirestore.instance
+          .collection('student')
+          .doc(_student.getStudentDocRef())
+          .collection('career_student')
+          .doc(_student.getCareerDocRefs()[0])
+          .collection('subject_student')
+          .add(subject.toMap());
+
+      print('=====succed====');
+      isDone = true;
+    } catch (e) {
+      print(e);
+      print('=====error=====');
+    }
+    return isDone;
   }
 }

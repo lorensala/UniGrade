@@ -2,6 +2,8 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mis_notas/data/subject_dao.dart';
+import 'package:mis_notas/entities/state.dart';
+import 'package:mis_notas/entities/state_record.dart';
 import 'package:mis_notas/entities/student.dart';
 import 'package:mis_notas/entities/subject.dart';
 import 'package:mis_notas/pages/dialogs/dialog_actualizar_materia.dart';
@@ -34,11 +36,22 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
   bool updated = false;
   bool firstTime = true;
   bool changed = false;
+  var _selectedCondition;
+
+  bool recursar = false;
 
   Subject _original;
 
   var _types = ['Práctico', 'Teórico', 'TP', 'Final'];
   var _notas = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+  var _condicion = [
+    'Regular',
+    'Aprobación Directa',
+    'Promoción Teórica',
+    'Promoción Práctica',
+    'Abandonada',
+    'Libre',
+  ];
 
   List<String> _getGrades(String _type, Subject _subject) {
     List<String> _grades = new List<String>();
@@ -72,6 +85,17 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
       default:
         return [];
     }
+  }
+
+  @override
+  void initState() {
+    if (widget._subject.getState().getState().getName() != '')
+      _selectedCondition = widget._subject.getState().getState().getName();
+    if (_selectedCondition == 'Libre') {
+      recursar = true;
+      changed = true;
+    }
+    super.initState();
   }
 
   @override
@@ -396,49 +420,79 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                             width: 10,
                           ),
                           InkWell(
-                            onTap: () async {
-                              if (_hasSelectedDataAdd &&
-                                  _selectedTypeAdd != null &&
-                                  _notaAdd != null) {
-                                int nota = int.parse(_notaAdd);
+                            onTap: !recursar
+                                ? () async {
+                                    if (_hasSelectedDataAdd &&
+                                        _selectedTypeAdd != null &&
+                                        _notaAdd != null) {
+                                      int nota = int.parse(_notaAdd);
 
-                                switch (_selectedTypeAdd) {
-                                  case 'Práctico':
-                                    if (widget._subject.getGradesP().length < 5)
-                                      widget._subject.addgradeP(nota);
-                                    break;
+                                      if (isEmpty(widget._subject) &&
+                                          (_selectedTypeAdd != 'Final' &&
+                                              _notaAdd < 6)) {
+                                        widget._subject.state = StateRecord(
+                                            StateSubject('Regular'),
+                                            DateTime.now());
+                                      }
 
-                                  case 'Teórico':
-                                    if (widget._subject.getGradesT().length < 5)
-                                      widget._subject.addgradeT(nota);
-                                    break;
+                                      switch (_selectedTypeAdd) {
+                                        case 'Práctico':
+                                          if (widget._subject
+                                                  .getGradesP()
+                                                  .length <
+                                              5)
+                                            widget._subject.addgradeP(nota);
+                                          break;
 
-                                  case 'TP':
-                                    if (widget._subject.getGradesTP().length <
-                                        5) widget._subject.addgradeTP(nota);
+                                        case 'Teórico':
+                                          if (widget._subject
+                                                  .getGradesT()
+                                                  .length <
+                                              5)
+                                            widget._subject.addgradeT(nota);
+                                          break;
 
-                                    break;
+                                        case 'TP':
+                                          if (widget._subject
+                                                  .getGradesTP()
+                                                  .length <
+                                              5)
+                                            widget._subject.addgradeTP(nota);
 
-                                  case 'Final':
-                                    if (widget._subject.getAplazos().length <=
-                                        3) {
-                                      if (nota > 5) {
-                                        await showActualizarMateria(
-                                            context, widget._subject);
+                                          break;
 
-                                        widget._subject.nf(nota);
-                                        setState(() {});
-                                      } else
-                                        widget._subject.addgradeAp(nota);
-                                      break;
+                                        case 'Final':
+                                          if (widget._subject
+                                                  .getAplazos()
+                                                  .length <=
+                                              3) {
+                                            if (nota > 5) {
+                                              await showActualizarMateria(
+                                                  context, widget._subject);
+
+                                              widget._subject.nf(nota);
+                                              setState(() {});
+                                            } else
+                                              widget._subject.addgradeAp(nota);
+                                            if (widget._subject
+                                                    .getAplazos()
+                                                    .length ==
+                                                4)
+                                              widget._subject.state =
+                                                  StateRecord(
+                                                      StateSubject('Libre'),
+                                                      DateTime.now());
+
+                                            break;
+                                          }
+                                      }
+
+                                      changed = true;
+
+                                      setState(() {});
                                     }
-                                }
-
-                                changed = true;
-
-                                setState(() {});
-                              }
-                            },
+                                  }
+                                : null,
                             child: Container(
                               width: 38.0,
                               height: 37.0,
@@ -564,43 +618,64 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                             width: 10,
                           ),
                           InkWell(
-                            onTap: () {
-                              if (_hasSelectedDataDel &&
-                                  _selectedTypeDel != null &&
-                                  _notaDel != null) {
-                                int nota = int.parse(_notaDel);
+                            onTap: !recursar
+                                ? () {
+                                    if (_hasSelectedDataDel &&
+                                        _selectedTypeDel != null &&
+                                        _notaDel != null) {
+                                      int nota = int.parse(_notaDel);
 
-                                switch (_selectedTypeDel) {
-                                  case 'Práctico':
-                                    if (widget._subject.getGradesP().length < 6)
-                                      widget._subject.deleteGradeP(nota);
-                                    break;
+                                      switch (_selectedTypeDel) {
+                                        case 'Práctico':
+                                          if (widget._subject
+                                                  .getGradesP()
+                                                  .length <
+                                              6)
+                                            widget._subject.deleteGradeP(nota);
+                                          break;
 
-                                  case 'Teórico':
-                                    if (widget._subject.getGradesT().length < 6)
-                                      widget._subject.deleteGradeT(nota);
-                                    break;
+                                        case 'Teórico':
+                                          if (widget._subject
+                                                  .getGradesT()
+                                                  .length <
+                                              6)
+                                            widget._subject.deleteGradeT(nota);
+                                          break;
 
-                                  case 'TP':
-                                    if (widget._subject.getGradesTP().length <
-                                        6) widget._subject.deleteGradeTP(nota);
-                                    break;
+                                        case 'TP':
+                                          if (widget._subject
+                                                  .getGradesTP()
+                                                  .length <
+                                              6)
+                                            widget._subject.deleteGradeTP(nota);
+                                          break;
 
-                                  case 'Final':
-                                    if (nota > 5)
-                                      widget._subject.nf(-1);
-                                    else
-                                      widget._subject.deleteGradeAp(nota);
-                                    break;
-                                }
+                                        case 'Final':
+                                          if (nota > 5) {
+                                            widget._subject.nf(-1);
+                                            widget._subject.state = StateRecord(
+                                                StateSubject(''),
+                                                DateTime.now());
+                                          } else
+                                            widget._subject.deleteGradeAp(nota);
+                                          if (widget._subject
+                                                  .getAplazos()
+                                                  .length <
+                                              4)
+                                            widget._subject.state = StateRecord(
+                                                StateSubject(''),
+                                                DateTime.now());
+                                          break;
+                                      }
 
-                                changed = true;
+                                      changed = true;
 
-                                setState(() {
-                                  _notaDel = null;
-                                });
-                              }
-                            },
+                                      setState(() {
+                                        _notaDel = null;
+                                      });
+                                    }
+                                  }
+                                : null,
                             child: Container(
                               width: 38.0,
                               height: 37.0,
@@ -771,51 +846,63 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                             width: 30,
                           ),
                           InkWell(
-                            onTap: () {
-                              if (_hasSelectedDataMod &&
-                                  _selectedTypeMod != null &&
-                                  _notaMod != null &&
-                                  _newNota != null) {
-                                int nota = int.parse(_notaMod);
-                                int nuevaNota = int.parse(_newNota);
+                            onTap: !recursar
+                                ? () {
+                                    if (_hasSelectedDataMod &&
+                                        _selectedTypeMod != null &&
+                                        _notaMod != null &&
+                                        _newNota != null) {
+                                      int nota = int.parse(_notaMod);
+                                      int nuevaNota = int.parse(_newNota);
 
-                                switch (_selectedTypeMod) {
-                                  case 'Práctico':
-                                    if (widget._subject.getGradesP().length < 6)
-                                      widget._subject
-                                          .modGradeP(nota, nuevaNota);
-                                    break;
+                                      switch (_selectedTypeMod) {
+                                        case 'Práctico':
+                                          if (widget._subject
+                                                  .getGradesP()
+                                                  .length <
+                                              6)
+                                            widget._subject
+                                                .modGradeP(nota, nuevaNota);
+                                          break;
 
-                                  case 'Teórico':
-                                    if (widget._subject.getGradesT().length < 6)
-                                      widget._subject
-                                          .modGradeT(nota, nuevaNota);
-                                    break;
+                                        case 'Teórico':
+                                          if (widget._subject
+                                                  .getGradesT()
+                                                  .length <
+                                              6)
+                                            widget._subject
+                                                .modGradeT(nota, nuevaNota);
+                                          break;
 
-                                  case 'TP':
-                                    if (widget._subject.getGradesTP().length <
-                                        6)
-                                      widget._subject
-                                          .modGradeTP(nota, nuevaNota);
-                                    break;
+                                        case 'TP':
+                                          if (widget._subject
+                                                  .getGradesTP()
+                                                  .length <
+                                              6)
+                                            widget._subject
+                                                .modGradeTP(nota, nuevaNota);
+                                          break;
 
-                                  case 'Final':
-                                    if (widget._subject.getAplazos().length <=
-                                        3) {
-                                      widget._subject
-                                          .modGradAp(nota, nuevaNota);
-                                      break;
+                                        case 'Final':
+                                          if (widget._subject
+                                                  .getAplazos()
+                                                  .length <=
+                                              3) {
+                                            widget._subject
+                                                .modGradAp(nota, nuevaNota);
+                                            break;
+                                          }
+                                      }
+
+                                      changed = true;
+
+                                      setState(() {
+                                        _newNota = null;
+                                        _notaMod = null;
+                                      });
                                     }
-                                }
-
-                                changed = true;
-
-                                setState(() {
-                                  _newNota = null;
-                                  _notaMod = null;
-                                });
-                              }
-                            },
+                                  }
+                                : null,
                             child: Container(
                               width: 38.0,
                               height: 37.0,
@@ -836,64 +923,203 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                       ),
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 30,
                     ),
-                    FlatButton(
-                      color: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      hoverColor: Colors.transparent,
-                      focusColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      onPressed: () async {
-                        updated = await _subjectDao.updateSubject(
-                            Subject.fromOther(widget._subject), _student);
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+                      child: Text(
+                        'Seleccionar Condición ',
+                        style: TextStyle(
+                          fontFamily: 'Avenir LT Std',
+                          fontSize: 22,
+                          color: const Color(0xff484848),
+                          fontWeight: FontWeight.w800,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                          width: 288.0,
+                          height: 37.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(26.0),
+                            color: const Color(0xfff7f7f7),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                  value: _selectedCondition,
+                                  hint: new Text('Condicion'),
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      _selectedCondition = newValue;
+                                      widget._subject.state = StateRecord(
+                                          StateSubject(_selectedCondition),
+                                          DateTime.now());
 
-                        if (updated) {
-                          await CoolAlert.show(
-                              borderRadius: 26,
-                              title: 'Éxito',
-                              backgroundColor: Colors.white,
-                              context: context,
-                              type: CoolAlertType.success,
-                              text: '¡Materia actualizada con exito!');
-                        } else {
-                          CoolAlert.show(
-                              borderRadius: 26,
-                              title: 'Error',
-                              backgroundColor: Colors.white,
-                              context: context,
-                              type: CoolAlertType.error,
-                              text: 'Error al actualizar la materia');
-                        }
-                        changed = false;
-                      },
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-                          child: Container(
-                            //width: double.ini,
-                            height: 37.0,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(26.0),
-                              color: changed
-                                  ? const Color(0xffa7ffad)
-                                  : Colors.grey,
-                            ),
-                            child: Center(
-                              child: Text(
-                                'Guardar Cambios',
-                                style: TextStyle(
-                                  fontFamily: 'Avenir LT Std',
-                                  fontSize: 16,
-                                  color: Colors.black,
-                                ),
-                                textAlign: TextAlign.left,
-                              ),
+                                      changed = true;
+                                    });
+                                  },
+                                  items: recursar
+                                      ? null
+                                      : _condicion
+                                          .map((type) => DropdownMenuItem(
+                                              child: Text(type), value: type))
+                                          .toList()),
                             ),
                           ),
                         ),
                       ),
-                    )
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    !recursar
+                        ? FlatButton(
+                            color: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            hoverColor: Colors.transparent,
+                            focusColor: Colors.transparent,
+                            splashColor: Colors.transparent,
+                            onPressed: () async {
+                              updated = await _subjectDao.updateSubject(
+                                  Subject.fromOther(widget._subject), _student);
+
+                              if (updated) {
+                                await CoolAlert.show(
+                                    borderRadius: 26,
+                                    title: 'Éxito',
+                                    backgroundColor: Colors.white,
+                                    context: context,
+                                    type: CoolAlertType.success,
+                                    text: '¡Materia actualizada con exito!');
+                              } else {
+                                CoolAlert.show(
+                                    borderRadius: 26,
+                                    title: 'Error',
+                                    backgroundColor: Colors.white,
+                                    context: context,
+                                    type: CoolAlertType.error,
+                                    text: 'Error al actualizar la materia');
+                              }
+                              changed = false;
+                            },
+                            child: Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(24, 0, 24, 0),
+                                child: Container(
+                                  //width: double.ini,
+                                  height: 37.0,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(26.0),
+                                    color: changed
+                                        ? const Color(0xffa7ffad)
+                                        : Colors.grey,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Guardar Cambios',
+                                      style: TextStyle(
+                                        fontFamily: 'Avenir LT Std',
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : FlatButton(
+                            color: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            hoverColor: Colors.transparent,
+                            focusColor: Colors.transparent,
+                            splashColor: Colors.transparent,
+                            onPressed: () async {
+                              updated = await _subjectDao.recursarSubject(
+                                  Subject.fromOther(widget._subject), _student);
+
+                              if (updated) {
+                                await CoolAlert.show(
+                                    borderRadius: 26,
+                                    title: 'Éxito',
+                                    backgroundColor: Colors.white,
+                                    context: context,
+                                    type: CoolAlertType.success,
+                                    text: '¡Materia actualizada con exito!');
+
+                                Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                        transitionDuration:
+                                            Duration(milliseconds: 250),
+                                        transitionsBuilder: (context, animation,
+                                            secondaryAnimation, child) {
+                                          animation = CurvedAnimation(
+                                              parent: animation,
+                                              curve: Curves.easeInOut);
+                                          return SlideTransition(
+                                            position: Tween(
+                                                    begin: Offset(1.0, 0.0),
+                                                    end: Offset(0.0, 0.0))
+                                                .animate(animation),
+                                            child: child,
+                                          );
+                                        },
+                                        pageBuilder: (context, animation,
+                                            animationTime) {
+                                          return MisNotas(
+                                              getIndex(_original, _student));
+                                        }));
+                              } else {
+                                CoolAlert.show(
+                                    borderRadius: 26,
+                                    title: 'Error',
+                                    backgroundColor: Colors.white,
+                                    context: context,
+                                    type: CoolAlertType.error,
+                                    text: 'Error al actualizar la materia');
+                              }
+                            },
+                            child: Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(24, 0, 24, 0),
+                                child: Container(
+                                  //width: double.ini,
+                                  height: 37.0,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(26.0),
+                                    color: changed
+                                        ? const Color(0xffFF9A9A)
+                                        : Colors.grey,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Recursar Materia',
+                                      style: TextStyle(
+                                        fontFamily: 'Avenir LT Std',
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
                   ],
                 )
               ],
@@ -902,6 +1128,17 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
         ),
       ),
     );
+  }
+
+  bool isEmpty(Subject subject) {
+    if (subject.getGradesP().isEmpty &&
+        subject.getGradesTP().isEmpty &&
+        subject.getGradesT().isEmpty &&
+        subject.getAplazos().isEmpty &&
+        subject.getNf() == -1)
+      return true;
+    else
+      return false;
   }
 
   Future<void> showActualizarMateria(BuildContext _context, Subject _subject) {

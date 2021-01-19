@@ -15,9 +15,19 @@ class MisMaterias extends StatefulWidget {
 
 class _MisMateriasState extends State<MisMaterias> {
   String _condition = 'Todas';
+  List<Subject> toRemove = new List<Subject>();
 
   Future<List<Subject>> getData(Student _student, String condition) async {
     List<Subject> _list = _student.getSubjects();
+
+    _list.forEach((s) {
+      if (!s.getVisible()) {
+        toRemove.add(s);
+      }
+    });
+
+    _list.removeWhere((s) => toRemove.contains(s));
+
     List<Subject> _listAux = new List<Subject>();
 
     if (condition == 'Todas') {

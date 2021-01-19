@@ -38,12 +38,25 @@ class _DialogActualizarMateriaState extends State<DialogActualizarMateria> {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(26.0)),
         child: Container(
           width: 338.0,
-          height: 150.0,
+          height: 180.0,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 40, 20, 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                Text(
+                  'Seleccione la condicion:',
+                  style: TextStyle(
+                    fontFamily: 'Avenir LT Std',
+                    fontSize: 22,
+                    color: const Color(0xff000000),
+                    fontWeight: FontWeight.w800,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
                 Container(
                   width: 288.0,
                   height: 37.0,

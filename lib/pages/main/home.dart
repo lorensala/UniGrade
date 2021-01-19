@@ -1,3 +1,4 @@
+import 'package:coast/coast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -34,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   bool isLoading = true;
   var _studentDao = new StudentDao();
   int page = 0;
-  final controller = PageController(initialPage: 0);
+  final controller = CoastController();
   var isPressedHome = true;
   var isPressedProfile = false;
   var isPressedSettings = false;
@@ -195,11 +196,14 @@ class _HomePageState extends State<HomePage> {
 
                       _student.statistics = _statistics;
 
-                      return PageView(
+                      return Coast(
                         controller: controller,
-                        children: [
-                          MainPage(),
-                          ProfilePage(),
+                        beaches: [
+                          Beach(builder: (context) => MainPage()),
+                          Beach(builder: (context) => ProfilePage()),
+                        ],
+                        observers: [
+                          CrabController(),
                         ],
                         onPageChanged: (page) {
                           _isPressed.value = page;
@@ -249,8 +253,9 @@ class _HomePageState extends State<HomePage> {
                                 ? Image.asset(buttons['home'][0])
                                 : Image.asset(buttons['home'][1]),
                             onPressed: () {
-                              if (controller.page != 0)
-                                controller.animateToPage(0,
+                              if (controller.beach != 0)
+                                controller.animateTo(
+                                    beach: 0,
                                     duration: Duration(milliseconds: 300),
                                     curve: Curves.ease);
                             },
@@ -275,8 +280,9 @@ class _HomePageState extends State<HomePage> {
                                 ? Image.asset(buttons['user'][0])
                                 : Image.asset(buttons['user'][1]),
                             onPressed: () {
-                              if (controller.page != 1)
-                                controller.animateToPage(1,
+                              if (controller.beach != 1)
+                                controller.animateTo(
+                                    beach: 1,
                                     duration: Duration(milliseconds: 300),
                                     curve: Curves.ease);
                             },

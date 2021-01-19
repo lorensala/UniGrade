@@ -21,7 +21,7 @@ class ProfileStat extends StatelessWidget {
               axes: <RadialAxis>[
                 RadialAxis(
                   minimum: 0,
-                  maximum: 100,
+                  maximum: 10,
                   startAngle: 270,
                   endAngle: 270,
                   showLabels: false,
@@ -98,7 +98,7 @@ class ProfileStat extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  int.parse(_percentage.round().toString()).toString() + '%',
+                  int.parse(_percentage.round().toString()).toString() + '/10',
                   style: TextStyle(
                     fontFamily: 'Avenir LT Std',
                     fontSize: 45,

@@ -38,7 +38,7 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
   bool firstTime = true;
   bool changed = false;
   var _selectedCondition;
-
+  bool pressed = false;
   bool recursar = false;
 
   Subject _original;
@@ -351,7 +351,7 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
 
                                       if (isEmpty(widget._subject) &&
                                           (_selectedTypeAdd != 'Final' &&
-                                              _notaAdd < 6)) {
+                                              nota < 6)) {
                                         widget._subject.state = StateRecord(
                                             StateSubject('Regular'),
                                             DateTime.now());
@@ -413,6 +413,7 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                                           }
                                       }
 
+                                      changed = true;
                                       changed = true;
 
                                       setState(() {});
@@ -982,48 +983,54 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                             focusColor: Colors.transparent,
                             splashColor: Colors.transparent,
                             onPressed: () async {
-                              updated = await _subjectDao.recursarSubject(
-                                  Subject.fromOther(widget._subject), _student);
+                              if (!pressed) {
+                                pressed = true;
+                                updated = await _subjectDao.recursarSubject(
+                                    Subject.fromOther(widget._subject),
+                                    _student);
 
-                              if (updated) {
-                                await CoolAlert.show(
-                                    borderRadius: 26,
-                                    title: 'Éxito',
-                                    backgroundColor: Colors.white,
-                                    context: context,
-                                    type: CoolAlertType.success,
-                                    text: '¡Materia actualizada con exito!');
+                                if (updated) {
+                                  await CoolAlert.show(
+                                      borderRadius: 26,
+                                      title: 'Éxito',
+                                      backgroundColor: Colors.white,
+                                      context: context,
+                                      type: CoolAlertType.success,
+                                      text: '¡Materia actualizada con exito!');
 
-                                Navigator.push(
-                                    context,
-                                    PageRouteBuilder(
-                                        transitionDuration:
-                                            Duration(milliseconds: 250),
-                                        transitionsBuilder: (context, animation,
-                                            secondaryAnimation, child) {
-                                          animation = CurvedAnimation(
-                                              parent: animation,
-                                              curve: Curves.easeInOut);
-                                          return SlideTransition(
-                                            position: Tween(
-                                                    begin: Offset(1.0, 0.0),
-                                                    end: Offset(0.0, 0.0))
-                                                .animate(animation),
-                                            child: child,
-                                          );
-                                        },
-                                        pageBuilder: (context, animation,
-                                            animationTime) {
-                                          return HomePage();
-                                        }));
-                              } else {
-                                CoolAlert.show(
-                                    borderRadius: 26,
-                                    title: 'Error',
-                                    backgroundColor: Colors.white,
-                                    context: context,
-                                    type: CoolAlertType.error,
-                                    text: 'Error al actualizar la materia');
+                                  Navigator.push(
+                                      context,
+                                      PageRouteBuilder(
+                                          transitionDuration:
+                                              Duration(milliseconds: 250),
+                                          transitionsBuilder: (context,
+                                              animation,
+                                              secondaryAnimation,
+                                              child) {
+                                            animation = CurvedAnimation(
+                                                parent: animation,
+                                                curve: Curves.easeInOut);
+                                            return SlideTransition(
+                                              position: Tween(
+                                                      begin: Offset(1.0, 0.0),
+                                                      end: Offset(0.0, 0.0))
+                                                  .animate(animation),
+                                              child: child,
+                                            );
+                                          },
+                                          pageBuilder: (context, animation,
+                                              animationTime) {
+                                            return HomePage();
+                                          }));
+                                } else {
+                                  CoolAlert.show(
+                                      borderRadius: 26,
+                                      title: 'Error',
+                                      backgroundColor: Colors.white,
+                                      context: context,
+                                      type: CoolAlertType.error,
+                                      text: 'Error al actualizar la materia');
+                                }
                               }
                             },
                             child: Center(

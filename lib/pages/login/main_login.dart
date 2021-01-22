@@ -17,6 +17,8 @@ class _MainLoginState extends State<MainLogin> {
   Widget build(BuildContext context) {
     ValueNotifier<bool> _isNew =
         Provider.of<ValueNotifier<bool>>(context, listen: false);
+
+    double height = MediaQuery.of(context).size.height;
     return Align(
       alignment: Alignment.center,
       child: Padding(
@@ -44,7 +46,7 @@ class _MainLoginState extends State<MainLogin> {
               textAlign: TextAlign.left,
             ),
             SizedBox(
-              height: 90,
+              height: height / 80,
             ),
             Consumer<ValueNotifier<bool>>(
               builder: (context, isNew, child) => Visibility(
@@ -59,7 +61,7 @@ class _MainLoginState extends State<MainLogin> {
 
                           UserCredential _userCredentials =
                               await signInWithGoogle();
-                          _isNew.value = false;
+                          _isNew.value = false; 
 
                           if (_userCredentials.additionalUserInfo.isNewUser) {
                             _isNew.value = true;

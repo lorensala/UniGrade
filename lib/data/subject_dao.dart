@@ -915,6 +915,12 @@ class SubjectsDao {
       _docRef.update({'visible': false});
 
       subject.state = StateRecord(StateSubject('Regular'), DateTime.now());
+      subject.aplazos = new List<int>();
+      subject.gradesP = new List<int>();
+      subject.gradesT = new List<int>();
+      subject.gradesTP = new List<int>();
+      subject.notaFinal = -1;
+      subject.passed = false;
 
       FirebaseFirestore.instance
           .collection('student')

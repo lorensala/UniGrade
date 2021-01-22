@@ -80,11 +80,23 @@ class _HomePageState extends State<HomePage> {
 
   Future<List> getDataStatistics(Student _student) async {
     List _dataList = new List();
+    List<Subject> _list = new List<Subject>();
+    List<Subject> toRemove = new List<Subject>();
 
     StatisticsService _statisticsService = new StatisticsService();
     SubjectsDao _subjectDao = SubjectsDao();
 
-    List<Subject> _list = await _subjectDao.getAllSubjectsByUser(_student);
+    List<Subject> _listAll = await _subjectDao.getAllSubjectsByUser(_student);
+
+    _list.addAll(_listAll);
+
+    _list.forEach((s) {
+      if (!s.getVisible()) {
+        toRemove.add(s);
+      }
+    });
+
+    _list.removeWhere((s) => toRemove.contains(s));
 
     List<Subject> _listCon =
         await _subjectDao.getAllSubjectsWithCondition(_student);
@@ -103,7 +115,7 @@ class _HomePageState extends State<HomePage> {
     _dataList.add(await _statisticsService.getSubjectsCondition(
         _student, _list, -1, 'Regular'));
     _dataList.add(
-        await _statisticsService.getAvgNfWithBadGrades(_student, _list, -1));
+        await _statisticsService.getAvgNfWithBadGrades(_student, _listAll, -1));
     _dataList.add(_statisticsService.getProfileStats(_student, _listCon));
 
     _dataList.add(_statisticsService.getPoints(_student, _list));

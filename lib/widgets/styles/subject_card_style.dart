@@ -10,8 +10,6 @@ class SubjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
       child: InkWell(

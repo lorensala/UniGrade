@@ -53,24 +53,25 @@ class _MainLoginState extends State<MainLogin> {
                   return InkWell(
                       highlightColor: Colors.transparent,
                       splashColor: Colors.transparent,
-                      onTap: !_isPressed
-                          ? () async {
-                              setState(() {
-                                _isPressed = true;
-                              });
+                      onTap: () async {
+                        if (!_isPressed) {
+                          _isPressed = true;
 
-                              UserCredential _userCredentials =
-                                  await signInWithGoogle();
-                              _isNew.value = false;
+                          UserCredential _userCredentials =
+                              await signInWithGoogle();
+                          _isNew.value = false;
 
-                              if (_userCredentials
-                                  .additionalUserInfo.isNewUser) {
-                                _isNew.value = true;
-                              } else {
-                                Navigator.pushNamed(context, '/homepage');
-                              }
-                            }
-                          : null,
+                          if (_userCredentials.additionalUserInfo.isNewUser) {
+                            _isNew.value = true;
+                          } else {
+                            Navigator.pushNamed(context, '/homepage');
+                          }
+
+                          setState(() {
+                            _isPressed = true;
+                          });
+                        }
+                      },
                       child: Container(
                         width: 300.0,
                         height: 50.0,

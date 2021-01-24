@@ -362,7 +362,7 @@ class _MisMateriasState extends State<MisMaterias> {
                           child: ListView.builder(
                             itemCount: snapshot.data.length,
                             itemBuilder: (context, index) {
-                              return SubjectCard(snapshot.data[index]);
+                              return SubjectCard(snapshot.data[index], true);
                             },
                             physics: AlwaysScrollableScrollPhysics(),
                           ),

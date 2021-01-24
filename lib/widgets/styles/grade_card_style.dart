@@ -24,15 +24,24 @@ class GradeCard extends StatelessWidget {
     String notasTp = '';
     String notasAp = '';
 
-    Map<String, Color> _colors = {
-      'Regular': Color(0xffFEFFD9),
-      'Aprobación Directa': Color(0xffE2FFE3),
-      'Promoción Teórica': Color(0xffE4F0FF),
-      'Promoción Práctica': Color(0xffEAD6FF),
-      'Abandonada': Color(0xffFFE4E4),
-      'Libre': Color(0xffFFE4E4),
-      '': Color(0xffF7F7F7),
-    };
+    Color _getColors(String condition) {
+      switch (condition) {
+        case 'Regular':
+          return Color(0xffFEFFD9);
+        case 'Aprobación Directa':
+          return Color(0xffE2FFE3);
+        case 'Promoción Teórica':
+          return Color(0xffE4F0FF);
+        case 'Promoción Práctica':
+          return Color(0xffEAD6FF);
+        case 'Abandonada':
+          return Color(0xffFFE4E4);
+        case 'Libre':
+          return Color(0xffFFE4E4);
+        default:
+          return Color(0xffF7F7F7);
+      }
+    }
 
     Map<String, String> _stateText = {
       'Regular': 'REG.',
@@ -105,7 +114,7 @@ class GradeCard extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(26.0),
                 color: !(nf >= 6)
-                    ? _colors[_subject.getState().getState().getName()]
+                    ? _getColors(_subject.getState().getState().getName())
                     : Color(0xffE2FFE3)),
             child: Padding(
               padding: EdgeInsets.fromLTRB(20, 5, 20, 5),

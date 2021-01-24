@@ -116,6 +116,10 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
               context: context,
               backgroundColor: Colors.white,
               type: CoolAlertType.confirm,
+              confirmBtnText: 'Si',
+              cancelBtnText: 'No',
+              title: '¿Seguro que desea salir?',
+              text: '',
               onConfirmBtnTap: () async {
                 await _subjectDao
                     .getSubject(widget._subject, _student)
@@ -163,6 +167,10 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                                 context: context,
                                 backgroundColor: Colors.white,
                                 type: CoolAlertType.confirm,
+                                confirmBtnText: 'Si',
+                                cancelBtnText: 'No',
+                                title: '¿Seguro que desea salir?',
+                                text: '',
                                 onConfirmBtnTap: () async {
                                   await _subjectDao
                                       .getSubject(widget._subject, _student)
@@ -186,7 +194,6 @@ class _MisNotasInfoState extends State<MisNotasInfo> {
                                   aux.notaFinal = _original.getNf();
 
                                   exit(_student);
-                                  ;
                                 });
                           }
                         },

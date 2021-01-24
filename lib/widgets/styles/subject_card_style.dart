@@ -5,38 +5,42 @@ import 'package:mis_notas/pages/pages/mismaterias/materias_info_page.dart';
 
 class SubjectCard extends StatelessWidget {
   final Subject _subject;
+  final bool _clickeable;
 
-  SubjectCard(this._subject);
+  SubjectCard(this._subject, this._clickeable);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
       child: InkWell(
-        onTap: () async {
-          SubjectsDao _subjectsDao = new SubjectsDao();
+        onTap: _clickeable
+            ? () async {
+                SubjectsDao _subjectsDao = new SubjectsDao();
 
-          Map _map = await _subjectsDao.getCorrelativas(_subject);
+                Map _map = await _subjectsDao.getCorrelativas(_subject);
 
-          Navigator.push(
-              context,
-              PageRouteBuilder(
-                  transitionDuration: Duration(milliseconds: 250),
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    animation = CurvedAnimation(
-                        parent: animation, curve: Curves.easeInOut);
-                    return SlideTransition(
-                      position:
-                          Tween(begin: Offset(0.0, 1.0), end: Offset(0.0, 0.0))
-                              .animate(animation),
-                      child: child,
-                    );
-                  },
-                  pageBuilder: (context, animation, animationTime) {
-                    return MisMateriasInfo(_subject, _map);
-                  }));
-        },
+                Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                        transitionDuration: Duration(milliseconds: 250),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          animation = CurvedAnimation(
+                              parent: animation, curve: Curves.easeInOut);
+                          return SlideTransition(
+                            position: Tween(
+                                    begin: Offset(0.0, 1.0),
+                                    end: Offset(0.0, 0.0))
+                                .animate(animation),
+                            child: child,
+                          );
+                        },
+                        pageBuilder: (context, animation, animationTime) {
+                          return MisMateriasInfo(_subject, _map);
+                        }));
+              }
+            : null,
         child: Stack(
           children: <Widget>[
             Column(children: <Widget>[

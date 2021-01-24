@@ -67,7 +67,7 @@ class MisMateriasInfo extends StatelessWidget {
                   ),
                 ),
               ),
-              SubjectCard(_subject),
+              SubjectCard(_subject, false),
               Padding(
                 padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
                 child: Align(
@@ -181,18 +181,21 @@ class MisMateriasInfo extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
-                child: Container(
-                  child: Text(
-                    _map.isNotEmpty
-                        ? textFormatter(_map['cursada'].toString())
-                        : 'No data',
-                    style: TextStyle(
-                      fontFamily: 'Avenir LT Std',
-                      fontSize: 15,
-                      color: const Color(0xff8d8d8d),
-                      fontWeight: FontWeight.w800,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    child: Text(
+                      _map.isNotEmpty
+                          ? textFormatter(_map['cursada'].toString())
+                          : 'No data',
+                      style: TextStyle(
+                        fontFamily: 'Avenir LT Std',
+                        fontSize: 15,
+                        color: const Color(0xff8d8d8d),
+                        fontWeight: FontWeight.w800,
+                      ),
+                      textAlign: TextAlign.left,
                     ),
-                    textAlign: TextAlign.left,
                   ),
                 ),
               ),
@@ -218,18 +221,21 @@ class MisMateriasInfo extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
-                child: Container(
-                  child: Text(
-                    _map.isNotEmpty
-                        ? textFormatter(_map['aprobada'].toString())
-                        : 'No data',
-                    style: TextStyle(
-                      fontFamily: 'Avenir LT Std',
-                      fontSize: 15,
-                      color: const Color(0xff8d8d8d),
-                      fontWeight: FontWeight.w800,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    child: Text(
+                      _map.isNotEmpty
+                          ? textFormatter(_map['aprobada'].toString())
+                          : 'No data',
+                      style: TextStyle(
+                        fontFamily: 'Avenir LT Std',
+                        fontSize: 15,
+                        color: const Color(0xff8d8d8d),
+                        fontWeight: FontWeight.w800,
+                      ),
+                      textAlign: TextAlign.left,
                     ),
-                    textAlign: TextAlign.left,
                   ),
                 ),
               ),
@@ -248,20 +254,23 @@ class MisMateriasInfo extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
-                child: Container(
-                  width: 305.0,
-                  height: 70,
-                  child: Text(
-                    _map.isNotEmpty
-                        ? textFormatter(_map['rendir'].toString())
-                        : 'No data',
-                    style: TextStyle(
-                      fontFamily: 'Avenir LT Std',
-                      fontSize: 15,
-                      color: const Color(0xff8d8d8d),
-                      fontWeight: FontWeight.w800,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    width: 305.0,
+                    height: 70,
+                    child: Text(
+                      _map.isNotEmpty
+                          ? textFormatter(_map['rendir'].toString())
+                          : 'No data',
+                      style: TextStyle(
+                        fontFamily: 'Avenir LT Std',
+                        fontSize: 15,
+                        color: const Color(0xff8d8d8d),
+                        fontWeight: FontWeight.w800,
+                      ),
+                      textAlign: TextAlign.left,
                     ),
-                    textAlign: TextAlign.left,
                   ),
                 ),
               ),

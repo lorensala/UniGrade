@@ -6,6 +6,11 @@ Uni grade es una aplicación mobile multiplataforma, realizada con el framework 
 
 ## Requerimientos
 
-* Iniciar sesión con la cuenta de Google a través de Firebase Auth.
+* Iniciar sesión con la cuenta de Google.
 * Cargar notas.
 * Actualizar condición de las materias.
+* Generar estadísticas generales de la carrera.
+* Mostrar correlativas de las materias.
+
+## Screenshots
+

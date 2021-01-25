@@ -14,9 +14,9 @@ UniGrade es una aplicación mobile multiplataforma, desarrollada en el framework
 * Generar el perfil del usuario con respecto 
 
 ## Screenshots
-![Menú Prinicipal](https://github.com/lorensala/UniGrade/tree/master/assets/images/main.jpg)
-![Perfil](https://github.com/lorensala/UniGrade/tree/master/assets/images/profile.jpg)
-![Estadísticas](https://github.com/lorensala/UniGrade/tree/master/assets/images/stats.jpg)
-![Notas](https://github.com/lorensala/UniGrade/tree/master/assets/images/notas.jpg)
-![Materias](https://github.com/lorensala/UniGrade/tree/master/assets/images/materias.jpg)
-
+  
+<img src="/assets/images/main.jpg" alt="" width=300 height=633>
+<img src="/assets/images/profile.jpg" alt="" width=300 height=633>
+<img src="/assets/images/stats.jpg" alt="" width=300 height=793>
+<img src="/assets/images/notas.jpg" alt="" width=300 height=633>
+<img src="/assets/images/materias.jpg" alt="" width=300 height=633>
